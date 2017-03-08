@@ -68,27 +68,34 @@ sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libs
 
 Fetch dependencies from their GitHub repos:
 
-    $ git submodule init && git submodule update
+```
+git submodule init && git submodule update
+```
 
-Create the Makefile:
+### Compilation
 
-    $ mkdir build && cd build && cmake .. 
+To compile, starting at the project root directory, create the build directory and Makefile:
 
-Then, to compile the library, tests, and profiling harness, run this within the `build directory:
+```
+mkdir build && cd build
+cmake ..
+```
+Optionally, you can specify the install location by providing the desired install path prefix:
+```
+cmake .. -DCMAKE_INSTALL_PREFIX=/install/path
+```
 
-    $ make
-
-### Using libff as a library
-
-To build and install the libff library:
-
-	$ DESTDIR=/install/path make install
+Then, to compile and install the library, run this within the build directory:
+```
+make
+make install
+```
 
 This will install libff.a into /install/path/lib; so your application should be linked using -L/install/path/lib -lff. It also installs the requisite headers into /install/path/include; so your application should be compiled using -I/install/path/include.
 
 ## Testing
 
-The library uses Google Test for its unit tests. To execute the GTests for this library, run:
+The library uses Google Test for its unit tests. To execute the tests for this library, run:
 ```
 make check
 ```
