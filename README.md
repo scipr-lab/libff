@@ -63,7 +63,7 @@ The library has been tested on Linux, but it is compatible with Windows and Mac 
 On Ubuntu 14.04 LTS:
 
 ```
-sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libprocps3-dev
+sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libprocps3-dev pkg-config
 ```
 
 Fetch dependencies from their GitHub repos:
@@ -85,6 +85,13 @@ To build and install the libff library:
 	$ DESTDIR=/install/path make install
 
 This will install libff.a into /install/path/lib; so your application should be linked using -L/install/path/lib -lff. It also installs the requisite headers into /install/path/include; so your application should be compiled using -I/install/path/include.
+
+## Testing
+
+The library uses Google Test for its unit tests. To execute the GTests for this library, run:
+```
+make check
+```
 
 [SCIPR Lab]: http://www.scipr-lab.org/ (Succinct Computational Integrity and Privacy Research Lab)
 
