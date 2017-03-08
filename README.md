@@ -91,7 +91,7 @@ make
 make install
 ```
 
-This will install libff.a into /install/path/lib; so your application should be linked using -L/install/path/lib -lff. It also installs the requisite headers into /install/path/include; so your application should be compiled using -I/install/path/include.
+This will install `libff.a` into `/install/path/lib`; so your application should be linked using `-L/install/path/lib -lff`. It also installs the requisite headers into `/install/path/include`; so your application should be compiled using `-I/install/path/include`.
 
 ## Testing
 
