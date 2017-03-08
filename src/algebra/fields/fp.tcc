@@ -12,6 +12,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <cmath>
+#include <limits>
 
 #include "algebra/fields/fp_aux.tcc"
 #include "algebra/fields/field_utils.hpp"
@@ -195,6 +196,7 @@ Fp_model<n,modulus>::Fp_model(const bigint<n> &b)
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus>::Fp_model(const long x, const bool is_unsigned)
 {
+    static_assert(std::numeric_limits<mp_limb_t>::max() >= std::numeric_limits<long>::max(), "long won't fit in mp_limb_t");
     if (is_unsigned || x >= 0)
     {
         this->mont_repr.data[0] = (mp_limb_t)x;
