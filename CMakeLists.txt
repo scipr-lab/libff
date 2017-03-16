@@ -113,8 +113,7 @@ set(
 )
 
 find_path(GMP_INCLUDE_DIR NAMES gmp.h)
-find_library(GMP_LIBRARIES NAMES gmp libgmp)
-find_library(GMPXX_LIBRARIES NAMES gmpxx libgmpxx)
+message(STATUS "GMP include dir: ${GMP_INCLUDE_DIR}")
 
 include(FindPkgConfig)
 
@@ -136,8 +135,6 @@ add_definitions(
 )
 
 enable_testing()
-
-include_directories(.)
 
 if(${CURVE} STREQUAL "BN128")
   add_definitions(
