@@ -79,10 +79,10 @@ edwards_G1 operator*(const bigint<m> &lhs, const edwards_G1 &rhs)
     return scalar_mul<edwards_G1, m>(rhs, lhs);
 }
 
-template<mp_size_t m, const bigint<m>& modulus_p>
-edwards_G1 operator*(const Fp_model<m,modulus_p> &lhs, const edwards_G1 &rhs)
+template<typename T>
+edwards_G1 operator*(const T &lhs, const edwards_G1 &rhs)
 {
-    return scalar_mul<edwards_G1, m>(rhs, lhs.as_bigint());
+    return scalar_mul<edwards_G1, T::num_limbs>(rhs, lhs.as_bigint());
 }
 
 std::ostream& operator<<(std::ostream& out, const std::vector<edwards_G1> &v);
