@@ -38,9 +38,10 @@ bool is_little_endian();
 
 std::string FORMAT(const std::string &prefix, const char* format, ...);
 
+const std::string empty("");
 /* A variadic template to suppress unused argument warnings */
 template<typename ... Types>
-void UNUSED(Types&&...) {}
+const std::string& UNUSED(Types&&...) { return empty; }
 
 #ifdef DEBUG
 #define FMT FORMAT
