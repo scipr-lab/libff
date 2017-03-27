@@ -77,10 +77,10 @@ alt_bn128_G1 operator*(const bigint<m> &lhs, const alt_bn128_G1 &rhs)
     return scalar_mul<alt_bn128_G1, m>(rhs, lhs);
 }
 
-template<mp_size_t m, const bigint<m>& modulus_p>
-alt_bn128_G1 operator*(const Fp_model<m,modulus_p> &lhs, const alt_bn128_G1 &rhs)
+template<typename T>
+alt_bn128_G1 operator*(const T &lhs, const alt_bn128_G1 &rhs)
 {
-    return scalar_mul<alt_bn128_G1, m>(rhs, lhs.as_bigint());
+    return scalar_mul<alt_bn128_G1, T::num_limbs>(rhs, lhs.as_bigint());
 }
 
 std::ostream& operator<<(std::ostream& out, const std::vector<alt_bn128_G1> &v);

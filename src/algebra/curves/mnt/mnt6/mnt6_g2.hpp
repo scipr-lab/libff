@@ -95,10 +95,10 @@ mnt6_G2 operator*(const bigint<m> &lhs, const mnt6_G2 &rhs)
     return scalar_mul<mnt6_G2, m>(rhs, lhs);
 }
 
-template<mp_size_t m, const bigint<m>& modulus_p>
-mnt6_G2 operator*(const Fp_model<m,modulus_p> &lhs, const mnt6_G2 &rhs)
+template<typename T>
+mnt6_G2 operator*(const T &lhs, const mnt6_G2 &rhs)
 {
-    return scalar_mul<mnt6_G2, m>(rhs, lhs.as_bigint());
+    return scalar_mul<mnt6_G2, T::num_limbs>(rhs, lhs.as_bigint());
 }
 
 template<typename T>
