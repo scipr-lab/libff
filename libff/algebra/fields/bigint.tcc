@@ -158,7 +158,7 @@ bool bigint<n>::test_bit(const std::size_t bitno) const
         const std::size_t part = bitno/GMP_NUMB_BITS;
         const std::size_t bit = bitno - (GMP_NUMB_BITS*part);
         const mp_limb_t one = 1;
-        return (this->data[part] & (one<<bit));
+        return (this->data[part] & (one<<bit)) != 0;
     }
 }
 
