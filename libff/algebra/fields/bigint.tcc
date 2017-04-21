@@ -11,6 +11,7 @@
 #define BIGINT_TCC_
 #include <cassert>
 #include <cstring>
+#include <random>
 
 namespace libff {
 
@@ -165,11 +166,14 @@ bool bigint<n>::test_bit(const std::size_t bitno) const
 template<mp_size_t n>
 bigint<n>& bigint<n>::randomize()
 {
-    assert(GMP_NUMB_BITS == sizeof(mp_limb_t) * 8);
-    FILE *fp = fopen("/dev/urandom", "r");  //TODO Remove hard-coded use of /dev/urandom.
-    size_t bytes_read = fread(this->data, 1, sizeof(mp_limb_t) * n, fp);
-    assert(bytes_read == sizeof(mp_limb_t) * n);
-    fclose(fp);
+    static_assert(GMP_NUMB_BITS == sizeof(mp_limb_t) * 8, "Wrong GMP_NUMB_BITS value");
+	std::random_device rd;
+	constexpr size_t num_random_words = sizeof(mp_limb_t) * n / sizeof(std::random_device::result_type);
+	auto random_words = reinterpret_cast<std::random_device::result_type*>(this->data);
+	for (size_t i = 0; i < num_random_words; ++i)
+	{
+		random_words[i] = rd();
+	}
 
     return (*this);
 }
