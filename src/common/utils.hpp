@@ -45,7 +45,7 @@ void UNUSED(Types&&...) {}
 #ifdef DEBUG
 #define FMT FORMAT
 #else
-#define FMT UNUSED
+#define FMT(...) (UNUSED(__VA_ARGS__), "")
 #endif
 
 void serialize_bit_vector(std::ostream &out, const bit_vector &v);
