@@ -44,7 +44,9 @@ FieldT SHA512_rng(const uint64_t idx)
         }
 
         /* clear all bits higher than MSB of modulus */
-        size_t bitno = GMP_NUMB_BITS * FieldT::num_limbs;
+        size_t bitno = GMP_NUMB_BITS * FieldT::num_limbs - 1;
+
+        /* mod is non-zero so the loop will always terminate */
         while (FieldT::mod.test_bit(bitno) == false)
         {
             const std::size_t part = bitno/GMP_NUMB_BITS;
