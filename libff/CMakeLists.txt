@@ -74,6 +74,18 @@ install(
   TARGETS ff DESTINATION lib
 )
 
+add_executable(
+  multiexp_profile
+  EXCLUDE_FROM_ALL
+
+  algebra/scalar_multiplication/multiexp_profile.cpp
+)
+target_link_libraries(
+  multiexp_profile
+
+  ff
+)
+
 # Tests
 add_executable(
   algebra_bilinearity_test
