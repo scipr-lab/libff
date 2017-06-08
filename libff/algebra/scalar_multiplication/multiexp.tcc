@@ -18,6 +18,7 @@
 #include <cassert>
 #include <type_traits>
 
+#include <libff/algebra/fields/bigint.hpp>
 #include <libff/algebra/fields/fp_aux.tcc>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 #include <libff/common/profiling.hpp>
@@ -139,6 +140,139 @@ T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
         result = result + (*scalar_it) * (*vec_it);
     }
     assert(scalar_it == scalar_end);
+
+    return result;
+}
+
+/**
+ * Simultaneous 2^w-ary method,
+ * Section 2.1 of Bodo Moller, "Algorithms for multi-exponentiation", SAC '01
+ */
+template<typename T, typename FieldT>
+T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
+                     typename std::vector<T>::const_iterator bases_end,
+                     typename std::vector<FieldT>::const_iterator exponents,
+                     typename std::vector<FieldT>::const_iterator exponents_end,
+                     size_t chunk_length)
+{
+    UNUSED(exponents_end);
+
+    size_t length = bases_end - bases;
+    size_t pair_count = (length + 1) / 2;
+
+    std::vector<T> precomp(pair_count << (2 * chunk_length));
+
+    // precomp[(i << (2 * chunk_length)) | (a << chunk_length) | b] contains
+    // ag + bh, where g and f are elements of pair i
+    // (so g = bases[2*i], h = bases[2*i + 1])
+    for (size_t i = 0; i < pair_count; i++)
+    {
+        // first, assume b = 0
+        // cover a = 0, a = 1 manually, then process the rest in pairs of
+        // 2j and 2j+1 to cover even/odd cases separately and thus
+        // benefit from fast doubling
+        size_t pair_mask = i << (2 * chunk_length);
+        precomp[pair_mask | 0 << chunk_length] = T::zero();
+        precomp[pair_mask | 1 << chunk_length] = bases[2 * i];
+        for (size_t j = 1; j < (1u << (chunk_length - 1)); j++)
+        {
+            // (2j) * g = 2 * (jg)
+            precomp[pair_mask | (2*j) << chunk_length] =
+                precomp[pair_mask | j << chunk_length].dbl();
+            // (2j + 1) * g = (2j) * g  + g
+            precomp[pair_mask | (2*j + 1) << chunk_length] =
+                precomp[pair_mask | (2*j) << chunk_length] + bases[2 * i];
+        }
+
+        // now consider b != 0
+        if (2*i + 1 == length)
+        {
+            // bases[2*i + 1] does not exist
+            break;
+        }
+
+        for (size_t j = 0; j < (1u << (chunk_length - 1)); j++)
+        {
+            // calculating (2j)g + bh,
+            // also in pairs to benefit from doubling
+            // note that (2j)g + 0h is already calculated, but
+            // (2j)g + 1h isn't
+            precomp[pair_mask | (2*j) << chunk_length | 1] =
+                precomp[pair_mask | (2*j) << chunk_length] + bases[2*i + 1];
+            for (size_t k = 1; k < (1u << (chunk_length - 1)); k++)
+            {
+                // (2j)g + (2k)h = 2 * (jg + kh)
+                precomp[pair_mask | (2*j) << chunk_length | (2*k)] =
+                    precomp[pair_mask | j << chunk_length | k].dbl();
+                // (2j)g + (2k + 1)h = (2j)g + (2k)h + h
+                precomp[pair_mask | (2*j) << chunk_length | (2*k + 1)] =
+                    precomp[pair_mask | (2*j) << chunk_length | (2*k)] +
+                    bases[2 * i + 1];
+            }
+
+            // calculating (2j+1)g + bh,
+            // cannot benefit from doubling
+            // note that (2j+1)g + 0h is already calculated
+            for (size_t b = 1; b < (1u << chunk_length); b++)
+            {
+                // (2j + 1) * g + b * h = (2j + 1) * g + (b - 1) * h + h
+                precomp[pair_mask | (2*j + 1) << chunk_length | b] =
+                    precomp[pair_mask | (2*j + 1) << chunk_length | (b - 1)] +
+                    bases[2 * i + 1];
+            }
+        }
+    }
+
+    // now time to do the actual exponentiation
+    const mp_size_t exp_num_limbs =
+        std::remove_reference<decltype(*exponents)>::type::num_limbs;
+    std::vector<bigint<exp_num_limbs> > bn_exponents(2 * pair_count);
+    size_t num_bits = 0;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        bn_exponents[i] = exponents[i].as_bigint();
+        num_bits = std::max(num_bits, bn_exponents[i].num_bits());
+    }
+    // note: if length is odd, bn_exponents[length + 1] == 0,
+    // which is exactly what we'll want
+
+    // note: bigint.test_bit(x) works safely even for x bigger than
+    // bigint.max_bits()
+
+
+    T result = T::zero();
+    // chunk is unsigned, so the loop condition can't be (chunk >= 0)
+    size_t chunk_count = (num_bits + chunk_length - 1) / chunk_length;
+    for (size_t chunk = chunk_count - 1; chunk < chunk_count; chunk--)
+    {
+        for (size_t i = 0; i < pair_count; i++)
+        {
+            size_t entry = i << (2 * chunk_length);
+            for (size_t bit = 0; bit < chunk_length; bit++)
+            {
+                if (bn_exponents[2*i].test_bit(chunk_length * chunk + bit))
+                {
+                    entry |= 1 << (chunk_length + bit);
+                }
+
+                if (bn_exponents[2*i + 1].test_bit(chunk_length * chunk + bit))
+                {
+                    entry |= 1 << bit;
+                }
+            }
+
+            result = result + precomp[entry];
+        }
+
+        if (chunk != 0)
+        {
+            for (size_t i = 0; i < chunk_length; i++)
+            {
+                result = result.dbl();
+            }
+        }
+    }
 
     return result;
 }

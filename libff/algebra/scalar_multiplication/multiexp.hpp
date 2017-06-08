@@ -34,6 +34,17 @@ T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
                   typename std::vector<FieldT>::const_iterator scalar_end);
 
 /**
+ * Simultaneous 2^w-ary method,
+ * Section 2.1 of Bodo Moller, "Algorithms for multi-exponentiation", SAC '01
+ */
+template<typename T, typename FieldT>
+T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
+                     typename std::vector<T>::const_iterator bases_end,
+                     typename std::vector<FieldT>::const_iterator exponents,
+                     typename std::vector<FieldT>::const_iterator exponents_end,
+                     size_t chunk_length);
+
+/**
  * Naive multi-exponentiation uses a variant of the Bos-Coster algorithm [1],
  * and implementation suggestions from [2].
  *
