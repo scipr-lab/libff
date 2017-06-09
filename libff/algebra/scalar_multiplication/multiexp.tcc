@@ -277,6 +277,112 @@ T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
     return result;
 }
 
+/*
+ * A special case of Pippenger's algorithm from Page 15 of
+ * https://eprint.iacr.org/2012/549.pdf
+ */
+template<typename T, typename FieldT>
+T multi_exp_djb(typename std::vector<T>::const_iterator bases,
+                typename std::vector<T>::const_iterator bases_end,
+                typename std::vector<FieldT>::const_iterator exponents,
+                typename std::vector<FieldT>::const_iterator exponents_end,
+                size_t c)
+{
+    UNUSED(exponents_end);
+
+    size_t length = bases_end - bases;
+    const mp_size_t exp_num_limbs =
+        std::remove_reference<decltype(*exponents)>::type::num_limbs;
+    std::vector<bigint<exp_num_limbs> > bn_exponents(length);
+    size_t num_bits = 0;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        bn_exponents[i] = exponents[i].as_bigint();
+        num_bits = std::max(num_bits, bn_exponents[i].num_bits());
+    }
+
+    size_t num_groups = (num_bits + c - 1) / c;
+
+    T result;
+    bool result_nonzero = false;
+
+    for (size_t k = num_groups - 1; k <= num_groups; k--)
+    {
+        if (result_nonzero)
+        {
+            for (size_t i = 0; i < c; i++)
+            {
+                result = result.dbl();
+            }
+        }
+
+        std::vector<T> buckets(1 << c);
+        std::vector<bool> bucket_nonzero(1 << c);
+
+        for (size_t i = 0; i < length; i++)
+        {
+            size_t id = 0;
+            for (size_t j = 0; j < c; j++)
+            {
+                if (bn_exponents[i].test_bit(k*c + j))
+                {
+                    id |= 1 << j;
+                }
+            }
+
+            if (id == 0)
+            {
+                continue;
+            }
+
+            if (bucket_nonzero[id])
+            {
+                buckets[id] = buckets[id] + bases[i];
+            }
+            else
+            {
+                buckets[id] = bases[i];
+                bucket_nonzero[id] = true;
+            }
+        }
+
+        T running_sum;
+        bool running_sum_nonzero = false;
+
+        for (size_t i = (1u << c) - 1; i > 0; i--)
+        {
+            if (bucket_nonzero[i])
+            {
+                if (running_sum_nonzero)
+                {
+                    running_sum = running_sum + buckets[i];
+                }
+                else
+                {
+                    running_sum = buckets[i];
+                    running_sum_nonzero = true;
+                }
+            }
+
+            if (running_sum_nonzero)
+            {
+                if (result_nonzero)
+                {
+                    result = result + running_sum;
+                }
+                else
+                {
+                    result = running_sum;
+                    result_nonzero = true;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
 template<typename T, typename FieldT>
 T multi_exp_inner_rivest(typename std::vector<T>::const_iterator vec_start,
                          typename std::vector<T>::const_iterator vec_end,

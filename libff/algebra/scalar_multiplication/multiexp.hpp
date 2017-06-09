@@ -44,6 +44,17 @@ T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
                      typename std::vector<FieldT>::const_iterator exponents_end,
                      size_t chunk_length);
 
+/*
+ * A special case of Pippenger's algorithm from Page 15 of
+ * https://eprint.iacr.org/2012/549.pdf
+ */
+template<typename T, typename FieldT>
+T multi_exp_djb(typename std::vector<T>::const_iterator bases,
+                typename std::vector<T>::const_iterator bases_end,
+                typename std::vector<FieldT>::const_iterator exponents,
+                typename std::vector<FieldT>::const_iterator exponents_end,
+                size_t c);
+
 /**
  * Naive multi-exponentiation uses a variant of the Bos-Coster algorithm [1],
  * and implementation suggestions from [2].
