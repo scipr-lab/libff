@@ -277,6 +277,135 @@ T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
     return result;
 }
 
+template<typename T, typename FieldT>
+T multi_exp_inner_rivest(typename std::vector<T>::const_iterator vec_start,
+                         typename std::vector<T>::const_iterator vec_end,
+                         typename std::vector<FieldT>::const_iterator scalar_start,
+                         typename std::vector<FieldT>::const_iterator scalar_end)
+{
+    UNUSED(scalar_end);
+    size_t length = vec_end - vec_start;
+
+    if (length == 0)
+    {
+        return T::zero();
+    }
+
+    if (length == 1)
+    {
+        return (*scalar_start)*(*vec_start);
+    }
+
+    // first, we carefully count & group exponents into buckets
+    // so that they are stored in exponents[] grouped by .num_bits()
+    // s.t. the exponents with .num_bits() = k
+    // are stored in exponents[bucket_start[k] .. bucket_start[k + 1] - 1]
+    const mp_size_t exp_num_limbs =
+        std::remove_reference<decltype(*scalar_start)>::type::num_limbs;
+    std::vector<bigint<exp_num_limbs> > tmp_exponents(length);
+    std::vector<size_t> bucket_start(exp_num_limbs * GMP_NUMB_BITS);
+    size_t num_bits = 0;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        tmp_exponents[i] = scalar_start[i].as_bigint();
+        size_t num_bits_here = tmp_exponents[i].num_bits();
+        num_bits = std::max(num_bits, num_bits_here);
+        bucket_start[num_bits_here]++;
+    }
+
+    for (size_t i = 1; i < num_bits + 2; i++)
+    {
+        bucket_start[i] += bucket_start[i - 1];
+    }
+
+    std::vector<T> bases(length);
+    std::vector<bigint<exp_num_limbs> > exponents(length);
+    for (size_t i = 0; i < length; i++)
+    {
+        size_t index = --bucket_start[tmp_exponents[i].num_bits()];
+        exponents[index] = tmp_exponents[i];
+        bases[index] = vec_start[i];
+    }
+
+    // now we do a weaker version of Bos and Coster:
+    // take two terms ag + bh from the biggest bucket
+    // and replace them with (a-b)g + b(g+h)
+    // until all exponents but one are 0
+
+    // we will keep num_bits updated (i.e. it's always going to be
+    // the highest i for which bucket_start[i] != bucket_start[i + 1])
+
+    T result = T::zero();
+
+    while (bucket_start[1] < length - 1)
+    {
+        // take the last element of the last bucket,
+        // and also the one before it (possibly from a smaller bucket)
+        size_t i = bucket_start[num_bits + 1] - 1;
+        size_t j = i - 1;
+
+        // it could be that exponents[j] > exponents[i], but only
+        // if they come from the same bucket.
+        // that would be very inconvenient, so we test it & fix if necessary.
+        if ((bucket_start[num_bits] <= j) &&
+            (mpn_cmp(exponents[j].data, exponents[i].data, exp_num_limbs) > 0))
+        {
+            std::swap(exponents[i], exponents[j]);
+            std::swap(bases[i], bases[j]);
+        }
+
+        size_t j_bits = exponents[j].num_bits();
+        size_t limit = (num_bits - j_bits >= 20 ? 20 : num_bits - j_bits);
+
+        if (j_bits < 1ul << limit)
+        {
+            /*
+              In this case, exponentiating to the power of a is cheaper than
+              subtracting b from a multiple times, so let's do it directly
+              */
+            result = result.add(opt_window_wnaf_exp(bases[i], exponents[i], num_bits));
+            exponents[i].clear();
+        }
+        else
+        {
+            bases[j] = bases[j].add(bases[i]);
+            // exponents[i] -= exponents[j];
+            mpn_sub_n(exponents[i].data, exponents[i].data, exponents[j].data,
+                exp_num_limbs);
+        }
+
+
+        // i might now belong in a different bucket
+        size_t i_bucket = exponents[i].num_bits();
+        size_t i_cur_bucket = num_bits;
+        while (i_cur_bucket != i_bucket)
+        {
+            // move i to previous bucket by moving it to start of current one
+            // and then advance the bucket_start pointer forwards
+            if (i != bucket_start[i_cur_bucket])
+            {
+                std::swap(exponents[i], exponents[bucket_start[i_cur_bucket]]);
+                std::swap(bases[i], bases[bucket_start[i_cur_bucket]]);
+                i = bucket_start[i_cur_bucket];
+            }
+            bucket_start[i_cur_bucket]++;
+            i_cur_bucket--;
+        }
+
+        // update num_bits in case i was the only thing in its bucket
+        // and had its num_bits decreased
+        while (bucket_start[num_bits] == bucket_start[num_bits + 1])
+        {
+            num_bits--;
+        }
+    }
+
+    return result.add(opt_window_wnaf_exp(bases[bucket_start[num_bits]],
+        exponents[bucket_start[num_bits]],
+        num_bits));
+}
+
 /*
   The multi-exponentiation algorithm below is a variant of the Bos-Coster algorithm
   [Bos and Coster, "Addition chain heuristics", CRYPTO '89].
