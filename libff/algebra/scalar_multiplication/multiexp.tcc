@@ -289,8 +289,15 @@ T multi_exp_djb(typename std::vector<T>::const_iterator bases,
                 size_t c)
 {
     UNUSED(exponents_end);
-
     size_t length = bases_end - bases;
+
+    if (c == 0)
+    {
+        // empirically, this seems to be a decent estimate of the optimal value of c
+        size_t log2_length = log2(length);
+        c = log2_length - (log2_length / 3 - 2);
+    }
+
     const mp_size_t exp_num_limbs =
         std::remove_reference<decltype(*exponents)>::type::num_limbs;
     std::vector<bigint<exp_num_limbs> > bn_exponents(length);

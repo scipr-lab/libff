@@ -53,7 +53,7 @@ T multi_exp_djb(typename std::vector<T>::const_iterator bases,
                 typename std::vector<T>::const_iterator bases_end,
                 typename std::vector<FieldT>::const_iterator exponents,
                 typename std::vector<FieldT>::const_iterator exponents_end,
-                size_t c);
+                size_t c = 0);
 
 /**
  * Naive multi-exponentiation uses a variant of the Bos-Coster algorithm [1],
