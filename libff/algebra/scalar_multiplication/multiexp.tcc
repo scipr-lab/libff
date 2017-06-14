@@ -345,7 +345,11 @@ T multi_exp_djb(typename std::vector<T>::const_iterator bases,
 
             if (bucket_nonzero[id])
             {
+#ifdef USE_MIXED_ADDITION
+                buckets[id] = buckets[id].mixed_add(bases[i]);
+#else
                 buckets[id] = buckets[id] + bases[i];
+#endif
             }
             else
             {
@@ -353,6 +357,10 @@ T multi_exp_djb(typename std::vector<T>::const_iterator bases,
                 bucket_nonzero[id] = true;
             }
         }
+
+#ifdef USE_MIXED_ADDITION
+        batch_to_special(buckets);
+#endif
 
         T running_sum;
         bool running_sum_nonzero = false;
@@ -363,7 +371,11 @@ T multi_exp_djb(typename std::vector<T>::const_iterator bases,
             {
                 if (running_sum_nonzero)
                 {
+#ifdef USE_MIXED_ADDITION
+                    running_sum = running_sum.mixed_add(buckets[i]);
+#else
                     running_sum = running_sum + buckets[i];
+#endif
                 }
                 else
                 {
