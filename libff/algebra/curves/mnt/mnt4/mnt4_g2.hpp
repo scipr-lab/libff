@@ -87,6 +87,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream &out, const mnt4_G2 &g);
     friend std::istream& operator>>(std::istream &in, mnt4_G2 &g);
+
+    static void batch_to_special_all_non_zeros(std::vector<mnt4_G2> &vec);
 };
 
 template<mp_size_t m>
@@ -100,11 +102,6 @@ mnt4_G2 operator*(const Fp_model<m,modulus_p> &lhs, const mnt4_G2 &rhs)
 {
     return scalar_mul<mnt4_G2, m>(rhs, lhs.as_bigint());
 }
-
-template<typename T>
-void batch_to_special_all_non_zeros(std::vector<T> &vec);
-template<>
-void batch_to_special_all_non_zeros<mnt4_G2>(std::vector<mnt4_G2> &vec);
 
 } // libff
 

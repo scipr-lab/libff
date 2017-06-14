@@ -389,10 +389,7 @@ std::istream& operator>>(std::istream &in, edwards_G2 &g)
     return in;
 }
 
-template<typename T>
-void batch_to_special_all_non_zeros(std::vector<T> &vec);
-template<>
-void batch_to_special_all_non_zeros<edwards_G2>(std::vector<edwards_G2> &vec)
+void edwards_G2::batch_to_special_all_non_zeros(std::vector<edwards_G2> &vec)
 {
     std::vector<edwards_Fq3> Z_vec;
     Z_vec.reserve(vec.size());

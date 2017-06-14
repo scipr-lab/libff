@@ -78,6 +78,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream &out, const edwards_G2 &g);
     friend std::istream& operator>>(std::istream &in, edwards_G2 &g);
+
+    static void batch_to_special_all_non_zeros(std::vector<edwards_G2> &vec);
 };
 
 template<mp_size_t m>
@@ -91,11 +93,6 @@ edwards_G2 operator*(const Fp_model<m, modulus_p> &lhs, const edwards_G2 &rhs)
 {
    return scalar_mul<edwards_G2, m>(rhs, lhs.as_bigint());
 }
-
-template<typename T>
-void batch_to_special_all_non_zeros(std::vector<T> &vec);
-template<>
-void batch_to_special_all_non_zeros<edwards_G2>(std::vector<edwards_G2> &vec);
 
 } // libff
 #endif // EDWARDS_G2_HPP_

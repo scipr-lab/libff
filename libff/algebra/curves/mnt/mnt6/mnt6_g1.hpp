@@ -82,6 +82,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream &out, const mnt6_G1 &g);
     friend std::istream& operator>>(std::istream &in, mnt6_G1 &g);
+
+    static void batch_to_special_all_non_zeros(std::vector<mnt6_G1> &vec);
 };
 
 template<mp_size_t m>
@@ -98,11 +100,6 @@ mnt6_G1 operator*(const Fp_model<m,modulus_p> &lhs, const mnt6_G1 &rhs)
 
 std::ostream& operator<<(std::ostream& out, const std::vector<mnt6_G1> &v);
 std::istream& operator>>(std::istream& in, std::vector<mnt6_G1> &v);
-
-template<typename T>
-void batch_to_special_all_non_zeros(std::vector<T> &vec);
-template<>
-void batch_to_special_all_non_zeros<mnt6_G1>(std::vector<mnt6_G1> &vec);
 
 } // libff
 

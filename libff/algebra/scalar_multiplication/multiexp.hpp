@@ -121,10 +121,6 @@ std::vector<T> batch_exp_with_coeff(const size_t scalar_size,
                                     const FieldT &coeff,
                                     const std::vector<FieldT> &v);
 
-// defined in every curve
-template<typename T>
-void batch_to_special_all_non_zeros(std::vector<T> &vec);
-
 template<typename T>
 void batch_to_special(std::vector<T> &vec);
 

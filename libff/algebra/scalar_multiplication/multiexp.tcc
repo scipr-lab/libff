@@ -694,7 +694,7 @@ void batch_to_special(std::vector<T> &vec)
         }
     }
 
-    batch_to_special_all_non_zeros<T>(non_zero_vec);
+    T::batch_to_special_all_non_zeros(non_zero_vec);
     auto it = non_zero_vec.begin();
     T zero_special = T::zero();
     zero_special.to_special();
