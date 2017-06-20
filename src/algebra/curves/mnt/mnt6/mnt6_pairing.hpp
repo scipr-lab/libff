@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "algebra/curves/mnt/mnt6/mnt6_init.hpp"
+#include "mnt6_init.hpp"
 
 namespace libff {
 

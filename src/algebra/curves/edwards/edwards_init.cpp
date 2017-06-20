@@ -5,9 +5,9 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "algebra/curves/edwards/edwards_init.hpp"
-#include "algebra/curves/edwards/edwards_g1.hpp"
-#include "algebra/curves/edwards/edwards_g2.hpp"
+#include "edwards_init.hpp"
+#include "edwards_g1.hpp"
+#include "edwards_g2.hpp"
 
 namespace libff {
 

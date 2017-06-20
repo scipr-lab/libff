@@ -5,7 +5,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "algebra/curves/edwards/edwards_pp.hpp"
+#include "edwards_pp.hpp"
 
 namespace libff {
 

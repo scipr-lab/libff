@@ -9,8 +9,8 @@
 
 #ifndef FP6_2OVER3_TCC_
 #define FP6_2OVER3_TCC_
-#include "algebra/fields/field_utils.hpp"
-#include "algebra/scalar_multiplication/wnaf.hpp"
+#include "field_utils.hpp"
+#include "../scalar_multiplication/wnaf.hpp"
 
 namespace libff {
 

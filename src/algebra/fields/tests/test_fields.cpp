@@ -4,16 +4,16 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include "common/profiling.hpp"
-#include "algebra/curves/edwards/edwards_pp.hpp"
-#include "algebra/curves/mnt/mnt4/mnt4_pp.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_pp.hpp"
+#include "../../../common/profiling.hpp"
+#include "../../curves/edwards/edwards_pp.hpp"
+#include "../../curves/mnt/mnt4/mnt4_pp.hpp"
+#include "../../curves/mnt/mnt6/mnt6_pp.hpp"
 #ifdef CURVE_BN128
-#include "algebra/curves/bn128/bn128_pp.hpp"
+#include "../../curves/bn128/bn128_pp.hpp"
 #endif
-#include "algebra/curves/alt_bn128/alt_bn128_pp.hpp"
-#include "algebra/fields/fp6_3over2.hpp"
-#include "algebra/fields/fp12_2over3over2.hpp"
+#include "../../curves/alt_bn128/alt_bn128_pp.hpp"
+#include "../fp6_3over2.hpp"
+#include "../fp12_2over3over2.hpp"
 
 using namespace libff;
 

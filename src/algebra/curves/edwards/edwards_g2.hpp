@@ -9,8 +9,8 @@
 #define EDWARDS_G2_HPP_
 #include <iostream>
 #include <vector>
-#include "algebra/curves/edwards/edwards_init.hpp"
-#include "algebra/curves/curve_utils.hpp"
+#include "edwards_init.hpp"
+#include "../curve_utils.hpp"
 
 namespace libff {
 

@@ -13,7 +13,7 @@
 #include <cmath>
 #include <math.h>
 
-#include "algebra/fields/bigint.hpp"
+#include "../algebra/fields/bigint.hpp"
 
 #include "double.hpp"
 

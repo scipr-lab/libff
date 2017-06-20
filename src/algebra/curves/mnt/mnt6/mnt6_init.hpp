@@ -12,11 +12,11 @@
 #ifndef MNT6_INIT_HPP_
 #define MNT6_INIT_HPP_
 
-#include "algebra/curves/public_params.hpp"
-#include "algebra/curves/mnt/mnt46_common.hpp"
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/fp3.hpp"
-#include "algebra/fields/fp6_2over3.hpp"
+#include "../../public_params.hpp"
+#include "../mnt46_common.hpp"
+#include "../../../fields/fp.hpp"
+#include "../../../fields/fp3.hpp"
+#include "../../../fields/fp6_2over3.hpp"
 
 namespace libff {
 

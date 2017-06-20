@@ -8,8 +8,8 @@
 #ifndef EDWARDS_G1_HPP_
 #define EDWARDS_G1_HPP_
 #include <vector>
-#include "algebra/curves/edwards/edwards_init.hpp"
-#include "algebra/curves/curve_utils.hpp"
+#include "edwards_init.hpp"
+#include "../curve_utils.hpp"
 
 namespace libff {
 

@@ -13,12 +13,12 @@
 
 #include <cassert>
 
-#include "algebra/curves/mnt/mnt6/mnt6_pairing.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_init.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_g1.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_g2.hpp"
-#include "algebra/scalar_multiplication/wnaf.hpp"
-#include "common/profiling.hpp"
+#include "mnt6_pairing.hpp"
+#include "mnt6_init.hpp"
+#include "mnt6_g1.hpp"
+#include "mnt6_g2.hpp"
+#include "../../../scalar_multiplication/wnaf.hpp"
+#include "../../../../common/profiling.hpp"
 
 namespace libff {
 

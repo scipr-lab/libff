@@ -7,10 +7,10 @@
 
 #ifndef EDWARDS_INIT_HPP_
 #define EDWARDS_INIT_HPP_
-#include "algebra/curves/public_params.hpp"
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/fp3.hpp"
-#include "algebra/fields/fp6_2over3.hpp"
+#include "../public_params.hpp"
+#include "../../fields/fp.hpp"
+#include "../../fields/fp3.hpp"
+#include "../../fields/fp6_2over3.hpp"
 
 namespace libff {
 

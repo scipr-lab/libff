@@ -12,7 +12,7 @@
 #include <cstddef>
 #include <iostream>
 #include <gmp.h>
-#include "common/serialization.hpp"
+#include "../../common/serialization.hpp"
 
 namespace libff {
 
@@ -57,5 +57,5 @@ public:
 };
 
 } // libff
-#include "algebra/fields/bigint.tcc"
+#include "bigint.tcc"
 #endif

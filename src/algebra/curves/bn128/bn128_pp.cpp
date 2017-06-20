@@ -5,8 +5,8 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "algebra/curves/bn128/bn128_pp.hpp"
-#include "common/profiling.hpp"
+#include "bn128_pp.hpp"
+#include "../../../common/profiling.hpp"
 
 namespace libff {
 

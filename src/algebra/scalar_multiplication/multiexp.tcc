@@ -14,15 +14,15 @@
 #ifndef MULTIEXP_TCC_
 #define MULTIEXP_TCC_
 
-#include "algebra/fields/fp_aux.tcc"
+#include "../fields/fp_aux.tcc"
 
 #include <algorithm>
 #include <cassert>
 #include <type_traits>
 
-#include "common/profiling.hpp"
-#include "common/utils.hpp"
-#include "algebra/scalar_multiplication/wnaf.hpp"
+#include "../../common/profiling.hpp"
+#include "../../common/utils.hpp"
+#include "wnaf.hpp"
 
 namespace libff {
 

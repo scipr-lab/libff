@@ -14,8 +14,8 @@
 
 #include <vector>
 
-#include "algebra/curves/curve_utils.hpp"
-#include "algebra/curves/mnt/mnt4/mnt4_init.hpp"
+#include "../../curve_utils.hpp"
+#include "mnt4_init.hpp"
 
 namespace libff {
 

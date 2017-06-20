@@ -21,6 +21,6 @@ FieldT SHA512_rng(const uint64_t idx);
 
 } // libff
 
-#include "common/rng.tcc"
+#include "rng.tcc"
 
 #endif // RNG_HPP_

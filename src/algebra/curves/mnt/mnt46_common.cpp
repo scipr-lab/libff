@@ -11,7 +11,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "algebra/curves/mnt/mnt46_common.hpp"
+#include "mnt46_common.hpp"
 
 namespace libff {
 

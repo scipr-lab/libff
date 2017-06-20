@@ -10,8 +10,8 @@
 #ifndef FP_HPP_
 #define FP_HPP_
 
-#include "algebra/fields/bigint.hpp"
-#include "algebra/exponentiation/exponentiation.hpp"
+#include "bigint.hpp"
+#include "../exponentiation/exponentiation.hpp"
 
 namespace libff {
 
@@ -179,6 +179,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n, modulus>::Rcubed;
 
 } // libff
-#include "algebra/fields/fp.tcc"
+#include "fp.tcc"
 
 #endif // FP_HPP_

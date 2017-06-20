@@ -13,7 +13,7 @@
 #define DOUBLE_HPP_
 
 #include <complex>
-#include "algebra/fields/bigint.hpp"
+#include "../algebra/fields/bigint.hpp"
 
 namespace libff {
 

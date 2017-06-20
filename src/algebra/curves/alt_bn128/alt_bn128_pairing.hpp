@@ -8,7 +8,7 @@
 #ifndef ALT_BN128_PAIRING_HPP_
 #define ALT_BN128_PAIRING_HPP_
 #include <vector>
-#include "algebra/curves/alt_bn128/alt_bn128_init.hpp"
+#include "alt_bn128_init.hpp"
 
 namespace libff {
 

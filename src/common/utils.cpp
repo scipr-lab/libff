@@ -11,7 +11,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdarg>
-#include "common/utils.hpp"
+#include "utils.hpp"
 
 namespace libff {
 

@@ -58,5 +58,5 @@ size_t size_in_bits(const std::vector<T> &v);
 
 } // libff
 
-#include "common/utils.tcc" /* note that utils has a templatized part (utils.tcc) and non-templatized part (utils.cpp) */
+#include "utils.tcc" /* note that utils has a templatized part (utils.tcc) and non-templatized part (utils.cpp) */
 #endif // UTILS_HPP_

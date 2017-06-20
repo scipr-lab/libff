@@ -14,7 +14,7 @@
 
 #include <cstdint>
 
-#include "algebra/fields/bigint.hpp"
+#include "../fields/bigint.hpp"
 
 namespace libff {
 
@@ -26,6 +26,6 @@ FieldT power(const FieldT &base, const unsigned long exponent);
 
 } // libff
 
-#include "algebra/exponentiation/exponentiation.tcc"
+#include "exponentiation.tcc"
 
 #endif // EXPONENTIATION_HPP_

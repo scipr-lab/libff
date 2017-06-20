@@ -12,11 +12,11 @@
 #ifndef MNT6_PP_HPP_
 #define MNT6_PP_HPP_
 
-#include "algebra/curves/public_params.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_init.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_g1.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_g2.hpp"
-#include "algebra/curves/mnt/mnt6/mnt6_pairing.hpp"
+#include "../../public_params.hpp"
+#include "mnt6_init.hpp"
+#include "mnt6_g1.hpp"
+#include "mnt6_g2.hpp"
+#include "mnt6_pairing.hpp"
 
 namespace libff {
 

@@ -11,7 +11,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "common/profiling.hpp"
+#include "profiling.hpp"
 #include <cassert>
 #include <stdexcept>
 #include <chrono>
@@ -19,8 +19,8 @@
 #include <list>
 #include <vector>
 #include <ctime>
-#include "common/default_types/ec_pp.hpp"
-#include "common/utils.hpp"
+#include "default_types/ec_pp.hpp"
+#include "utils.hpp"
 
 #ifndef NO_PROCPS
 #include <proc/readproc.h>

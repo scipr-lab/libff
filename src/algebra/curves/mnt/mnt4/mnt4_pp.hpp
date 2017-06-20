@@ -12,11 +12,11 @@
 #ifndef MNT4_PP_HPP_
 #define MNT4_PP_HPP_
 
-#include "algebra/curves/public_params.hpp"
-#include "algebra/curves/mnt/mnt4/mnt4_init.hpp"
-#include "algebra/curves/mnt/mnt4/mnt4_g1.hpp"
-#include "algebra/curves/mnt/mnt4/mnt4_g2.hpp"
-#include "algebra/curves/mnt/mnt4/mnt4_pairing.hpp"
+#include "../../public_params.hpp"
+#include "mnt4_init.hpp"
+#include "mnt4_g1.hpp"
+#include "mnt4_g2.hpp"
+#include "mnt4_pairing.hpp"
 
 namespace libff {
 
