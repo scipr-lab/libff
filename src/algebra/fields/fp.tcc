@@ -14,8 +14,8 @@
 #include <cmath>
 #include <limits>
 
-#include "algebra/fields/fp_aux.tcc"
-#include "algebra/fields/field_utils.hpp"
+#include "fp_aux.tcc"
+#include "field_utils.hpp"
 
 namespace libff {
 

@@ -12,11 +12,11 @@
 #ifndef MNT4_INIT_HPP_
 #define MNT4_INIT_HPP_
 
-#include "algebra/curves/public_params.hpp"
-#include "algebra/curves/mnt/mnt46_common.hpp"
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/fp2.hpp"
-#include "algebra/fields/fp4.hpp"
+#include "../../public_params.hpp"
+#include "../mnt46_common.hpp"
+#include "../../../fields/fp.hpp"
+#include "../../../fields/fp2.hpp"
+#include "../../../fields/fp4.hpp"
 
 namespace libff {
 

@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "algebra/curves/mnt/mnt4/mnt4_init.hpp"
+#include "mnt4_init.hpp"
 
 namespace libff {
 

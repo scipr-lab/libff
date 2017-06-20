@@ -1,5 +1,3 @@
-include_directories(.)
-
 set(FF_EXTRASRCS)
 set(FF_EXTRALIBS)
 if(${CURVE} STREQUAL "BN128")

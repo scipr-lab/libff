@@ -7,11 +7,11 @@
 
 #ifndef ALT_BN128_INIT_HPP_
 #define ALT_BN128_INIT_HPP_
-#include "algebra/curves/public_params.hpp"
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/fp2.hpp"
-#include "algebra/fields/fp6_3over2.hpp"
-#include "algebra/fields/fp12_2over3over2.hpp"
+#include "../public_params.hpp"
+#include "../../fields/fp.hpp"
+#include "../../fields/fp2.hpp"
+#include "../../fields/fp6_3over2.hpp"
+#include "../../fields/fp12_2over3over2.hpp"
 
 namespace libff {
 

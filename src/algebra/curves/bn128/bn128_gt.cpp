@@ -5,7 +5,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "algebra/curves/bn128/bn128_gt.hpp"
+#include "bn128_gt.hpp"
 
 namespace libff {
 

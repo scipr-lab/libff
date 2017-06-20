@@ -10,7 +10,7 @@
 #ifndef FP2_TCC_
 #define FP2_TCC_
 
-#include "algebra/fields/field_utils.hpp"
+#include "field_utils.hpp"
 
 namespace libff {
 

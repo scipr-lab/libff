@@ -105,6 +105,6 @@ void batch_to_special(std::vector<T> &vec);
 
 } // libff
 
-#include "algebra/scalar_multiplication/multiexp.tcc"
+#include "multiexp.tcc"
 
 #endif // MULTIEXP_HPP_

@@ -16,35 +16,35 @@
 /************************ Pick the elliptic curve ****************************/
 
 #ifdef CURVE_ALT_BN128
-#include "algebra/curves/alt_bn128/alt_bn128_pp.hpp"
+#include "../../algebra/curves/alt_bn128/alt_bn128_pp.hpp"
 namespace libff {
 typedef alt_bn128_pp default_ec_pp;
 } // libff
 #endif
 
 #ifdef CURVE_BN128
-#include "algebra/curves/bn128/bn128_pp.hpp"
+#include "../../algebra/curves/bn128/bn128_pp.hpp"
 namespace libff {
 typedef bn128_pp default_ec_pp;
 } // libff
 #endif
 
 #ifdef CURVE_EDWARDS
-#include "algebra/curves/edwards/edwards_pp.hpp"
+#include "../../algebra/curves/edwards/edwards_pp.hpp"
 namespace libff {
 typedef edwards_pp default_ec_pp;
 } // libff
 #endif
 
 #ifdef CURVE_MNT4
-#include "algebra/curves/mnt/mnt4/mnt4_pp.hpp"
+#include "../../algebra/curves/mnt/mnt4/mnt4_pp.hpp"
 namespace libff {
 typedef mnt4_pp default_ec_pp;
 } // libff
 #endif
 
 #ifdef CURVE_MNT6
-#include "algebra/curves/mnt/mnt6/mnt6_pp.hpp"
+#include "../../algebra/curves/mnt/mnt6/mnt6_pp.hpp"
 namespace libff {
 typedef mnt6_pp default_ec_pp;
 } // libff

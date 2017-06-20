@@ -16,7 +16,7 @@
 
 #include <cassert>
 #include <sstream>
-#include "common/utils.hpp"
+#include "utils.hpp"
 
 namespace libff {
 

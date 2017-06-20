@@ -17,6 +17,6 @@ void bn_batch_invert(std::vector<FieldT> &vec);
 
 } // libff
 
-#include "algebra/curves/bn128/bn_utils.tcc"
+#include "bn_utils.tcc"
 
 #endif // BN_UTILS_HPP_

@@ -11,7 +11,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include "algebra/curves/mnt/mnt4/mnt4_pp.hpp"
+#include "mnt4_pp.hpp"
 
 namespace libff {
 

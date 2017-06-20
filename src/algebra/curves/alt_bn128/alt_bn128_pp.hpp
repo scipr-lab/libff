@@ -7,11 +7,11 @@
 
 #ifndef ALT_BN128_PP_HPP_
 #define ALT_BN128_PP_HPP_
-#include "algebra/curves/public_params.hpp"
-#include "algebra/curves/alt_bn128/alt_bn128_init.hpp"
-#include "algebra/curves/alt_bn128/alt_bn128_g1.hpp"
-#include "algebra/curves/alt_bn128/alt_bn128_g2.hpp"
-#include "algebra/curves/alt_bn128/alt_bn128_pairing.hpp"
+#include "../public_params.hpp"
+#include "alt_bn128_init.hpp"
+#include "alt_bn128_g1.hpp"
+#include "alt_bn128_g2.hpp"
+#include "alt_bn128_pairing.hpp"
 
 namespace libff {
 

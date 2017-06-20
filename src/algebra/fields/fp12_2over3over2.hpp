@@ -9,9 +9,9 @@
 
 #ifndef FP12_2OVER3OVER2_HPP_
 #define FP12_2OVER3OVER2_HPP_
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/fp2.hpp"
-#include "algebra/fields/fp6_3over2.hpp"
+#include "fp.hpp"
+#include "fp2.hpp"
+#include "fp6_3over2.hpp"
 #include <vector>
 
 namespace libff {
@@ -112,5 +112,5 @@ template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n, modulus> Fp12_2over3over2_model<n, modulus>::Frobenius_coeffs_c1[12];
 
 } // libff
-#include "algebra/fields/fp12_2over3over2.tcc"
+#include "fp12_2over3over2.tcc"
 #endif // FP12_2OVER3OVER2_HPP_

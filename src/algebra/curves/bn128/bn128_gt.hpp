@@ -7,8 +7,8 @@
 
 #ifndef BN128_GT_HPP_
 #define BN128_GT_HPP_
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/field_utils.hpp"
+#include "../../fields/fp.hpp"
+#include "../../fields/field_utils.hpp"
 #include <iostream>
 #include "third_party/ate-pairing/include/bn.h"
 

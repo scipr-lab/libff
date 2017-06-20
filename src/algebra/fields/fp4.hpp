@@ -16,8 +16,8 @@
 #ifndef FP4_HPP_
 #define FP4_HPP_
 
-#include "algebra/fields/fp.hpp"
-#include "algebra/fields/fp2.hpp"
+#include "fp.hpp"
+#include "fp2.hpp"
 
 namespace libff {
 
@@ -99,6 +99,6 @@ Fp_model<n, modulus> Fp4_model<n, modulus>::Frobenius_coeffs_c1[4];
 
 } // libff
 
-#include "algebra/fields/fp4.tcc"
+#include "fp4.tcc"
 
 #endif // FP4_HPP_

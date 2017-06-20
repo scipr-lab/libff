@@ -9,7 +9,7 @@
 
 #ifndef FP2_HPP_
 #define FP2_HPP_
-#include "algebra/fields/fp.hpp"
+#include "fp.hpp"
 #include <vector>
 
 namespace libff {
@@ -115,6 +115,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp2_model<n, modulus>::Frobenius_coeffs_c1[2];
 
 } // libff
-#include "algebra/fields/fp2.tcc"
+#include "fp2.tcc"
 
 #endif // FP2_HPP_

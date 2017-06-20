@@ -34,6 +34,6 @@ T opt_window_wnaf_exp(const T &base, const bigint<n> &scalar, const size_t scala
 
 } // libff
 
-#include "algebra/scalar_multiplication/wnaf.tcc"
+#include "wnaf.tcc"
 
 #endif // WNAF_HPP_
