@@ -13,9 +13,9 @@ ___libff___ is a C++ library for finite fields and elliptic curves. The library 
 
 The directory structure is as follows:
 
-* [__src__](src): C++ source code, containing the following modules:
-  * [__algebra__](src/algebra): fields and elliptic curve groups
-  * [__common__](src/common): miscellaneous utilities
+* [__libff__](libff): C++ source code, containing the following modules:
+  * [__algebra__](libff/algebra): fields and elliptic curve groups
+  * [__common__](libff/common): miscellaneous utilities
 * [__third\_party__](third_party): third party libraries
 
 ## Elliptic curve choices
