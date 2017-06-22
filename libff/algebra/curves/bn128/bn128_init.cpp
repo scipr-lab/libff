@@ -5,10 +5,10 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include <libff/algebra/curves/bn128/bn128_init.hpp>
 #include <libff/algebra/curves/bn128/bn128_g1.hpp>
 #include <libff/algebra/curves/bn128/bn128_g2.hpp>
 #include <libff/algebra/curves/bn128/bn128_gt.hpp>
+#include <libff/algebra/curves/bn128/bn128_init.hpp>
 
 namespace libff {
 

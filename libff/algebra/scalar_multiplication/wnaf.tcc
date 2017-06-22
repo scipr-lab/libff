@@ -14,6 +14,8 @@
 #ifndef WNAF_TCC_
 #define WNAF_TCC_
 
+#include <gmp.h>
+
 namespace libff {
 
 template<mp_size_t n>

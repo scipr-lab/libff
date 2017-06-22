@@ -5,11 +5,12 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include <libff/algebra/curves/edwards/edwards_pairing.hpp>
-#include <libff/algebra/curves/edwards/edwards_init.hpp>
 #include <cassert>
+
 #include <libff/algebra/curves/edwards/edwards_g1.hpp>
 #include <libff/algebra/curves/edwards/edwards_g2.hpp>
+#include <libff/algebra/curves/edwards/edwards_init.hpp>
+#include <libff/algebra/curves/edwards/edwards_pairing.hpp>
 #include <libff/common/profiling.hpp>
 
 namespace libff {

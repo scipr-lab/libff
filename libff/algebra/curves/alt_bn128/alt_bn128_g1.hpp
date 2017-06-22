@@ -8,6 +8,7 @@
 #ifndef ALT_BN128_G1_HPP_
 #define ALT_BN128_G1_HPP_
 #include <vector>
+
 #include <libff/algebra/curves/alt_bn128/alt_bn128_init.hpp>
 #include <libff/algebra/curves/curve_utils.hpp>
 

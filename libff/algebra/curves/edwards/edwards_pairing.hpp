@@ -8,6 +8,7 @@
 #ifndef EDWARDS_PAIRING_HPP_
 #define EDWARDS_PAIRING_HPP_
 #include <vector>
+
 #include <libff/algebra/curves/edwards/edwards_init.hpp>
 
 namespace libff {

@@ -9,10 +9,11 @@
 
 #ifndef FP12_2OVER3OVER2_HPP_
 #define FP12_2OVER3OVER2_HPP_
+#include <vector>
+
 #include <libff/algebra/fields/fp.hpp>
 #include <libff/algebra/fields/fp2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
-#include <vector>
 
 namespace libff {
 

@@ -11,7 +11,9 @@
 #define BIGINT_HPP_
 #include <cstddef>
 #include <iostream>
+
 #include <gmp.h>
+
 #include <libff/common/serialization.hpp>
 
 namespace libff {

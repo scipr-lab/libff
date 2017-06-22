@@ -7,11 +7,11 @@
 
 #ifndef EDWARDS_PP_HPP_
 #define EDWARDS_PP_HPP_
-#include <libff/algebra/curves/public_params.hpp>
-#include <libff/algebra/curves/edwards/edwards_init.hpp>
 #include <libff/algebra/curves/edwards/edwards_g1.hpp>
 #include <libff/algebra/curves/edwards/edwards_g2.hpp>
+#include <libff/algebra/curves/edwards/edwards_init.hpp>
 #include <libff/algebra/curves/edwards/edwards_pairing.hpp>
+#include <libff/algebra/curves/public_params.hpp>
 
 namespace libff {
 

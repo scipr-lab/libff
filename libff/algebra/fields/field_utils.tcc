@@ -12,7 +12,7 @@
 
 #include <complex>
 #include <stdexcept>
- 
+
 #include <libff/common/double.hpp>
 #include <libff/common/utils.hpp>
 

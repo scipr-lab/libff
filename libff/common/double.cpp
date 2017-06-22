@@ -9,12 +9,12 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include <complex>
 #include <cmath>
+#include <complex>
+
 #include <math.h>
 
 #include <libff/algebra/fields/bigint.hpp>
-
 #include <libff/common/double.hpp>
 
 namespace libff {

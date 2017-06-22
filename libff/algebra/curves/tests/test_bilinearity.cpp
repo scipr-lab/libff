@@ -4,8 +4,8 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <libff/common/profiling.hpp>
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
+#include <libff/common/profiling.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif

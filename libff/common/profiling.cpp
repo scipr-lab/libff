@@ -11,15 +11,16 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#include <libff/common/profiling.hpp>
 #include <cassert>
-#include <stdexcept>
 #include <chrono>
 #include <cstdio>
-#include <list>
-#include <vector>
 #include <ctime>
+#include <list>
+#include <stdexcept>
+#include <vector>
+
 #include <libff/common/default_types/ec_pp.hpp>
+#include <libff/common/profiling.hpp>
 #include <libff/common/utils.hpp>
 
 #ifndef NO_PROCPS

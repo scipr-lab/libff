@@ -7,10 +7,12 @@
 
 #ifndef BN128_GT_HPP_
 #define BN128_GT_HPP_
-#include <libff/algebra/fields/fp.hpp>
-#include <libff/algebra/fields/field_utils.hpp>
 #include <iostream>
+
 #include "third_party/ate-pairing/include/bn.h"
+
+#include <libff/algebra/fields/field_utils.hpp>
+#include <libff/algebra/fields/fp.hpp>
 
 namespace libff {
 

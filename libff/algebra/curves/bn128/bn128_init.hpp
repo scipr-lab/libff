@@ -7,9 +7,10 @@
 
 #ifndef BN128_INIT_HPP_
 #define BN128_INIT_HPP_
+#include "third_party/ate-pairing/include/bn.h"
+
 #include <libff/algebra/curves/public_params.hpp>
 #include <libff/algebra/fields/fp.hpp>
-#include "third_party/ate-pairing/include/bn.h"
 
 namespace libff {
 
