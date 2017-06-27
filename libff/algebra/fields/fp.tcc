@@ -10,12 +10,12 @@
 #ifndef FP_TCC_
 #define FP_TCC_
 #include <cassert>
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
 #include <limits>
 
-#include <libff/algebra/fields/fp_aux.tcc>
 #include <libff/algebra/fields/field_utils.hpp>
+#include <libff/algebra/fields/fp_aux.tcc>
 
 namespace libff {
 

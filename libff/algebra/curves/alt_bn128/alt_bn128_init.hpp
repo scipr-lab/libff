@@ -9,9 +9,9 @@
 #define ALT_BN128_INIT_HPP_
 #include <libff/algebra/curves/public_params.hpp>
 #include <libff/algebra/fields/fp.hpp>
+#include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
-#include <libff/algebra/fields/fp12_2over3over2.hpp>
 
 namespace libff {
 

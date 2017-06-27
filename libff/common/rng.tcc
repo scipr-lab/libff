@@ -14,7 +14,12 @@
 #ifndef RNG_TCC_
 #define RNG_TCC_
 
+#include <gmp.h>
 #include <openssl/sha.h>
+
+#include <libff/algebra/fields/bigint.hpp>
+#include <libff/common/rng.hpp>
+#include <libff/common/utils.hpp>
 
 namespace libff {
 

@@ -9,9 +9,11 @@
 #define BN128_G2_HPP_
 #include <iostream>
 #include <vector>
+
+#include "third_party/ate-pairing/include/bn.h"
+
 #include <libff/algebra/curves/bn128/bn128_init.hpp>
 #include <libff/algebra/curves/curve_utils.hpp>
-#include "third_party/ate-pairing/include/bn.h"
 
 namespace libff {
 

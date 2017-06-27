@@ -9,8 +9,9 @@
 
 #ifndef FP2_HPP_
 #define FP2_HPP_
-#include <libff/algebra/fields/fp.hpp>
 #include <vector>
+
+#include <libff/algebra/fields/fp.hpp>
 
 namespace libff {
 

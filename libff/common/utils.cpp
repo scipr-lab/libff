@@ -9,8 +9,9 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstdint>
 #include <cstdarg>
+#include <cstdint>
+
 #include <libff/common/utils.hpp>
 
 namespace libff {

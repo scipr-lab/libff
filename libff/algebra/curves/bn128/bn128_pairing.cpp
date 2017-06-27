@@ -10,12 +10,12 @@
 
 #include <sstream>
 
-#include <libff/algebra/curves/bn128/bn128_pairing.hpp>
-#include <libff/common/profiling.hpp>
-#include <libff/algebra/curves/bn128/bn128_init.hpp>
 #include <libff/algebra/curves/bn128/bn128_g1.hpp>
 #include <libff/algebra/curves/bn128/bn128_g2.hpp>
 #include <libff/algebra/curves/bn128/bn128_gt.hpp>
+#include <libff/algebra/curves/bn128/bn128_init.hpp>
+#include <libff/algebra/curves/bn128/bn128_pairing.hpp>
+#include <libff/common/profiling.hpp>
 
 namespace libff {
 

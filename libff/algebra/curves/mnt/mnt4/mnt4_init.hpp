@@ -12,8 +12,8 @@
 #ifndef MNT4_INIT_HPP_
 #define MNT4_INIT_HPP_
 
-#include <libff/algebra/curves/public_params.hpp>
 #include <libff/algebra/curves/mnt/mnt46_common.hpp>
+#include <libff/algebra/curves/public_params.hpp>
 #include <libff/algebra/fields/fp.hpp>
 #include <libff/algebra/fields/fp2.hpp>
 #include <libff/algebra/fields/fp4.hpp>

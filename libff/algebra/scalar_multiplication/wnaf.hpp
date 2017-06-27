@@ -12,6 +12,10 @@
 #ifndef WNAF_HPP_
 #define WNAF_HPP_
 
+#include <vector>
+
+#include <libff/algebra/fields/bigint.hpp>
+
 namespace libff {
 
 /**
