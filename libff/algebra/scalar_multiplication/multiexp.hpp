@@ -47,6 +47,8 @@ T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
 /*
  * A special case of Pippenger's algorithm from Page 15 of
  * https://eprint.iacr.org/2012/549.pdf
+ * When compiled with USE_MIXED_ADDITION, assumes input is
+ * in special form.
  */
 template<typename T, typename FieldT>
 T multi_exp_djb(typename std::vector<T>::const_iterator bases,
