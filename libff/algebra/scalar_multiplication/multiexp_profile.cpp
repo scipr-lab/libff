@@ -23,6 +23,7 @@ test_instances_t<GroupT> generate_group_elements(size_t count, size_t size)
 
     for (size_t i = 0; i < count; i++) {
         GroupT x = GroupT::random_element();
+        x.to_special(); // djb requires input to be in special form
         for (size_t j = 0; j < size; j++) {
             result[i].push_back(x);
             // result[i].push_back(GroupT::random_element());
@@ -48,69 +49,25 @@ test_instances_t<FieldT> generate_scalars(size_t count, size_t size)
     return result;
 }
 
-template<typename GroupT, typename FieldT>
+template<typename GroupT, typename FieldT, multi_exp_method Method>
 run_result_t<GroupT> profile_multiexp(
     test_instances_t<GroupT> group_elements,
-    test_instances_t<FieldT> scalars,
-    bool use_multiexp)
+    test_instances_t<FieldT> scalars)
 {
     long long start_time = get_nsec_time();
 
     std::vector<GroupT> answers;
     for (size_t i = 0; i < group_elements.size(); i++) {
-        answers.push_back(multi_exp<GroupT, FieldT>(
+        answers.push_back(multi_exp<GroupT, FieldT, Method>(
             group_elements[i].cbegin(), group_elements[i].cend(),
             scalars[i].cbegin(), scalars[i].cend(),
-            1, use_multiexp));
+            1));
     }
 
     long long time_delta = get_nsec_time() - start_time;
 
     return run_result_t<GroupT>(time_delta, answers);
 }
-
-template<typename GroupT, typename FieldT>
-run_result_t<GroupT> profile_simul_2w(
-    test_instances_t<GroupT> group_elements,
-    test_instances_t<FieldT> scalars,
-    size_t chunk_length)
-{
-    long long start_time = get_nsec_time();
-
-    std::vector<GroupT> answers;
-    for (size_t i = 0; i < group_elements.size(); i++) {
-        answers.push_back(simul_2w_multi_exp<GroupT, FieldT>(
-            group_elements[i].cbegin(), group_elements[i].cend(),
-            scalars[i].cbegin(), scalars[i].cend(),
-            chunk_length));
-    }
-
-    long long time_delta = get_nsec_time() - start_time;
-
-    return run_result_t<GroupT>(time_delta, answers);
-}
-
-template<typename GroupT, typename FieldT>
-run_result_t<GroupT> profile_djb(
-    test_instances_t<GroupT> group_elements,
-    test_instances_t<FieldT> scalars,
-    size_t c)
-{
-    long long start_time = get_nsec_time();
-
-    std::vector<GroupT> answers;
-    for (size_t i = 0; i < group_elements.size(); i++) {
-        answers.push_back(multi_exp_djb<GroupT, FieldT>(
-            group_elements[i].cbegin(), group_elements[i].cend(),
-            scalars[i].cbegin(), scalars[i].cend(),
-            c));
-    }
-
-    long long time_delta = get_nsec_time() - start_time;
-
-    return run_result_t<GroupT>(time_delta, answers);
-}
-
 
 template<typename GroupT, typename FieldT>
 void print_performance_csv(
@@ -127,41 +84,28 @@ void print_performance_csv(
         test_instances_t<FieldT> scalars =
             generate_scalars<FieldT>(10, 1 << expn);
 
-        run_result_t<GroupT> result_fast =
-            profile_multiexp<GroupT, FieldT>(
-                group_elements, scalars, true);
-        printf("\t%lld", result_fast.first); fflush(stdout);
+        run_result_t<GroupT> result_bos_coster =
+            profile_multiexp<GroupT, FieldT, multi_exp_method_bos_coster>(
+                group_elements, scalars);
+        printf("\t%lld", result_bos_coster.first); fflush(stdout);
 
-        for (size_t chunk_length = 2; chunk_length <= 4; chunk_length++)
-        {
-            run_result_t<GroupT> result_simul_2w =
-                profile_simul_2w<GroupT, FieldT>(
-                    group_elements, scalars, chunk_length);
-            printf("\t%lld", result_simul_2w.first);
-            if (compare_answers && (result_fast.second != result_simul_2w.second)) {
-                fprintf(stderr, "Answers NOT MATCHING (fast != simul_2w %lu)\n", chunk_length);
-            }
-        }
+        run_result_t<GroupT> result_djb =
+            profile_multiexp<GroupT, FieldT, multi_exp_method_djb>(
+                group_elements, scalars);
+        printf("\t%lld", result_djb.first); fflush(stdout);
 
-        for (size_t chunk_length = 10; chunk_length <= 12; chunk_length++)
-        {
-            run_result_t<GroupT> result_djb =
-                profile_djb<GroupT, FieldT>(
-                    group_elements, scalars, chunk_length);
-            printf("\t%lld", result_djb.first); fflush(stdout);
-            if (compare_answers && (result_fast.second != result_djb.second)) {
-                fprintf(stderr, "Answers NOT MATCHING (fast != djb %lu)\n", chunk_length);
-            }
+        if (compare_answers && (result_bos_coster.second != result_djb.second)) {
+            fprintf(stderr, "Answers NOT MATCHING (bos coster != djb)\n");
         }
 
         if (expn <= expn_end_naive) {
             run_result_t<GroupT> result_naive =
-                profile_multiexp<GroupT, FieldT>(
-                    group_elements, scalars, false);
+                profile_multiexp<GroupT, FieldT, multi_exp_method_naive>(
+                    group_elements, scalars);
             printf("\t%lld", result_naive.first); fflush(stdout);
 
-            if (compare_answers && (result_fast.second != result_naive.second)) {
-                fprintf(stderr, "Answers NOT MATCHING (fast != naive)\n");
+            if (compare_answers && (result_bos_coster.second != result_naive.second)) {
+                fprintf(stderr, "Answers NOT MATCHING (bos coster != naive)\n");
             }
         }
 

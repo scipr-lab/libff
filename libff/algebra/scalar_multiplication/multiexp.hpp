@@ -17,72 +17,60 @@
 
 namespace libff {
 
-/**
- * Naive multi-exponentiation individually multiplies each base by the
- * corresponding scalar and adds up the results.
- */
-template<typename T, typename FieldT>
-T naive_exp(typename std::vector<T>::const_iterator vec_start,
-            typename std::vector<T>::const_iterator vec_end,
-            typename std::vector<FieldT>::const_iterator scalar_start,
-            typename std::vector<FieldT>::const_iterator scalar_end);
-
-template<typename T, typename FieldT>
-T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
-                  typename std::vector<T>::const_iterator vec_end,
-                  typename std::vector<FieldT>::const_iterator scalar_start,
-                  typename std::vector<FieldT>::const_iterator scalar_end);
-
-/**
- * Simultaneous 2^w-ary method,
- * Section 2.1 of Bodo Moller, "Algorithms for multi-exponentiation", SAC '01
- */
-template<typename T, typename FieldT>
-T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
-                     typename std::vector<T>::const_iterator bases_end,
-                     typename std::vector<FieldT>::const_iterator exponents,
-                     typename std::vector<FieldT>::const_iterator exponents_end,
-                     size_t chunk_length);
-
-/*
- * A special case of Pippenger's algorithm from Page 15 of
- * https://eprint.iacr.org/2012/549.pdf
- * When compiled with USE_MIXED_ADDITION, assumes input is
- * in special form.
- */
-template<typename T, typename FieldT>
-T multi_exp_djb(typename std::vector<T>::const_iterator bases,
-                typename std::vector<T>::const_iterator bases_end,
-                typename std::vector<FieldT>::const_iterator exponents,
-                typename std::vector<FieldT>::const_iterator exponents_end,
-                size_t c = 0);
+enum multi_exp_method {
+ /**
+  * Naive multi-exponentiation individually multiplies each base by the
+  * corresponding scalar and adds up the results.
+  * multi_exp_method_naive uses opt_window_wnaf_exp for exponentiation,
+  * while multi_exp_method_plain uses operator *.
+  */
+ multi_exp_method_naive,
+ multi_exp_method_naive_plain,
+ /**
+  * A variant of the Bos-Coster algorithm [1],
+  * with implementation suggestions from [2].
+  *
+  * [1] = Bos and Coster, "Addition chain heuristics", CRYPTO '89
+  * [2] = Bernstein, Duif, Lange, Schwabe, and Yang, "High-speed high-security signatures", CHES '11
+  */
+ multi_exp_method_bos_coster,
+ /**
+  * A special case of Pippenger's algorithm from Page 15 of
+  * https://eprint.iacr.org/2012/549.pdf
+  * When compiled with USE_MIXED_ADDITION, assumes input is in special form.
+  * Requires that T implements .dbl() (and, if USE_MIXED_ADDITION is defined,
+  * .to_special(), .mixed_add(), and batch_to_special()).
+  */
+ multi_exp_method_djb
+};
 
 /**
- * Naive multi-exponentiation uses a variant of the Bos-Coster algorithm [1],
- * and implementation suggestions from [2].
- *
- * [1] = Bos and Coster, "Addition chain heuristics", CRYPTO '89
- * [2] = Bernstein, Duif, Lange, Schwabe, and Yang, "High-speed high-security signatures", CHES '11
+ * Computes the sum
+ * \sum_i scalar_start[i] * vec_start[i]
+ * using the selected method.
+ * Input is split into the given number of chunks, and, when compiled with
+ * MULTICORE, the chunks are processed in parallel.
  */
-template<typename T, typename FieldT>
+template<typename T, typename FieldT, multi_exp_method Method>
 T multi_exp(typename std::vector<T>::const_iterator vec_start,
             typename std::vector<T>::const_iterator vec_end,
             typename std::vector<FieldT>::const_iterator scalar_start,
             typename std::vector<FieldT>::const_iterator scalar_end,
-            const size_t chunks,
-            const bool use_multiexp=false);
+            const size_t chunks);
 
 
 /**
- * A variant of multi_exp that takes advantage of the method mixed_add (instead of the operator '+').
+ * A variant of multi_exp that takes advantage of the method mixed_add (instead
+ * of the operator '+').
+ * Assumes input is in special form, and includes special pre-processing for
+ * scalars equal to 0 or 1.
  */
-template<typename T, typename FieldT>
+template<typename T, typename FieldT, multi_exp_method Method>
 T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_start,
-                                  typename std::vector<T>::const_iterator vec_end,
-                                  typename std::vector<FieldT>::const_iterator scalar_start,
-                                  typename std::vector<FieldT>::const_iterator scalar_end,
-                                  const size_t chunks,
-                                  const bool use_multiexp);
+                                typename std::vector<T>::const_iterator vec_end,
+                                typename std::vector<FieldT>::const_iterator scalar_start,
+                                typename std::vector<FieldT>::const_iterator scalar_end,
+                                const size_t chunks);
 
 /**
  * A window table stores window sizes for different instance sizes for fixed-base multi-scalar multiplications.

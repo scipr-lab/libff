@@ -20,6 +20,7 @@
 
 #include <libff/algebra/fields/bigint.hpp>
 #include <libff/algebra/fields/fp_aux.tcc>
+#include <libff/algebra/scalar_multiplication/multiexp.hpp>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 #include <libff/common/profiling.hpp>
 #include <libff/common/utils.hpp>
@@ -103,11 +104,26 @@ public:
     }
 };
 
-template<typename T, typename FieldT>
-T naive_exp(typename std::vector<T>::const_iterator vec_start,
-            typename std::vector<T>::const_iterator vec_end,
-            typename std::vector<FieldT>::const_iterator scalar_start,
-            typename std::vector<FieldT>::const_iterator scalar_end)
+/**
+ * multi_exp_inner<T, FieldT, Method>() implementes the specified
+ * multiexponentiation method.
+ * this implementation relies on some rather arcane template magic:
+ * function templates cannot be partially specialized, so we cannot just write
+ *     template<typename T, typename FieldT>
+ *     T multi_exp_inner<T, FieldT, multi_exp_method_naive>
+ * thus we resort to using std::enable_if. the basic idea is that *overloading*
+ * is what's actually happening here, it's just that, for any given value of
+ * Method, only one of the templates will be valid, and thus the correct
+ * implementation will be used.
+ */
+
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_naive), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator vec_start,
+    typename std::vector<T>::const_iterator vec_end,
+    typename std::vector<FieldT>::const_iterator scalar_start,
+    typename std::vector<FieldT>::const_iterator scalar_end)
 {
     T result(T::zero());
 
@@ -124,11 +140,13 @@ T naive_exp(typename std::vector<T>::const_iterator vec_start,
     return result;
 }
 
-template<typename T, typename FieldT>
-T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
-                  typename std::vector<T>::const_iterator vec_end,
-                  typename std::vector<FieldT>::const_iterator scalar_start,
-                  typename std::vector<FieldT>::const_iterator scalar_end)
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_naive_plain), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator vec_start,
+    typename std::vector<T>::const_iterator vec_end,
+    typename std::vector<FieldT>::const_iterator scalar_start,
+    typename std::vector<FieldT>::const_iterator scalar_end)
 {
     T result(T::zero());
 
@@ -144,161 +162,20 @@ T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
     return result;
 }
 
-/**
- * Simultaneous 2^w-ary method,
- * Section 2.1 of Bodo Moller, "Algorithms for multi-exponentiation", SAC '01
- */
-template<typename T, typename FieldT>
-T simul_2w_multi_exp(typename std::vector<T>::const_iterator bases,
-                     typename std::vector<T>::const_iterator bases_end,
-                     typename std::vector<FieldT>::const_iterator exponents,
-                     typename std::vector<FieldT>::const_iterator exponents_end,
-                     size_t chunk_length)
-{
-    UNUSED(exponents_end);
-
-    size_t length = bases_end - bases;
-    size_t pair_count = (length + 1) / 2;
-
-    std::vector<T> precomp(pair_count << (2 * chunk_length));
-
-    // precomp[(i << (2 * chunk_length)) | (a << chunk_length) | b] contains
-    // ag + bh, where g and f are elements of pair i
-    // (so g = bases[2*i], h = bases[2*i + 1])
-    for (size_t i = 0; i < pair_count; i++)
-    {
-        // first, assume b = 0
-        // cover a = 0, a = 1 manually, then process the rest in pairs of
-        // 2j and 2j+1 to cover even/odd cases separately and thus
-        // benefit from fast doubling
-        size_t pair_mask = i << (2 * chunk_length);
-        precomp[pair_mask | 0 << chunk_length] = T::zero();
-        precomp[pair_mask | 1 << chunk_length] = bases[2 * i];
-        for (size_t j = 1; j < (1u << (chunk_length - 1)); j++)
-        {
-            // (2j) * g = 2 * (jg)
-            precomp[pair_mask | (2*j) << chunk_length] =
-                precomp[pair_mask | j << chunk_length].dbl();
-            // (2j + 1) * g = (2j) * g  + g
-            precomp[pair_mask | (2*j + 1) << chunk_length] =
-                precomp[pair_mask | (2*j) << chunk_length] + bases[2 * i];
-        }
-
-        // now consider b != 0
-        if (2*i + 1 == length)
-        {
-            // bases[2*i + 1] does not exist
-            break;
-        }
-
-        for (size_t j = 0; j < (1u << (chunk_length - 1)); j++)
-        {
-            // calculating (2j)g + bh,
-            // also in pairs to benefit from doubling
-            // note that (2j)g + 0h is already calculated, but
-            // (2j)g + 1h isn't
-            precomp[pair_mask | (2*j) << chunk_length | 1] =
-                precomp[pair_mask | (2*j) << chunk_length] + bases[2*i + 1];
-            for (size_t k = 1; k < (1u << (chunk_length - 1)); k++)
-            {
-                // (2j)g + (2k)h = 2 * (jg + kh)
-                precomp[pair_mask | (2*j) << chunk_length | (2*k)] =
-                    precomp[pair_mask | j << chunk_length | k].dbl();
-                // (2j)g + (2k + 1)h = (2j)g + (2k)h + h
-                precomp[pair_mask | (2*j) << chunk_length | (2*k + 1)] =
-                    precomp[pair_mask | (2*j) << chunk_length | (2*k)] +
-                    bases[2 * i + 1];
-            }
-
-            // calculating (2j+1)g + bh,
-            // cannot benefit from doubling
-            // note that (2j+1)g + 0h is already calculated
-            for (size_t b = 1; b < (1u << chunk_length); b++)
-            {
-                // (2j + 1) * g + b * h = (2j + 1) * g + (b - 1) * h + h
-                precomp[pair_mask | (2*j + 1) << chunk_length | b] =
-                    precomp[pair_mask | (2*j + 1) << chunk_length | (b - 1)] +
-                    bases[2 * i + 1];
-            }
-        }
-    }
-
-    // now time to do the actual exponentiation
-    const mp_size_t exp_num_limbs =
-        std::remove_reference<decltype(*exponents)>::type::num_limbs;
-    std::vector<bigint<exp_num_limbs> > bn_exponents(2 * pair_count);
-    size_t num_bits = 0;
-
-    for (size_t i = 0; i < length; i++)
-    {
-        bn_exponents[i] = exponents[i].as_bigint();
-        num_bits = std::max(num_bits, bn_exponents[i].num_bits());
-    }
-    // note: if length is odd, bn_exponents[length + 1] == 0,
-    // which is exactly what we'll want
-
-    // note: bigint.test_bit(x) works safely even for x bigger than
-    // bigint.max_bits()
-
-
-    T result = T::zero();
-    // chunk is unsigned, so the loop condition can't be (chunk >= 0)
-    size_t chunk_count = (num_bits + chunk_length - 1) / chunk_length;
-    for (size_t chunk = chunk_count - 1; chunk < chunk_count; chunk--)
-    {
-        for (size_t i = 0; i < pair_count; i++)
-        {
-            size_t entry = i << (2 * chunk_length);
-            for (size_t bit = 0; bit < chunk_length; bit++)
-            {
-                if (bn_exponents[2*i].test_bit(chunk_length * chunk + bit))
-                {
-                    entry |= 1 << (chunk_length + bit);
-                }
-
-                if (bn_exponents[2*i + 1].test_bit(chunk_length * chunk + bit))
-                {
-                    entry |= 1 << bit;
-                }
-            }
-
-            result = result + precomp[entry];
-        }
-
-        if (chunk != 0)
-        {
-            for (size_t i = 0; i < chunk_length; i++)
-            {
-                result = result.dbl();
-            }
-        }
-    }
-
-    return result;
-}
-
-/*
- * A special case of Pippenger's algorithm from Page 15 of
- * https://eprint.iacr.org/2012/549.pdf
- * When compiled with USE_MIXED_ADDITION, assumes input is
- * in special form.
- */
-template<typename T, typename FieldT>
-T multi_exp_djb(typename std::vector<T>::const_iterator bases,
-                typename std::vector<T>::const_iterator bases_end,
-                typename std::vector<FieldT>::const_iterator exponents,
-                typename std::vector<FieldT>::const_iterator exponents_end,
-                size_t c)
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_djb), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator bases,
+    typename std::vector<T>::const_iterator bases_end,
+    typename std::vector<FieldT>::const_iterator exponents,
+    typename std::vector<FieldT>::const_iterator exponents_end)
 {
     UNUSED(exponents_end);
     size_t length = bases_end - bases;
 
-    if (c == 0)
-    {
-        // empirically, this seems to be a decent estimate of the optimal value of c
-        size_t log2_length = log2(length);
-        c = log2_length - (log2_length / 3 - 2);
-    }
+    // empirically, this seems to be a decent estimate of the optimal value of c
+    size_t log2_length = log2(length);
+    size_t c = log2_length - (log2_length / 3 - 2);
 
     const mp_size_t exp_num_limbs =
         std::remove_reference<decltype(*exponents)>::type::num_limbs;
@@ -404,146 +281,13 @@ T multi_exp_djb(typename std::vector<T>::const_iterator bases,
     return result;
 }
 
-template<typename T, typename FieldT>
-T multi_exp_inner_rivest(typename std::vector<T>::const_iterator vec_start,
-                         typename std::vector<T>::const_iterator vec_end,
-                         typename std::vector<FieldT>::const_iterator scalar_start,
-                         typename std::vector<FieldT>::const_iterator scalar_end)
-{
-    UNUSED(scalar_end);
-    size_t length = vec_end - vec_start;
-
-    if (length == 0)
-    {
-        return T::zero();
-    }
-
-    if (length == 1)
-    {
-        return (*scalar_start)*(*vec_start);
-    }
-
-    // first, we carefully count & group exponents into buckets
-    // so that they are stored in exponents[] grouped by .num_bits()
-    // s.t. the exponents with .num_bits() = k
-    // are stored in exponents[bucket_start[k] .. bucket_start[k + 1] - 1]
-    const mp_size_t exp_num_limbs =
-        std::remove_reference<decltype(*scalar_start)>::type::num_limbs;
-    std::vector<bigint<exp_num_limbs> > tmp_exponents(length);
-    std::vector<size_t> bucket_start(exp_num_limbs * GMP_NUMB_BITS);
-    size_t num_bits = 0;
-
-    for (size_t i = 0; i < length; i++)
-    {
-        tmp_exponents[i] = scalar_start[i].as_bigint();
-        size_t num_bits_here = tmp_exponents[i].num_bits();
-        num_bits = std::max(num_bits, num_bits_here);
-        bucket_start[num_bits_here]++;
-    }
-
-    for (size_t i = 1; i < num_bits + 2; i++)
-    {
-        bucket_start[i] += bucket_start[i - 1];
-    }
-
-    std::vector<T> bases(length);
-    std::vector<bigint<exp_num_limbs> > exponents(length);
-    for (size_t i = 0; i < length; i++)
-    {
-        size_t index = --bucket_start[tmp_exponents[i].num_bits()];
-        exponents[index] = tmp_exponents[i];
-        bases[index] = vec_start[i];
-    }
-
-    // now we do a weaker version of Bos and Coster:
-    // take two terms ag + bh from the biggest bucket
-    // and replace them with (a-b)g + b(g+h)
-    // until all exponents but one are 0
-
-    // we will keep num_bits updated (i.e. it's always going to be
-    // the highest i for which bucket_start[i] != bucket_start[i + 1])
-
-    T result = T::zero();
-
-    while (bucket_start[1] < length - 1)
-    {
-        // take the last element of the last bucket,
-        // and also the one before it (possibly from a smaller bucket)
-        size_t i = bucket_start[num_bits + 1] - 1;
-        size_t j = i - 1;
-
-        // it could be that exponents[j] > exponents[i], but only
-        // if they come from the same bucket.
-        // that would be very inconvenient, so we test it & fix if necessary.
-        if ((bucket_start[num_bits] <= j) &&
-            (mpn_cmp(exponents[j].data, exponents[i].data, exp_num_limbs) > 0))
-        {
-            std::swap(exponents[i], exponents[j]);
-            std::swap(bases[i], bases[j]);
-        }
-
-        size_t j_bits = exponents[j].num_bits();
-        size_t limit = (num_bits - j_bits >= 20 ? 20 : num_bits - j_bits);
-
-        if (j_bits < 1ul << limit)
-        {
-            /*
-              In this case, exponentiating to the power of a is cheaper than
-              subtracting b from a multiple times, so let's do it directly
-              */
-            result = result.add(opt_window_wnaf_exp(bases[i], exponents[i], num_bits));
-            exponents[i].clear();
-        }
-        else
-        {
-            bases[j] = bases[j].add(bases[i]);
-            // exponents[i] -= exponents[j];
-            mpn_sub_n(exponents[i].data, exponents[i].data, exponents[j].data,
-                exp_num_limbs);
-        }
-
-
-        // i might now belong in a different bucket
-        size_t i_bucket = exponents[i].num_bits();
-        size_t i_cur_bucket = num_bits;
-        while (i_cur_bucket != i_bucket)
-        {
-            // move i to previous bucket by moving it to start of current one
-            // and then advance the bucket_start pointer forwards
-            if (i != bucket_start[i_cur_bucket])
-            {
-                std::swap(exponents[i], exponents[bucket_start[i_cur_bucket]]);
-                std::swap(bases[i], bases[bucket_start[i_cur_bucket]]);
-                i = bucket_start[i_cur_bucket];
-            }
-            bucket_start[i_cur_bucket]++;
-            i_cur_bucket--;
-        }
-
-        // update num_bits in case i was the only thing in its bucket
-        // and had its num_bits decreased
-        while (bucket_start[num_bits] == bucket_start[num_bits + 1])
-        {
-            num_bits--;
-        }
-    }
-
-    return result.add(opt_window_wnaf_exp(bases[bucket_start[num_bits]],
-        exponents[bucket_start[num_bits]],
-        num_bits));
-}
-
-/*
-  The multi-exponentiation algorithm below is a variant of the Bos-Coster algorithm
-  [Bos and Coster, "Addition chain heuristics", CRYPTO '89].
-  The implementation uses suggestions from
-  [Bernstein, Duif, Lange, Schwabe, and Yang, "High-speed high-security signatures", CHES '11].
-*/
-template<typename T, typename FieldT>
-T multi_exp_inner(typename std::vector<T>::const_iterator vec_start,
-                  typename std::vector<T>::const_iterator vec_end,
-                  typename std::vector<FieldT>::const_iterator scalar_start,
-                  typename std::vector<FieldT>::const_iterator scalar_end)
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_bos_coster), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator vec_start,
+    typename std::vector<T>::const_iterator vec_end,
+    typename std::vector<FieldT>::const_iterator scalar_start,
+    typename std::vector<FieldT>::const_iterator scalar_end)
 {
     const mp_size_t n = std::remove_reference<decltype(*scalar_start)>::type::num_limbs;
 
@@ -655,49 +399,35 @@ T multi_exp_inner(typename std::vector<T>::const_iterator vec_start,
     return opt_result;
 }
 
-template<typename T, typename FieldT>
+template<typename T, typename FieldT, multi_exp_method Method>
 T multi_exp(typename std::vector<T>::const_iterator vec_start,
             typename std::vector<T>::const_iterator vec_end,
             typename std::vector<FieldT>::const_iterator scalar_start,
             typename std::vector<FieldT>::const_iterator scalar_end,
-            const size_t chunks,
-            const bool use_multiexp)
+            const size_t chunks)
 {
     const size_t total = vec_end - vec_start;
-    if (total < chunks)
+    if ((total < chunks) || (chunks == 1))
     {
-        return naive_exp<T, FieldT>(vec_start, vec_end, scalar_start, scalar_end);
+        // no need to split into "chunks", can call implementation directly
+        return multi_exp_inner<T, FieldT, Method>(
+            vec_start, vec_end, scalar_start, scalar_end);
     }
 
     const size_t one = total/chunks;
 
     std::vector<T> partial(chunks, T::zero());
 
-    if (use_multiexp)
-    {
 #ifdef MULTICORE
 #pragma omp parallel for
 #endif
-        for (size_t i = 0; i < chunks; ++i)
-        {
-            partial[i] = multi_exp_inner<T, FieldT>(vec_start + i*one,
-                                                    (i == chunks-1 ? vec_end : vec_start + (i+1)*one),
-                                                    scalar_start + i*one,
-                                                    (i == chunks-1 ? scalar_end : scalar_start + (i+1)*one));
-        }
-    }
-    else
+    for (size_t i = 0; i < chunks; ++i)
     {
-#ifdef MULTICORE
-#pragma omp parallel for
-#endif
-        for (size_t i = 0; i < chunks; ++i)
-        {
-            partial[i] = naive_exp<T, FieldT>(vec_start + i*one,
-                                              (i == chunks-1 ? vec_end : vec_start + (i+1)*one),
-                                              scalar_start + i*one,
-                                              (i == chunks-1 ? scalar_end : scalar_start + (i+1)*one));
-        }
+        partial[i] = multi_exp_inner<T, FieldT, Method>(
+             vec_start + i*one,
+             (i == chunks-1 ? vec_end : vec_start + (i+1)*one),
+             scalar_start + i*one,
+             (i == chunks-1 ? scalar_end : scalar_start + (i+1)*one));
     }
 
     T final = T::zero();
@@ -710,13 +440,12 @@ T multi_exp(typename std::vector<T>::const_iterator vec_start,
     return final;
 }
 
-template<typename T, typename FieldT>
+template<typename T, typename FieldT, multi_exp_method Method>
 T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_start,
                                 typename std::vector<T>::const_iterator vec_end,
                                 typename std::vector<FieldT>::const_iterator scalar_start,
                                 typename std::vector<FieldT>::const_iterator scalar_end,
-                                const size_t chunks,
-                                const bool use_multiexp)
+                                const size_t chunks)
 {
     assert(std::distance(vec_start, vec_end) == std::distance(scalar_start, scalar_end));
     enter_block("Process scalar vector");
@@ -763,7 +492,7 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
 
     leave_block("Process scalar vector");
 
-    return acc + multi_exp<T, FieldT>(g.begin(), g.end(), p.begin(), p.end(), chunks, use_multiexp);
+    return acc + multi_exp<T, FieldT, Method>(g.begin(), g.end(), p.begin(), p.end(), chunks);
 }
 
 template<typename T>
