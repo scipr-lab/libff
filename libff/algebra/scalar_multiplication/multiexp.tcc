@@ -495,6 +495,17 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
     return acc + multi_exp<T, FieldT, Method>(g.begin(), g.end(), p.begin(), p.end(), chunks);
 }
 
+template <typename T>
+T inner_product(typename std::vector<T>::const_iterator a_start,
+                typename std::vector<T>::const_iterator a_end,
+                typename std::vector<T>::const_iterator b_start,
+                typename std::vector<T>::const_iterator b_end)
+{
+    return multi_exp<T, T, multi_exp_method_naive_plain>(
+        a_start, a_end,
+        b_start, b_end, 1);
+}
+
 template<typename T>
 size_t get_exp_window_size(const size_t num_scalars)
 {

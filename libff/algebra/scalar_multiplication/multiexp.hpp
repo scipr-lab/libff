@@ -73,6 +73,16 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
                                 const size_t chunks);
 
 /**
+ * A convenience function for calculating a pure inner product, where the
+ * more complicated methods are not required.
+ */
+template <typename T>
+T inner_product(typename std::vector<T>::const_iterator a_start,
+                typename std::vector<T>::const_iterator a_end,
+                typename std::vector<T>::const_iterator b_start,
+                typename std::vector<T>::const_iterator b_end);
+
+/**
  * A window table stores window sizes for different instance sizes for fixed-base multi-scalar multiplications.
  */
 template<typename T>
