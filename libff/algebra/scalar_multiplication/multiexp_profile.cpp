@@ -90,7 +90,7 @@ void print_performance_csv(
         printf("\t%lld", result_bos_coster.first); fflush(stdout);
 
         run_result_t<GroupT> result_djb =
-            profile_multiexp<GroupT, FieldT, multi_exp_method_djb>(
+            profile_multiexp<GroupT, FieldT, multi_exp_method_BDLO12>(
                 group_elements, scalars);
         printf("\t%lld", result_djb.first); fflush(stdout);
 

@@ -163,7 +163,7 @@ T multi_exp_inner(
 }
 
 template<typename T, typename FieldT, multi_exp_method Method,
-    typename std::enable_if<(Method == multi_exp_method_djb), int>::type = 0>
+    typename std::enable_if<(Method == multi_exp_method_BDLO12), int>::type = 0>
 T multi_exp_inner(
     typename std::vector<T>::const_iterator bases,
     typename std::vector<T>::const_iterator bases_end,

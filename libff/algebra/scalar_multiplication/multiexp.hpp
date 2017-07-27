@@ -36,12 +36,14 @@ enum multi_exp_method {
  multi_exp_method_bos_coster,
  /**
   * A special case of Pippenger's algorithm from Page 15 of
-  * https://eprint.iacr.org/2012/549.pdf
+  * Bernstein, Doumen, Lange, Oosterwijk,
+  * "Faster batch forgery identification", INDOCRYPT 2012
+  * (https://eprint.iacr.org/2012/549.pdf)
   * When compiled with USE_MIXED_ADDITION, assumes input is in special form.
   * Requires that T implements .dbl() (and, if USE_MIXED_ADDITION is defined,
   * .to_special(), .mixed_add(), and batch_to_special()).
   */
- multi_exp_method_djb
+ multi_exp_method_BDLO12
 };
 
 /**
