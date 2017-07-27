@@ -18,7 +18,9 @@
 #include <cassert>
 #include <type_traits>
 
+#include <libff/algebra/fields/bigint.hpp>
 #include <libff/algebra/fields/fp_aux.tcc>
+#include <libff/algebra/scalar_multiplication/multiexp.hpp>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 #include <libff/common/profiling.hpp>
 #include <libff/common/utils.hpp>
@@ -102,11 +104,26 @@ public:
     }
 };
 
-template<typename T, typename FieldT>
-T naive_exp(typename std::vector<T>::const_iterator vec_start,
-            typename std::vector<T>::const_iterator vec_end,
-            typename std::vector<FieldT>::const_iterator scalar_start,
-            typename std::vector<FieldT>::const_iterator scalar_end)
+/**
+ * multi_exp_inner<T, FieldT, Method>() implementes the specified
+ * multiexponentiation method.
+ * this implementation relies on some rather arcane template magic:
+ * function templates cannot be partially specialized, so we cannot just write
+ *     template<typename T, typename FieldT>
+ *     T multi_exp_inner<T, FieldT, multi_exp_method_naive>
+ * thus we resort to using std::enable_if. the basic idea is that *overloading*
+ * is what's actually happening here, it's just that, for any given value of
+ * Method, only one of the templates will be valid, and thus the correct
+ * implementation will be used.
+ */
+
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_naive), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator vec_start,
+    typename std::vector<T>::const_iterator vec_end,
+    typename std::vector<FieldT>::const_iterator scalar_start,
+    typename std::vector<FieldT>::const_iterator scalar_end)
 {
     T result(T::zero());
 
@@ -123,11 +140,13 @@ T naive_exp(typename std::vector<T>::const_iterator vec_start,
     return result;
 }
 
-template<typename T, typename FieldT>
-T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
-                  typename std::vector<T>::const_iterator vec_end,
-                  typename std::vector<FieldT>::const_iterator scalar_start,
-                  typename std::vector<FieldT>::const_iterator scalar_end)
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_naive_plain), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator vec_start,
+    typename std::vector<T>::const_iterator vec_end,
+    typename std::vector<FieldT>::const_iterator scalar_start,
+    typename std::vector<FieldT>::const_iterator scalar_end)
 {
     T result(T::zero());
 
@@ -143,17 +162,132 @@ T naive_plain_exp(typename std::vector<T>::const_iterator vec_start,
     return result;
 }
 
-/*
-  The multi-exponentiation algorithm below is a variant of the Bos-Coster algorithm
-  [Bos and Coster, "Addition chain heuristics", CRYPTO '89].
-  The implementation uses suggestions from
-  [Bernstein, Duif, Lange, Schwabe, and Yang, "High-speed high-security signatures", CHES '11].
-*/
-template<typename T, typename FieldT>
-T multi_exp_inner(typename std::vector<T>::const_iterator vec_start,
-                  typename std::vector<T>::const_iterator vec_end,
-                  typename std::vector<FieldT>::const_iterator scalar_start,
-                  typename std::vector<FieldT>::const_iterator scalar_end)
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_BDLO12), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator bases,
+    typename std::vector<T>::const_iterator bases_end,
+    typename std::vector<FieldT>::const_iterator exponents,
+    typename std::vector<FieldT>::const_iterator exponents_end)
+{
+    UNUSED(exponents_end);
+    size_t length = bases_end - bases;
+
+    // empirically, this seems to be a decent estimate of the optimal value of c
+    size_t log2_length = log2(length);
+    size_t c = log2_length - (log2_length / 3 - 2);
+
+    const mp_size_t exp_num_limbs =
+        std::remove_reference<decltype(*exponents)>::type::num_limbs;
+    std::vector<bigint<exp_num_limbs> > bn_exponents(length);
+    size_t num_bits = 0;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        bn_exponents[i] = exponents[i].as_bigint();
+        num_bits = std::max(num_bits, bn_exponents[i].num_bits());
+    }
+
+    size_t num_groups = (num_bits + c - 1) / c;
+
+    T result;
+    bool result_nonzero = false;
+
+    for (size_t k = num_groups - 1; k <= num_groups; k--)
+    {
+        if (result_nonzero)
+        {
+            for (size_t i = 0; i < c; i++)
+            {
+                result = result.dbl();
+            }
+        }
+
+        std::vector<T> buckets(1 << c);
+        std::vector<bool> bucket_nonzero(1 << c);
+
+        for (size_t i = 0; i < length; i++)
+        {
+            size_t id = 0;
+            for (size_t j = 0; j < c; j++)
+            {
+                if (bn_exponents[i].test_bit(k*c + j))
+                {
+                    id |= 1 << j;
+                }
+            }
+
+            if (id == 0)
+            {
+                continue;
+            }
+
+            if (bucket_nonzero[id])
+            {
+#ifdef USE_MIXED_ADDITION
+                buckets[id] = buckets[id].mixed_add(bases[i]);
+#else
+                buckets[id] = buckets[id] + bases[i];
+#endif
+            }
+            else
+            {
+                buckets[id] = bases[i];
+                bucket_nonzero[id] = true;
+            }
+        }
+
+#ifdef USE_MIXED_ADDITION
+        batch_to_special(buckets);
+#endif
+
+        T running_sum;
+        bool running_sum_nonzero = false;
+
+        for (size_t i = (1u << c) - 1; i > 0; i--)
+        {
+            if (bucket_nonzero[i])
+            {
+                if (running_sum_nonzero)
+                {
+#ifdef USE_MIXED_ADDITION
+                    running_sum = running_sum.mixed_add(buckets[i]);
+#else
+                    running_sum = running_sum + buckets[i];
+#endif
+                }
+                else
+                {
+                    running_sum = buckets[i];
+                    running_sum_nonzero = true;
+                }
+            }
+
+            if (running_sum_nonzero)
+            {
+                if (result_nonzero)
+                {
+                    result = result + running_sum;
+                }
+                else
+                {
+                    result = running_sum;
+                    result_nonzero = true;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+template<typename T, typename FieldT, multi_exp_method Method,
+    typename std::enable_if<(Method == multi_exp_method_bos_coster), int>::type = 0>
+T multi_exp_inner(
+    typename std::vector<T>::const_iterator vec_start,
+    typename std::vector<T>::const_iterator vec_end,
+    typename std::vector<FieldT>::const_iterator scalar_start,
+    typename std::vector<FieldT>::const_iterator scalar_end)
 {
     const mp_size_t n = std::remove_reference<decltype(*scalar_start)>::type::num_limbs;
 
@@ -265,49 +399,35 @@ T multi_exp_inner(typename std::vector<T>::const_iterator vec_start,
     return opt_result;
 }
 
-template<typename T, typename FieldT>
+template<typename T, typename FieldT, multi_exp_method Method>
 T multi_exp(typename std::vector<T>::const_iterator vec_start,
             typename std::vector<T>::const_iterator vec_end,
             typename std::vector<FieldT>::const_iterator scalar_start,
             typename std::vector<FieldT>::const_iterator scalar_end,
-            const size_t chunks,
-            const bool use_multiexp)
+            const size_t chunks)
 {
     const size_t total = vec_end - vec_start;
-    if (total < chunks)
+    if ((total < chunks) || (chunks == 1))
     {
-        return naive_exp<T, FieldT>(vec_start, vec_end, scalar_start, scalar_end);
+        // no need to split into "chunks", can call implementation directly
+        return multi_exp_inner<T, FieldT, Method>(
+            vec_start, vec_end, scalar_start, scalar_end);
     }
 
     const size_t one = total/chunks;
 
     std::vector<T> partial(chunks, T::zero());
 
-    if (use_multiexp)
-    {
 #ifdef MULTICORE
 #pragma omp parallel for
 #endif
-        for (size_t i = 0; i < chunks; ++i)
-        {
-            partial[i] = multi_exp_inner<T, FieldT>(vec_start + i*one,
-                                                    (i == chunks-1 ? vec_end : vec_start + (i+1)*one),
-                                                    scalar_start + i*one,
-                                                    (i == chunks-1 ? scalar_end : scalar_start + (i+1)*one));
-        }
-    }
-    else
+    for (size_t i = 0; i < chunks; ++i)
     {
-#ifdef MULTICORE
-#pragma omp parallel for
-#endif
-        for (size_t i = 0; i < chunks; ++i)
-        {
-            partial[i] = naive_exp<T, FieldT>(vec_start + i*one,
-                                              (i == chunks-1 ? vec_end : vec_start + (i+1)*one),
-                                              scalar_start + i*one,
-                                              (i == chunks-1 ? scalar_end : scalar_start + (i+1)*one));
-        }
+        partial[i] = multi_exp_inner<T, FieldT, Method>(
+             vec_start + i*one,
+             (i == chunks-1 ? vec_end : vec_start + (i+1)*one),
+             scalar_start + i*one,
+             (i == chunks-1 ? scalar_end : scalar_start + (i+1)*one));
     }
 
     T final = T::zero();
@@ -320,13 +440,12 @@ T multi_exp(typename std::vector<T>::const_iterator vec_start,
     return final;
 }
 
-template<typename T, typename FieldT>
+template<typename T, typename FieldT, multi_exp_method Method>
 T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_start,
                                 typename std::vector<T>::const_iterator vec_end,
                                 typename std::vector<FieldT>::const_iterator scalar_start,
                                 typename std::vector<FieldT>::const_iterator scalar_end,
-                                const size_t chunks,
-                                const bool use_multiexp)
+                                const size_t chunks)
 {
     assert(std::distance(vec_start, vec_end) == std::distance(scalar_start, scalar_end));
     enter_block("Process scalar vector");
@@ -373,7 +492,18 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
 
     leave_block("Process scalar vector");
 
-    return acc + multi_exp<T, FieldT>(g.begin(), g.end(), p.begin(), p.end(), chunks, use_multiexp);
+    return acc + multi_exp<T, FieldT, Method>(g.begin(), g.end(), p.begin(), p.end(), chunks);
+}
+
+template <typename T>
+T inner_product(typename std::vector<T>::const_iterator a_start,
+                typename std::vector<T>::const_iterator a_end,
+                typename std::vector<T>::const_iterator b_start,
+                typename std::vector<T>::const_iterator b_end)
+{
+    return multi_exp<T, T, multi_exp_method_naive_plain>(
+        a_start, a_end,
+        b_start, b_end, 1);
 }
 
 template<typename T>
@@ -564,7 +694,7 @@ void batch_to_special(std::vector<T> &vec)
         }
     }
 
-    batch_to_special_all_non_zeros<T>(non_zero_vec);
+    T::batch_to_special_all_non_zeros(non_zero_vec);
     auto it = non_zero_vec.begin();
     T zero_special = T::zero();
     zero_special.to_special();

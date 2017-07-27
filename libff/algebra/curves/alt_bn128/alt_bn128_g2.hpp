@@ -74,6 +74,8 @@ public:
 
     friend std::ostream& operator<<(std::ostream &out, const alt_bn128_G2 &g);
     friend std::istream& operator>>(std::istream &in, alt_bn128_G2 &g);
+
+    static void batch_to_special_all_non_zeros(std::vector<alt_bn128_G2> &vec);
 };
 
 template<mp_size_t m>
@@ -88,10 +90,6 @@ alt_bn128_G2 operator*(const Fp_model<m,modulus_p> &lhs, const alt_bn128_G2 &rhs
     return scalar_mul<alt_bn128_G2, m>(rhs, lhs.as_bigint());
 }
 
-template<typename T>
-void batch_to_special_all_non_zeros(std::vector<T> &vec);
-template<>
-void batch_to_special_all_non_zeros<alt_bn128_G2>(std::vector<alt_bn128_G2> &vec);
 
 } // libff
 #endif // ALT_BN128_G2_HPP_

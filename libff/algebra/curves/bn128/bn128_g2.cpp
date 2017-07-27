@@ -474,8 +474,7 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
     return in;
 }
 
-template<>
-void batch_to_special_all_non_zeros<bn128_G2>(std::vector<bn128_G2> &vec)
+void bn128_G2::batch_to_special_all_non_zeros(std::vector<bn128_G2> &vec)
 {
     std::vector<bn::Fp2> Z_vec;
     Z_vec.reserve(vec.size());

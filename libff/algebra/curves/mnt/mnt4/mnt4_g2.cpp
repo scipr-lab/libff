@@ -473,8 +473,7 @@ std::istream& operator>>(std::istream &in, mnt4_G2 &g)
     return in;
 }
 
-template<>
-void batch_to_special_all_non_zeros<mnt4_G2>(std::vector<mnt4_G2> &vec)
+void mnt4_G2::batch_to_special_all_non_zeros(std::vector<mnt4_G2> &vec)
 {
     std::vector<mnt4_Fq2> Z_vec;
     Z_vec.reserve(vec.size());
