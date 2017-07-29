@@ -10,7 +10,7 @@
 
 #ifndef BN128_PAIRING_HPP_
 #define BN128_PAIRING_HPP_
-#include "third_party/ate-pairing/include/bn.h"
+#include "depends/ate-pairing/include/bn.h"
 
 #include <libff/algebra/curves/bn128/bn128_g1.hpp>
 #include <libff/algebra/curves/bn128/bn128_g2.hpp>

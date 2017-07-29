@@ -9,7 +9,7 @@
 #define BN128_GT_HPP_
 #include <iostream>
 
-#include "third_party/ate-pairing/include/bn.h"
+#include "depends/ate-pairing/include/bn.h"
 
 #include <libff/algebra/fields/field_utils.hpp>
 #include <libff/algebra/fields/fp.hpp>
