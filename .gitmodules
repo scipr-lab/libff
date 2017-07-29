@@ -1,9 +1,9 @@
-[submodule "third_party/gtest"]
+[submodule "depends/gtest"]
 	path = depends/gtest
 	url = https://github.com/google/googletest.git
-[submodule "third_party/ate-pairing"]
+[submodule "depends/ate-pairing"]
 	path = depends/ate-pairing
 	url = https://github.com/herumi/ate-pairing.git
-[submodule "third_party/xbyak"]
+[submodule "depends/xbyak"]
 	path = depends/xbyak
 	url = https://github.com/herumi/xbyak.git
