@@ -227,5 +227,5 @@ endif(CCACHE_FOUND)
 # Add a `make check` target that builds and tests
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
-add_subdirectory(third_party)
+add_subdirectory(depends)
 add_subdirectory(libff)
