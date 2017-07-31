@@ -75,6 +75,12 @@ option(
   ON
 )
 
+option(
+  IS_LIBFF_PARENT
+  "Install submodule dependencies if caller originates from here"
+  ON
+)
+
 set(
   OPT_FLAGS
   ""
@@ -224,8 +230,10 @@ if(CCACHE_FOUND)
         set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
 endif(CCACHE_FOUND)
 
-# Add a `make check` target that builds and tests
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+if ("${IS_LIBFF_PARENT}")
+  # Add a `make check` target that builds and tests
+  add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
-add_subdirectory(depends)
+  add_subdirectory(depends)
+endif()
 add_subdirectory(libff)
