@@ -207,22 +207,6 @@ if("${USE_ASM}")
   add_definitions(-DUSE_ASM)
 endif()
 
-find_program(
-  MARKDOWN
-
-  markdown_py
-  DOC "Path to markdown_py binary"
-)
-if(MARKDOWN-NOTFOUND)
-else()
-   add_custom_target(
-     doc
-     ${MARKDOWN} -f ${CMAKE_CURRENT_BINARY_DIR}/README.html -x toc -x extra --noisy ${CMAKE_CURRENT_SOURCE_DIR}/README.md
-     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-     COMMENT "Translating from markdown to HTML" VERBATIM
-   )
-endif()
-
 # Configure CCache if available
 find_program(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
@@ -231,6 +215,22 @@ if(CCACHE_FOUND)
 endif(CCACHE_FOUND)
 
 if ("${IS_LIBFF_PARENT}")
+  find_program(
+    MARKDOWN
+
+    markdown_py
+    DOC "Path to markdown_py binary"
+  )
+  if(MARKDOWN-NOTFOUND)
+  else()
+     add_custom_target(
+       doc
+       ${MARKDOWN} -f ${CMAKE_CURRENT_BINARY_DIR}/README.html -x toc -x extra --noisy ${CMAKE_CURRENT_SOURCE_DIR}/README.md
+       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+       COMMENT "Translating from markdown to HTML" VERBATIM
+     )
+  endif()
+
   # Add a `make check` target that builds and tests
   add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
