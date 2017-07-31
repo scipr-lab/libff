@@ -87,56 +87,58 @@ target_link_libraries(
 )
 
 # Tests
-add_executable(
-  algebra_bilinearity_test
-  EXCLUDE_FROM_ALL
+if ("${IS_LIBFF_PARENT}")
+  add_executable(
+    algebra_bilinearity_test
+    EXCLUDE_FROM_ALL
 
-  algebra/curves/tests/test_bilinearity.cpp
-)
-target_link_libraries(
-  algebra_bilinearity_test
+    algebra/curves/tests/test_bilinearity.cpp
+  )
+  target_link_libraries(
+    algebra_bilinearity_test
 
-  ff
-)
+    ff
+  )
 
-add_executable(
-  algebra_groups_test
-  EXCLUDE_FROM_ALL
+  add_executable(
+    algebra_groups_test
+    EXCLUDE_FROM_ALL
 
-  algebra/curves/tests/test_groups.cpp
-)
-target_link_libraries(
-  algebra_groups_test
+    algebra/curves/tests/test_groups.cpp
+  )
+  target_link_libraries(
+    algebra_groups_test
 
-  ff
-)
+    ff
+  )
 
-add_executable(
-  algebra_fields_test
-  EXCLUDE_FROM_ALL
+  add_executable(
+    algebra_fields_test
+    EXCLUDE_FROM_ALL
 
-  algebra/fields/tests/test_fields.cpp
-)
-target_link_libraries(
-  algebra_fields_test
+    algebra/fields/tests/test_fields.cpp
+  )
+  target_link_libraries(
+    algebra_fields_test
 
-  ff
-)
+    ff
+  )
 
-include(CTest)
-add_test(
-  NAME algebra_bilinearity_test
-  COMMAND algebra_bilinearity_test
-)
-add_test(
-  NAME algebra_groups_test
-  COMMAND algebra_groups_test
-)
-add_test(
-  NAME algebra_fields_test
-  COMMAND algebra_fields_test
-)
+  include(CTest)
+  add_test(
+    NAME algebra_bilinearity_test
+    COMMAND algebra_bilinearity_test
+  )
+  add_test(
+    NAME algebra_groups_test
+    COMMAND algebra_groups_test
+  )
+  add_test(
+    NAME algebra_fields_test
+    COMMAND algebra_fields_test
+  )
 
-add_dependencies(check algebra_bilinearity_test)
-add_dependencies(check algebra_groups_test)
-add_dependencies(check algebra_fields_test)
+  add_dependencies(check algebra_bilinearity_test)
+  add_dependencies(check algebra_groups_test)
+  add_dependencies(check algebra_fields_test)
+endif()
