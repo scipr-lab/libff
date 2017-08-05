@@ -5,7 +5,7 @@ ___libff___ is a C++ library for finite fields and elliptic curves. The library 
 
 ## Table of contents
 
-- [Directory Structure](#directory-structure)
+- [Directory structure](#directory-structure)
 - [Elliptic curve choices](#elliptic-curve-choices)
 - [Build guide](#build-guide)
 
@@ -16,16 +16,16 @@ The directory structure is as follows:
 * [__libff__](libff): C++ source code, containing the following modules:
   * [__algebra__](libff/algebra): fields and elliptic curve groups
   * [__common__](libff/common): miscellaneous utilities
-* [__third\_party__](third_party): third party libraries
+* [__depends__](depends): dependency libraries
 
 ## Elliptic curve choices
 
 The libsnark library currently provides three options:
 
-* "edwards":
+* `edwards`:
    an instantiation based on an Edwards curve, providing 80 bits of security.
 
-* "bn128":
+* `bn128`:
    an instantiation based on a Barreto-Naehrig curve, providing 128
    bits of security. The underlying curve implementation is
    \[ate-pairing], which has incorporated our patch that changes the
@@ -40,10 +40,10 @@ The libsnark library currently provides three options:
         run `sudo setsebool -P allow_execheap 1` to allow execution,
         or use `make CURVE=ALT_BN128` instead.
 
-* "alt_bn128":
-   an alternative to "bn128", somewhat slower but avoids dynamic code generation.
+* `alt_bn128`:
+   an alternative to `bn128`, somewhat slower but avoids dynamic code generation.
 
-Note that bn128 requires an x86-64 CPU while the other curve choices
+Note that `bn128` requires an x86-64 CPU while the other curve choices
 should be architecture-independent.
 
 ## Build guide
@@ -77,8 +77,7 @@ git submodule init && git submodule update
 To compile, starting at the project root directory, create the build directory and Makefile:
 
 ```
-mkdir build && cd build
-cmake ..
+mkdir build && cd build && cmake ..
 ```
 Optionally, you can specify the install location by providing the desired install path prefix:
 ```
