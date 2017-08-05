@@ -94,7 +94,7 @@ This will install `libff.a` into `/install/path/lib`; so your application should
 
 ## Testing
 
-The library uses Google Test for its unit tests. To execute the tests for this library, run:
+To execute the tests for this library, run:
 ```
 make check
 ```

@@ -1,9 +1,3 @@
-add_subdirectory(gtest EXCLUDE_FROM_ALL)
-
-# TODO(scripr-lab): upstream these buildsystems to the respective
-# projects.
-
-
 if(${CURVE} STREQUAL "BN128")
   include_directories(ate-pairing/include)
   include_directories(xbyak)
