@@ -54,14 +54,13 @@ add_library(
 target_link_libraries(
   ff
 
-  ${GMP_LIBRARIES}
+  GMP::gmp
   ${PROCPS_LIBRARIES}
   ${FF_EXTRALIBS}
 )
 target_include_directories(
   ff
   PUBLIC ..
-  PRIVATE ${GMP_INCLUDE_DIR}
 )
 
 install(
