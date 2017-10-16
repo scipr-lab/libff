@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 2.8)
 
 project (libff)
 
+# Default to RelWithDebInfo configuration if no configuration is explicitly specified.
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type on single-configuration generators" FORCE)
+endif()
+
 set(
   CURVE
   "BN128"
