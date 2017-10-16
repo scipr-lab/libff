@@ -107,9 +107,8 @@ set_target_properties(
   INTERFACE_INCLUDE_DIRECTORIES ${GMP_INCLUDE_DIR}
 )
 
-include(FindPkgConfig)
-
 if("${WITH_PROCPS}")
+  include(FindPkgConfig)
   pkg_check_modules(
     PROCPS
     REQUIRED
