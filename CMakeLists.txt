@@ -112,6 +112,9 @@ set_target_properties(
   INTERFACE_INCLUDE_DIRECTORIES ${GMP_INCLUDE_DIR}
 )
 
+find_package(OpenSSL REQUIRED)
+INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
+
 if("${WITH_PROCPS}")
   include(FindPkgConfig)
   pkg_check_modules(
@@ -216,6 +219,13 @@ if ("${IS_LIBFF_PARENT}")
 
   # Add a `make check` target that builds and tests
   add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+
+  # Add a `make profile` target that builds and profiles
+  add_custom_target(
+    profile
+    COMMAND ${CMAKE_COMMAND}
+     -E echo 'Built target finished'
+  )
 
   add_subdirectory(depends)
 endif()
