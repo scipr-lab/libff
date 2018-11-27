@@ -193,6 +193,10 @@ alt_bn128_G2 alt_bn128_G2::operator+(const alt_bn128_G2 &other) const
         return this->dbl();
     }
 
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
+
     // rest of add case
     alt_bn128_Fq2 H = U2 - U1;                            // H = U2-U1
     alt_bn128_Fq2 S2_minus_S1 = S2-S1;
@@ -275,7 +279,7 @@ alt_bn128_G2 alt_bn128_G2::mixed_add(const alt_bn128_G2 &other) const
 #endif
 
     alt_bn128_Fq2 H = U2-(this->X);                         // H = U2-X1
-    alt_bn128_Fq2 HH = H.squared() ;                        // HH = H&2
+    alt_bn128_Fq2 HH = H.squared() ;                        // HH = H^2
     alt_bn128_Fq2 I = HH+HH;                                // I = 4*HH
     I = I + I;
     alt_bn128_Fq2 J = H*I;                                  // J = H*I
