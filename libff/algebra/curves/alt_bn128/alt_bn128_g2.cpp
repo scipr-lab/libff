@@ -166,10 +166,9 @@ alt_bn128_G2 alt_bn128_G2::operator+(const alt_bn128_G2 &other) const
     // no need to handle points of order 2,4
     // (they cannot exist in a prime-order subgroup)
 
-    // check for doubling case
-
-    // using Jacobian coordinates so:
-    // (X1:Y1:Z1) = (X2:Y2:Z2)
+    // using Jacobian coordinates according to
+    // https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#addition-add-2007-bl
+    // Note: (X1:Y1:Z1) = (X2:Y2:Z2)
     // iff
     // X1/Z1^2 == X2/Z2^2 and Y1/Z1^3 == Y2/Z2^3
     // iff
@@ -187,6 +186,7 @@ alt_bn128_G2 alt_bn128_G2::operator+(const alt_bn128_G2 &other) const
     alt_bn128_Fq2 S1 = (this->Y) * Z2_cubed;      // S1 = Y1 * Z2 * Z2Z2
     alt_bn128_Fq2 S2 = (other.Y) * Z1_cubed;      // S2 = Y2 * Z1 * Z1Z1
 
+    // check for doubling case
     if (U1 == U2 && S1 == S2)
     {
         // dbl case; nothing of above can be reused
@@ -221,50 +221,7 @@ alt_bn128_G2 alt_bn128_G2::operator-(const alt_bn128_G2 &other) const
 
 alt_bn128_G2 alt_bn128_G2::add(const alt_bn128_G2 &other) const
 {
-    // handle special cases having to do with O
-    if (this->is_zero())
-    {
-        return other;
-    }
-
-    if (other.is_zero())
-    {
-        return *this;
-    }
-
-    // no need to handle points of order 2,4
-    // (they cannot exist in a prime-order subgroup)
-
-    // handle double case
-    if (this->operator==(other))
-    {
-        return this->dbl();
-    }
-
-#ifdef PROFILE_OP_COUNTS
-    this->add_cnt++;
-#endif
-    // NOTE: does not handle O and pts of order 2,4
-    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#addition-add-1998-cmo-2
-
-    alt_bn128_Fq2 Z1Z1 = (this->Z).squared();             // Z1Z1 = Z1^2
-    alt_bn128_Fq2 Z2Z2 = (other.Z).squared();             // Z2Z2 = Z2^2
-    alt_bn128_Fq2 U1 = (this->X) * Z2Z2;                  // U1 = X1 * Z2Z2
-    alt_bn128_Fq2 U2 = (other.X) * Z1Z1;                  // U2 = X2 * Z1Z1
-    alt_bn128_Fq2 S1 = (this->Y) * (other.Z) * Z2Z2;      // S1 = Y1 * Z2 * Z2Z2
-    alt_bn128_Fq2 S2 = (other.Y) * (this->Z) * Z1Z1;      // S2 = Y2 * Z1 * Z1Z1
-    alt_bn128_Fq2 H = U2 - U1;                            // H = U2-U1
-    alt_bn128_Fq2 S2_minus_S1 = S2-S1;
-    alt_bn128_Fq2 I = (H+H).squared();                    // I = (2 * H)^2
-    alt_bn128_Fq2 J = H * I;                              // J = H * I
-    alt_bn128_Fq2 r = S2_minus_S1 + S2_minus_S1;          // r = 2 * (S2-S1)
-    alt_bn128_Fq2 V = U1 * I;                             // V = U1 * I
-    alt_bn128_Fq2 X3 = r.squared() - J - (V+V);           // X3 = r^2 - J - 2 * V
-    alt_bn128_Fq2 S1_J = S1 * J;
-    alt_bn128_Fq2 Y3 = r * (V-X3) - (S1_J+S1_J);          // Y3 = r * (V-X3)-2 S1 J
-    alt_bn128_Fq2 Z3 = ((this->Z+other.Z).squared()-Z1Z1-Z2Z2) * H; // Z3 = ((Z1+Z2)^2-Z1Z1-Z2Z2) * H
-
-    return alt_bn128_G2(X3, Y3, Z3);
+    return (*this) + other;
 }
 
 alt_bn128_G2 alt_bn128_G2::mixed_add(const alt_bn128_G2 &other) const
@@ -287,15 +244,13 @@ alt_bn128_G2 alt_bn128_G2::mixed_add(const alt_bn128_G2 &other) const
     // no need to handle points of order 2,4
     // (they cannot exist in a prime-order subgroup)
 
-    // check for doubling case
-
-    // using Jacobian coordinates so:
-    // (X1:Y1:Z1) = (X2:Y2:Z2)
+    // using Jacobian coordinates according to
+    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#addition-madd-2007-bl
+    // Note: (X1:Y1:Z1) = (X2:Y2:Z2)
     // iff
     // X1/Z1^2 == X2/Z2^2 and Y1/Z1^3 == Y2/Z2^3
     // iff
     // X1 * Z2^2 == X2 * Z1^2 and Y1 * Z2^3 == Y2 * Z1^3
-
     // we know that Z2 = 1
 
     const alt_bn128_Fq2 Z1Z1 = (this->Z).squared();
@@ -308,6 +263,7 @@ alt_bn128_G2 alt_bn128_G2::mixed_add(const alt_bn128_G2 &other) const
     const alt_bn128_Fq2 &S1 = (this->Y);                // S1 = Y1 * Z2 * Z2Z2
     const alt_bn128_Fq2 S2 = (other.Y) * Z1_cubed;      // S2 = Y2 * Z1 * Z1Z1
 
+    // check for doubling case
     if (U1 == U2 && S1 == S2)
     {
         // dbl case; nothing of above can be reused
@@ -318,8 +274,6 @@ alt_bn128_G2 alt_bn128_G2::mixed_add(const alt_bn128_G2 &other) const
     this->add_cnt++;
 #endif
 
-    // NOTE: does not handle O and pts of order 2,4
-    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#addition-madd-2007-bl
     alt_bn128_Fq2 H = U2-(this->X);                         // H = U2-X1
     alt_bn128_Fq2 HH = H.squared() ;                        // HH = H&2
     alt_bn128_Fq2 I = HH+HH;                                // I = 4*HH
@@ -348,8 +302,11 @@ alt_bn128_G2 alt_bn128_G2::dbl() const
     }
 
     // NOTE: does not handle O and pts of order 2,4
-    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
+    // (they cannot exist in a prime-order subgroup)
 
+    // using Jacobian coordinates according to
+    // https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#doubling-dbl-2009-l
+    
     alt_bn128_Fq2 A = (this->X).squared();         // A = X1^2
     alt_bn128_Fq2 B = (this->Y).squared();        // B = Y1^2
     alt_bn128_Fq2 C = B.squared();                // C = B^2
