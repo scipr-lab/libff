@@ -47,7 +47,6 @@ extern edwards_Fq edwards_twist_mul_by_q_Z;
 
 // parameters for pairing
 extern bigint<edwards_q_limbs> edwards_ate_loop_count;
-extern bigint<6*edwards_q_limbs> edwards_final_exponent;
 extern bigint<edwards_q_limbs> edwards_final_exponent_last_chunk_abs_of_w0;
 extern bool edwards_final_exponent_last_chunk_is_w0_neg;
 extern bigint<edwards_q_limbs> edwards_final_exponent_last_chunk_w1;

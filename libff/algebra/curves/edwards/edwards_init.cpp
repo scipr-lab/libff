@@ -29,7 +29,6 @@ edwards_Fq edwards_twist_mul_by_q_Y;
 edwards_Fq edwards_twist_mul_by_q_Z;
 
 bigint<edwards_q_limbs> edwards_ate_loop_count;
-bigint<6*edwards_q_limbs> edwards_final_exponent;
 bigint<edwards_q_limbs> edwards_final_exponent_last_chunk_abs_of_w0;
 bool edwards_final_exponent_last_chunk_is_w0_neg;
 bigint<edwards_q_limbs> edwards_final_exponent_last_chunk_w1;
@@ -261,7 +260,6 @@ void init_edwards_params()
     /* pairing parameters */
 
     edwards_ate_loop_count = bigint_q("4492509698523932320491110403");
-    edwards_final_exponent = bigint<6*edwards_q_limbs>("36943107177961694649618797346446870138748651578611748415128207429491593976636391130175425245705674550269561361208979548749447898941828686017765730419416875539615941651269793928962468899856083169227457503942470721108165443528513330156264699608120624990672333642644221591552000");
     edwards_final_exponent_last_chunk_abs_of_w0 = bigint_q("17970038794095729281964441603");
     edwards_final_exponent_last_chunk_is_w0_neg = true;
     edwards_final_exponent_last_chunk_w1 = bigint_q("4");
