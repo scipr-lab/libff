@@ -36,6 +36,7 @@ bigint<n>::bigint(const char* s) /// Initialize from a string containing an inte
 
     mp_size_t limbs_written = mpn_set_str(this->data, s_copy, l, 10);
     assert(limbs_written <= n);
+    UNUSED(limbs_written);  // Prevent release build warnings
 
     delete[] s_copy;
 }
@@ -216,6 +217,7 @@ std::istream& operator>>(std::istream &in, bigint<n> &b)
 
     mp_size_t limbs_written = mpn_set_str(b.data, s_copy, l, 10);
     assert(limbs_written <= n);
+    UNUSED(limbs_written);  // Prevent release build warnings
 
     delete[] s_copy;
 #endif

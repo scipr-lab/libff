@@ -110,6 +110,19 @@ void test_group()
     assert((GroupT::order() * one) - one != zero);
 
     test_mixed_add<GroupT>();
+
+    // Prevent release build warnings
+    UNUSED(rand1);
+    UNUSED(rand2);
+    UNUSED(randsum);
+    UNUSED(zero);
+    UNUSED(one);
+    UNUSED(two);
+    UNUSED(three);
+    UNUSED(four);
+    UNUSED(five);
+    UNUSED(a);
+    UNUSED(b);
 }
 
 template<typename GroupT>
@@ -117,6 +130,7 @@ void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
     assert((GroupT::base_field_char()*a) == a.mul_by_q());
+    UNUSED(a);  // Prevent release build warnings
 }
 
 template<typename GroupT>
