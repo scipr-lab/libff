@@ -114,7 +114,7 @@ void edwards_G2::to_special()
         return;
     }
 
-#ifdef DEBUG
+#if defined(DEBUG) && !defined(NDEBUG)
     const edwards_G2 copy(*this);
 #endif
 
