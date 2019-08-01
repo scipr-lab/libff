@@ -621,16 +621,26 @@ std::vector<T> batch_exp(const size_t scalar_size,
                          const window_table<T> &table,
                          const std::vector<FieldT> &v)
 {
+    return batch_exp(scalar_size, window, table, v, v.size());
+}
+
+template<typename T, typename FieldT>
+std::vector<T> batch_exp(const size_t scalar_size,
+                         const size_t window,
+                         const window_table<T> &table,
+                         const std::vector<FieldT> &v,
+                         size_t num_entries)
+{
     if (!inhibit_profiling_info)
     {
         print_indent();
     }
-    std::vector<T> res(v.size(), table[0][0]);
+    std::vector<T> res(num_entries, table[0][0]);
 
 #ifdef MULTICORE
 #pragma omp parallel for
 #endif
-    for (size_t i = 0; i < v.size(); ++i)
+    for (size_t i = 0; i < num_entries; ++i)
     {
         res[i] = windowed_exp(scalar_size, window, table, v[i]);
 
