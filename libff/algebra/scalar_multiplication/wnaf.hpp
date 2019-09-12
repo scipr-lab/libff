@@ -19,10 +19,30 @@
 namespace libff {
 
 /**
+ * Find the wNAF representation of the given scalar relative to the given
+ * window size, reusing the given vector to store it.
+ */
+template<mp_size_t n>
+void update_wnaf(std::vector<long> &naf, const size_t window_size, const bigint<n> &scalar);
+
+/**
  * Find the wNAF representation of the given scalar relative to the given window size.
  */
 template<mp_size_t n>
 std::vector<long> find_wnaf(const size_t window_size, const bigint<n> &scalar);
+
+/**
+ * Compute optimal window size.
+ */
+template<typename T>
+size_t wnaf_opt_window_size(const size_t scalar_bits);
+
+/**
+ * In additive notation, use wNAF exponentiation (with the given window size)
+ * to compute scalar * base, for a scalar in naf form.
+ */
+template<typename T>
+T fixed_window_wnaf_exp(const size_t window_size, const T &base, const std::vector<long> &naf);
 
 /**
  * In additive notation, use wNAF exponentiation (with the given window size) to compute scalar * base.

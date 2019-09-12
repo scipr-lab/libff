@@ -19,10 +19,10 @@
 namespace libff {
 
 template<mp_size_t n>
-std::vector<long> find_wnaf(const size_t window_size, const bigint<n> &scalar)
+void update_wnaf(std::vector<long> &wnaf, const size_t window_size, const bigint<n> &scalar)
 {
     const size_t length = scalar.max_bits(); // upper bound
-    std::vector<long> res(length+1);
+    wnaf.resize(length+1);
     bigint<n> c = scalar;
     long j = 0;
     while (!c.is_zero())
@@ -49,19 +49,40 @@ std::vector<long> find_wnaf(const size_t window_size, const bigint<n> &scalar)
         {
             u = 0;
         }
-        res[j] = u;
+        wnaf[j] = u;
         ++j;
 
         mpn_rshift(c.data, c.data, n, 1); // c = c/2
     }
 
+    wnaf.resize(j);
+}
+
+template<mp_size_t n>
+std::vector<long> find_wnaf(const size_t window_size, const bigint<n> &scalar)
+{
+    std::vector<long> res;
+    update_wnaf(res, window_size, scalar);
     return res;
 }
 
-template<typename T, mp_size_t n>
-T fixed_window_wnaf_exp(const size_t window_size, const T &base, const bigint<n> &scalar)
+template<typename T>
+size_t wnaf_opt_window_size(const size_t scalar_bits)
 {
-    std::vector<long> naf = find_wnaf(window_size, scalar);
+    for (long i = T::wnaf_window_table.size() - 1; i >= 0; --i)
+    {
+        if (scalar_bits >= T::wnaf_window_table[i])
+        {
+            return i+1;
+        }
+    }
+
+    return 0;
+}
+
+template<typename T>
+T fixed_window_wnaf_exp(const size_t window_size, const T &base, const std::vector<long> &naf)
+{
     std::vector<T> table(1ul<<(window_size-1));
     T tmp = base;
     T dbl = base.dbl();
@@ -98,18 +119,16 @@ T fixed_window_wnaf_exp(const size_t window_size, const T &base, const bigint<n>
 }
 
 template<typename T, mp_size_t n>
+T fixed_window_wnaf_exp(const size_t window_size, const T &base, const bigint<n> &scalar)
+{
+    std::vector<long> naf = find_wnaf(window_size, scalar);
+    return fixed_window_wnaf_exp<T>(window_size, base, naf);
+}
+
+template<typename T, mp_size_t n>
 T opt_window_wnaf_exp(const T &base, const bigint<n> &scalar, const size_t scalar_bits)
 {
-    size_t best = 0;
-    for (long i = T::wnaf_window_table.size() - 1; i >= 0; --i)
-    {
-        if (scalar_bits >= T::wnaf_window_table[i])
-        {
-            best = i+1;
-            break;
-        }
-    }
-
+    const size_t best = wnaf_opt_window_size<T>(scalar_bits);
     if (best > 0)
     {
         return fixed_window_wnaf_exp(best, base, scalar);
