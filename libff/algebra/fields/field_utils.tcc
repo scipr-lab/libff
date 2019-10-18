@@ -65,7 +65,7 @@ std::vector<FieldT> pack_int_vector_into_field_element_vector(const std::vector<
             const size_t word_index = (i * chunk_bits + j) / w;
             const size_t pos_in_word = (i * chunk_bits + j) % w;
             const size_t word_or_0 = (word_index < v.size() ? v[word_index] : 0);
-            const size_t bit = (word_or_0 >> pos_in_word) & 1;
+            const mp_limb_t bit = (word_or_0 >> pos_in_word) & 1;
 
             b.data[j / GMP_NUMB_BITS] |= bit << (j % GMP_NUMB_BITS);
         }
@@ -88,7 +88,7 @@ std::vector<FieldT> pack_bit_vector_into_field_element_vector(const bit_vector &
         bigint<FieldT::num_limbs> b;
         for (size_t j = 0; j < chunk_bits; ++j)
         {
-            b.data[j / GMP_NUMB_BITS] |= ((i * chunk_bits + j) < v.size() && v[i * chunk_bits + j] ? 1ll : 0ll) << (j % GMP_NUMB_BITS);
+            b.data[j / GMP_NUMB_BITS] |= ((i * chunk_bits + j) < v.size() && v[i * chunk_bits + j] ? ((mp_limb_t)1) : ((mp_limb_t)0)) << (j % GMP_NUMB_BITS);
         }
         result[i] = FieldT(b);
     }

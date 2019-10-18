@@ -709,7 +709,7 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
             const std::size_t part = bitno/GMP_NUMB_BITS;
             const std::size_t bit = bitno - (GMP_NUMB_BITS*part);
 
-            r.mont_repr.data[part] &= ~(1ul<<bit);
+            r.mont_repr.data[part] &= ~(((mp_limb_t)1)<<bit);
 
             bitno--;
         }
