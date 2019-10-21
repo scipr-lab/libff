@@ -190,9 +190,9 @@ bigint<n>& bigint<n>::randomize()
 template<mp_size_t n>
 std::ostream& operator<<(std::ostream &out, const bigint<n> &b)
 {
-#ifdef BINARY_OUTPUT
+if (binary_output) {
     out.write((char*)b.data, sizeof(b.data[0]) * n);
-#else
+} else {
     mpz_t t;
     mpz_init(t);
     b.to_mpz(t);
@@ -200,16 +200,16 @@ std::ostream& operator<<(std::ostream &out, const bigint<n> &b)
     out << t;
 
     mpz_clear(t);
-#endif
+}
     return out;
 }
 
 template<mp_size_t n>
 std::istream& operator>>(std::istream &in, bigint<n> &b)
 {
-#ifdef BINARY_OUTPUT
+if (binary_output) {
     in.read((char*)b.data, sizeof(b.data[0]) * n);
-#else
+} else {
     std::string s;
     in >> s;
 
@@ -226,7 +226,7 @@ std::istream& operator>>(std::istream &in, bigint<n> &b)
     assert(limbs_written <= n);
 
     delete[] s_copy;
-#endif
+}
     return in;
 }
 

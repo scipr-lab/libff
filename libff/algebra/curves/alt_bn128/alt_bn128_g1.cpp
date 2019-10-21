@@ -407,12 +407,12 @@ std::ostream& operator<<(std::ostream &out, const alt_bn128_G1 &g)
     copy.to_affine_coordinates();
 
     out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     out << copy.X << OUTPUT_SEPARATOR << copy.Y;
-#else
+} else {
     /* storing LSB of Y */
     out << copy.X << OUTPUT_SEPARATOR << (copy.Y.as_bigint().data[0] & 1);
-#endif
+}
 
     return out;
 }
@@ -422,10 +422,10 @@ std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
     char is_zero;
     alt_bn128_Fq tX, tY;
 
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     in >> is_zero >> tX >> tY;
     is_zero -= '0';
-#else
+} else {
     in.read((char*)&is_zero, 1); // this reads is_zero;
     is_zero -= '0';
     consume_OUTPUT_SEPARATOR(in);
@@ -448,7 +448,7 @@ std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
             tY = -tY;
         }
     }
-#endif
+}
     // using Jacobian coordinates
     if (!is_zero)
     {

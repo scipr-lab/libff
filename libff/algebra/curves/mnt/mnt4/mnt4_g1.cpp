@@ -392,12 +392,12 @@ std::ostream& operator<<(std::ostream &out, const mnt4_G1 &g)
     copy.to_affine_coordinates();
 
     out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     out << copy.X_ << OUTPUT_SEPARATOR << copy.Y_;
-#else
+} else {
     /* storing LSB of Y */
     out << copy.X_ << OUTPUT_SEPARATOR << (copy.Y_.as_bigint().data[0] & 1);
-#endif
+}
 
     return out;
 }
@@ -407,10 +407,10 @@ std::istream& operator>>(std::istream &in, mnt4_G1 &g)
     char is_zero;
     mnt4_Fq tX, tY;
 
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     in >> is_zero >> tX >> tY;
     is_zero -= '0';
-#else
+} else {
     in.read((char*)&is_zero, 1);
     is_zero -= '0';
     consume_OUTPUT_SEPARATOR(in);
@@ -433,7 +433,7 @@ std::istream& operator>>(std::istream &in, mnt4_G1 &g)
             tY = -tY;
         }
     }
-#endif
+}
     // using projective coordinates
     if (!is_zero)
     {

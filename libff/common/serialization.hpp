@@ -19,6 +19,10 @@
 #include <vector>
 
 namespace libff {
+    
+extern bool binary_output;
+extern bool montgomery_output;
+extern bool no_pt_compression;
 
 /*
  * @todo
@@ -60,13 +64,15 @@ namespace libff {
  * portable between machines of different word sizes.
  */
 
-#ifdef BINARY_OUTPUT
-#define OUTPUT_NEWLINE ""
-#define OUTPUT_SEPARATOR ""
-#else
-#define OUTPUT_NEWLINE "\n"
-#define OUTPUT_SEPARATOR " "
-#endif
+#define OUTPUT_NEWLINE (libff::binary_output?"":"\n")
+#define OUTPUT_SEPARATOR (libff::binary_output?"":" ")
+//#ifdef BINARY_OUTPUT
+//#define OUTPUT_NEWLINE ""
+//#define OUTPUT_SEPARATOR ""
+//#else
+//#define OUTPUT_NEWLINE "\n"
+//#define OUTPUT_SEPARATOR " "
+//#endif
 
 inline void consume_newline(std::istream &in);
 inline void consume_OUTPUT_NEWLINE(std::istream &in);
@@ -85,7 +91,7 @@ template<typename T>
 std::ostream& operator<<(std::ostream& out, const std::vector<T> &v);
 
 template<typename T>
-std::istream& operator>>(std::ostream& out, std::vector<T> &v);
+std::istream& operator>>(std::istream& in, std::vector<T> &v);
 
 template<typename T1, typename T2>
 std::ostream& operator<<(std::ostream& out, const std::map<T1, T2> &m);

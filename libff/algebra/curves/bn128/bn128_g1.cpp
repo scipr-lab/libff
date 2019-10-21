@@ -348,24 +348,24 @@ std::ostream& operator<<(std::ostream &out, const bn128_G1 &g)
 
     out << (gcopy.is_zero() ? '1' : '0') << OUTPUT_SEPARATOR;
 
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     /* no point compression case */
-#ifndef BINARY_OUTPUT
+if (!binary_output) {
     out << gcopy.coord[0] << OUTPUT_SEPARATOR << gcopy.coord[1];
-#else
+} else {
     out.write((char*) &gcopy.coord[0], sizeof(gcopy.coord[0]));
     out.write((char*) &gcopy.coord[1], sizeof(gcopy.coord[1]));
-#endif
+}
 
-#else
+} else {
     /* point compression case */
-#ifndef BINARY_OUTPUT
+if (!binary_output) {
     out << gcopy.coord[0];
-#else
+} else {
     out.write((char*) &gcopy.coord[0], sizeof(gcopy.coord[0]));
-#endif
+}
     out << OUTPUT_SEPARATOR << (((unsigned char*)&gcopy.coord[1])[0] & 1 ? '1' : '0');
-#endif
+}
 
     return out;
 }
@@ -408,25 +408,26 @@ std::istream& operator>>(std::istream &in, bn128_G1 &g)
     is_zero -= '0';
     consume_OUTPUT_SEPARATOR(in);
 
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     /* no point compression case */
-#ifndef BINARY_OUTPUT
+if (!binary_output) {
     in >> g.coord[0];
     consume_OUTPUT_SEPARATOR(in);
     in >> g.coord[1];
-#else
+} else {
+    
     in.read((char*) &g.coord[0], sizeof(g.coord[0]));
     in.read((char*) &g.coord[1], sizeof(g.coord[1]));
-#endif
+}
 
-#else
+} else {
     /* point compression case */
     bn::Fp tX;
-#ifndef BINARY_OUTPUT
+if (!binary_output) {
     in >> tX;
-#else
+} else {
     in.read((char*)&tX, sizeof(tX));
-#endif
+}
     consume_OUTPUT_SEPARATOR(in);
     unsigned char Y_lsb;
     in.read((char*)&Y_lsb, 1);
@@ -447,7 +448,7 @@ std::istream& operator>>(std::istream &in, bn128_G1 &g)
             bn::Fp::neg(g.coord[1], g.coord[1]);
         }
     }
-#endif
+}
 
     /* finalize */
     if (!is_zero)

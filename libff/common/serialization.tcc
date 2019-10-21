@@ -29,24 +29,24 @@ inline void consume_newline(std::istream &in)
 
 inline void consume_OUTPUT_NEWLINE(std::istream &in)
 {
-#ifdef BINARY_OUTPUT
+if (binary_output) {
     // nothing to consume
     UNUSED(in);
-#else
+} else {
     char c;
     in.read(&c, 1);
-#endif
+}
 }
 
 inline void consume_OUTPUT_SEPARATOR(std::istream &in)
 {
-#ifdef BINARY_OUTPUT
+if (binary_output) {
     // nothing to consume
     UNUSED(in);
-#else
+} else {
     char c;
     in.read(&c, 1);
-#endif
+}
 }
 
 inline void output_bool(std::ostream &out, const bool b)

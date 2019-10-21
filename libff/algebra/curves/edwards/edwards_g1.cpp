@@ -304,12 +304,12 @@ std::ostream& operator<<(std::ostream &out, const edwards_G1 &g)
 {
     edwards_G1 copy(g);
     copy.to_affine_coordinates();
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     out << copy.X << OUTPUT_SEPARATOR << copy.Y;
-#else
+} else {
     /* storing LSB of Y */
     out << copy.X << OUTPUT_SEPARATOR << (copy.Y.as_bigint().data[0] & 1);
-#endif
+}
 
     return out;
 }
@@ -318,11 +318,11 @@ std::istream& operator>>(std::istream &in, edwards_G1 &g)
 {
     edwards_Fq tX, tY;
 
-#ifdef NO_PT_COMPRESSION
+if (no_pt_compression) {
     in >> tX;
     consume_OUTPUT_SEPARATOR(in);
     in >> tY;
-#else
+} else {
     /*
       a x^2 + y^2 = 1 + d x^2 y^2
       y = sqrt((1-ax^2)/(1-dx^2))
@@ -343,7 +343,7 @@ std::istream& operator>>(std::istream &in, edwards_G1 &g)
     {
         tY = -tY;
     }
-#endif
+}
 
     // using inverted coordinates
     g.X = tY;

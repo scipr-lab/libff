@@ -47,6 +47,7 @@ add_library(
   algebra/curves/mnt/mnt6/mnt6_pp.cpp
   common/double.cpp
   common/profiling.cpp
+  common/serialization.cpp
   common/utils.cpp
 
   ${FF_EXTRASRCS}
