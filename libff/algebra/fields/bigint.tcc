@@ -216,6 +216,10 @@ std::istream& operator>>(std::istream &in, bigint<n> &b)
 
     mp_size_t limbs_written = mpn_set_str(b.data, s_copy, l, 10);
     assert(limbs_written <= n);
+    if (limbs_written < n)
+    {
+      memset(b.data + limbs_written, 0, (n - limbs_written) * sizeof(mp_limb_t));
+    }
 
     delete[] s_copy;
 #endif
