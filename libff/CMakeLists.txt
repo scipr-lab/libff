@@ -78,6 +78,7 @@ install(
 
 # Tests
 if ("${IS_LIBFF_PARENT}")
+  # Tests for prime fields
   add_executable(
     algebra_bilinearity_test
     EXCLUDE_FROM_ALL
@@ -132,6 +133,28 @@ if ("${IS_LIBFF_PARENT}")
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_fields_test)
 
+  # Tests for binary fields
+  add_executable(
+    algebra_gf32_test
+    EXCLUDE_FROM_ALL
+
+    algebra/binary_fields/tests/test_gf32.cpp
+  )
+  target_link_libraries(
+    algebra_gf32_test
+
+    ff
+  )
+
+  include(CTest)
+  add_test(
+    NAME algebra_gf32_test
+    COMMAND algebra_gf32_test
+  )
+
+  add_dependencies(check algebra_gf32_test)
+
+  # Profiling for prime fields
   add_executable(
     multiexp_profile
     EXCLUDE_FROM_ALL
