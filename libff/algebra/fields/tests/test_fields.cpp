@@ -17,6 +17,7 @@
 
 using namespace libff;
 
+#ifndef NDEBUG
 template<typename FieldT>
 void test_field()
 {
@@ -216,7 +217,7 @@ void test_Fp4_tom_cook()
     }
 }
 
-int main(void)
+int main()
 {
     edwards_pp::init_public_params();
     test_all_fields<edwards_pp>();
@@ -243,3 +244,11 @@ int main(void)
     test_field<Fq<bn128_pp> >();
 #endif
 }
+
+#else // NDEBUG
+
+int main()
+{
+    printf("All tests here depend on assert() which is disabled by -DNDEBUG. Please recompile and run again.\n");
+}
+#endif // NDEBUG
