@@ -33,6 +33,7 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static bn128_G2 G2_zero;
     static bn128_G2 G2_one;
+    static bool initialized;
 
     bn::Fp2 coord[3];
     bn128_G2();

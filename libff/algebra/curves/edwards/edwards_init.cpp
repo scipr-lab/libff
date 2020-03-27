@@ -137,11 +137,11 @@ void init_edwards_params()
     edwards_twist_mul_by_q_Z = edwards_Fq("1073752683758513276629212192812154536507607213288832062");
 
     /* choice of group G1 */
-
     edwards_G1::G1_zero = edwards_G1(edwards_Fq::zero(),
                                      edwards_Fq::one());
     edwards_G1::G1_one = edwards_G1(edwards_Fq("3713709671941291996998665608188072510389821008693530490"),
                                     edwards_Fq("4869953702976555123067178261685365085639705297852816679"));
+    edwards_G1::initialized = true;
 
     edwards_G1::wnaf_window_table.resize(0);
     edwards_G1::wnaf_window_table.push_back(9);
@@ -205,6 +205,7 @@ void init_edwards_params()
                                     edwards_Fq3(edwards_Fq("364634864866983740775341816274081071386963546650700569"),
                                                 edwards_Fq("3264380230116139014996291397901297105159834497864380415"),
                                                 edwards_Fq("3504781284999684163274269077749440837914479176282903747")));
+    edwards_G2::initialized = true;
 
     edwards_G2::wnaf_window_table.resize(0);
     edwards_G2::wnaf_window_table.push_back(6);

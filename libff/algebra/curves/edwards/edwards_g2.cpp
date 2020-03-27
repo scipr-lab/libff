@@ -17,14 +17,18 @@ long long edwards_G2::dbl_cnt = 0;
 std::vector<size_t> edwards_G2::wnaf_window_table;
 std::vector<size_t> edwards_G2::fixed_base_exp_window_table;
 
-edwards_G2 edwards_G2::G2_zero;
-edwards_G2 edwards_G2::G2_one;
+edwards_G2 edwards_G2::G2_zero = {};
+edwards_G2 edwards_G2::G2_one = {};
+bool edwards_G2::initialized = false;
 
 edwards_G2::edwards_G2()
 {
-    this->X = G2_zero.X;
-    this->Y = G2_zero.Y;
-    this->Z = G2_zero.Z;
+    if (initialized)
+    {
+        this->X = G2_zero.X;
+        this->Y = G2_zero.Y;
+        this->Z = G2_zero.Z;
+    }
 }
 
 edwards_Fq3 edwards_G2::mul_by_a(const edwards_Fq3 &elt)
