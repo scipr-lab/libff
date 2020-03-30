@@ -447,7 +447,11 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
                                 typename std::vector<FieldT>::const_iterator scalar_end,
                                 const size_t chunks)
 {
+#ifndef NDEBUG
     assert(std::distance(vec_start, vec_end) == std::distance(scalar_start, scalar_end));
+#else
+    libff::UNUSED(vec_end);
+#endif
     enter_block("Process scalar vector");
     auto value_it = vec_start;
     auto scalar_it = scalar_start;
