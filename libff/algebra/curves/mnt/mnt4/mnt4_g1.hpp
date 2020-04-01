@@ -24,8 +24,6 @@ std::ostream& operator<<(std::ostream &, const mnt4_G1&);
 std::istream& operator>>(std::istream &, mnt4_G1&);
 
 class mnt4_G1 {
-private:
-    mnt4_Fq X_, Y_, Z_;
 public:
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
@@ -41,14 +39,12 @@ public:
     typedef mnt4_Fq base_field;
     typedef mnt4_Fr scalar_field;
 
+    mnt4_Fq X, Y, Z;
+
     // using projective coordinates
     mnt4_G1();
-    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y) : X_(X), Y_(Y), Z_(base_field::one()) {}
-    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y, const mnt4_Fq& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    mnt4_Fq X() const { return X_; }
-    mnt4_Fq Y() const { return Y_; }
-    mnt4_Fq Z() const { return Z_; }
+    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y) : X(X), Y(Y), Z(base_field::one()) {}
+    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y, const mnt4_Fq& Z) : X(X), Y(Y), Z(Z) {}
 
     void print() const;
     void print_coordinates() const;
