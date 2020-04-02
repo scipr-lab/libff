@@ -56,30 +56,25 @@ void test_mixed_add()
 template<typename GroupT>
 void test_group()
 {
-    bigint<1> rand1 = bigint<1>("76749407");
-    bigint<1> rand2 = bigint<1>("44410867");
-    bigint<1> randsum = bigint<1>("121160274");
-
     GroupT zero = GroupT::zero();
     GroupT one = GroupT::one();
+    assert(one != zero);
 
     GroupT two = bigint<1>(2l) * GroupT::one();
     GroupT five = bigint<1>(5l) * GroupT::one();
-
     GroupT three = bigint<1>(3l) * GroupT::one();
     GroupT four = bigint<1>(4l) * GroupT::one();
-
-    assert(two+five == three+four);
+    assert(two + five == three + four);
 
     GroupT a = GroupT::random_element();
+    while (a == zero || a == one) {
+        a = GroupT::random_element();
+    }
+
     GroupT b = GroupT::random_element();
-
-    assert(one != zero);
-    assert(a != zero);
-    assert(a != one);
-
-    assert(b != zero);
-    assert(b != one);
+    while (b == zero || b == one) {
+        b = GroupT::random_element();
+    }
 
     assert(a.dbl() == a + a);
     assert(b.dbl() == b + b);
@@ -100,7 +95,11 @@ void test_group()
     assert((a + b).dbl() == (a + b) + (b + a));
     assert(bigint<1>("2") * (a + b) == (a + b) + (b + a));
 
-    assert((rand1 * a) + (rand2 * a) == (randsum * a));
+    bigint<1> scalar1 = bigint<1>("76749407");
+    bigint<1> scalar2 = bigint<1>("44410867");
+    bigint<1> sum_scalars = bigint<1>("121160274");
+    assert(scalar1.as_ulong() + scalar2.as_ulong() == sum_scalars.as_ulong());
+    assert((scalar1 * a) + (scalar2 * a) == (sum_scalars * a));
 
     assert(GroupT::order() * a == zero);
     assert(GroupT::order() * one == zero);
@@ -114,7 +113,7 @@ template<typename GroupT>
 void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
-    assert((GroupT::base_field_char()*a) == a.mul_by_q());
+    assert((GroupT::base_field_char() * a) == a.mul_by_q());
 }
 
 template<typename GroupT>
