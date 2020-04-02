@@ -61,11 +61,9 @@ void test_group()
     bigint<1> randsum = bigint<1>("121160274");
 
     GroupT zero = GroupT::zero();
-    assert(zero == zero);
     GroupT one = GroupT::one();
-    assert(one == one);
+
     GroupT two = bigint<1>(2l) * GroupT::one();
-    assert(two == two);
     GroupT five = bigint<1>(5l) * GroupT::one();
 
     GroupT three = bigint<1>(3l) * GroupT::one();
