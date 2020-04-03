@@ -224,8 +224,8 @@ bn128_G2 bn128_G2::add(const bn128_G2 &other) const
 #endif
 
     bn::Fp2 this_coord[3], other_coord[3], result_coord[3];
-    this->fill_coord(&this_coord);
-    other.fill_coord(&other_coord);
+    this->fill_coord(this_coord);
+    other.fill_coord(other_coord);
     bn::ecop::ECAdd(result_coord, this_coord, other_coord);
 
     bn128_G2 result(result_coord);
@@ -326,7 +326,7 @@ bn128_G2 bn128_G2::dbl() const
 #endif
 
     bn::Fp2 this_coord[3], result_coord[3];
-    this->fill_coord(&this_coord);
+    this->fill_coord(this_coord);
     bn::ecop::ECDouble(result_coord, this_coord);
 
     bn128_G2 result(result_coord);
