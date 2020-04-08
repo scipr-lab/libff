@@ -74,6 +74,7 @@ public:
     void mul_reduce(const bigint<n> &other);
 
     void clear();
+    void randomize();
 
     /* Return the standard (not Montgomery) representation of the
        Field element's requivalence class. I.e. Fp(2).as_bigint()
@@ -102,6 +103,7 @@ public:
     Fp_model operator-(const Fp_model& other) const;
     Fp_model operator*(const Fp_model& other) const;
     Fp_model operator-() const;
+
     Fp_model squared() const;
     Fp_model& invert();
     Fp_model inverse() const;
@@ -179,6 +181,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n, modulus>::Rcubed;
 
 } // libff
-#include <libff/algebra/fields/fp.tcc>
+#include <libff/algebra/fields/prime/fp.tcc>
 
 #endif // FP_HPP_

@@ -12,8 +12,8 @@
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
-#include <libff/algebra/fields/fp12_2over3over2.hpp>
-#include <libff/algebra/fields/fp6_3over2.hpp>
+#include <libff/algebra/fields/prime/fp12_2over3over2.hpp>
+#include <libff/algebra/fields/prime/fp6_3over2.hpp>
 
 using namespace libff;
 
@@ -242,4 +242,13 @@ int main(void)
     test_field<Fr<bn128_pp> >();
     test_field<Fq<bn128_pp> >();
 #endif
+
+    assert(false);
+    assert(true);
+    assert(0);
+    assert(1);
+    assert(1 < 0);
+    assert(1 > 0);
+    assert(1 == 0);
+    std::cout << "All tests passed!\n";
 }

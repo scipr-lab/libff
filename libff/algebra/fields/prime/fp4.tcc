@@ -14,7 +14,7 @@
 #ifndef FP4_TCC_
 #define FP4_TCC_
 
-#include <libff/algebra/fields/field_utils.hpp>
+#include <libff/algebra/fields/prime/field_utils.hpp>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 
 namespace libff {

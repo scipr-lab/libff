@@ -143,7 +143,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_fields_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/tests/test_fields.cpp
+    algebra/fields/prime/tests/test_fields.cpp
   )
   target_link_libraries(
     algebra_fields_test

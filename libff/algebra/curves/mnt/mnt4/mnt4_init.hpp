@@ -14,9 +14,9 @@
 
 #include <libff/algebra/curves/mnt/mnt46_common.hpp>
 #include <libff/algebra/curves/public_params.hpp>
-#include <libff/algebra/fields/fp.hpp>
-#include <libff/algebra/fields/fp2.hpp>
-#include <libff/algebra/fields/fp4.hpp>
+#include <libff/algebra/fields/prime/fp.hpp>
+#include <libff/algebra/fields/prime/fp2.hpp>
+#include <libff/algebra/fields/prime/fp4.hpp>
 
 namespace libff {
 

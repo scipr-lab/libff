@@ -11,8 +11,8 @@
 
 #include "depends/ate-pairing/include/bn.h"
 
-#include <libff/algebra/fields/field_utils.hpp>
-#include <libff/algebra/fields/fp.hpp>
+#include <libff/algebra/fields/prime/field_utils.hpp>
+#include <libff/algebra/fields/prime/fp.hpp>
 
 namespace libff {
 

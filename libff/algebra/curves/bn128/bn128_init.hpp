@@ -10,7 +10,7 @@
 #include "depends/ate-pairing/include/bn.h"
 
 #include <libff/algebra/curves/public_params.hpp>
-#include <libff/algebra/fields/fp.hpp>
+#include <libff/algebra/fields/prime/fp.hpp>
 
 namespace libff {
 
