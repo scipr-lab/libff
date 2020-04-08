@@ -225,6 +225,12 @@ void Fp_model<n,modulus>::clear()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp_model<n,modulus>::randomize()
+{
+    // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n,modulus>::as_bigint() const
 {
     bigint<n> one;
@@ -588,6 +594,12 @@ Fp_model<n,modulus> Fp_model<n,modulus>::operator-() const
         mpn_sub_n(r.mont_repr.data, modulus.data, this->mont_repr.data, n);
         return r;
     }
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus>& Fp_model<n,modulus>::square()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

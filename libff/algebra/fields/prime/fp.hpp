@@ -104,6 +104,7 @@ public:
     Fp_model operator*(const Fp_model& other) const;
     Fp_model operator-() const;
 
+    Fp_model& square();
     Fp_model squared() const;
     Fp_model& invert();
     Fp_model inverse() const;
@@ -115,7 +116,7 @@ public:
 
     static size_t size_in_bits() { return num_bits; }
     static size_t capacity() { return num_bits - 1; }
-    static bigint<n> field_char() { return modulus; }
+    static bigint<n> base_field_char() { return modulus; }
 
     static Fp_model<n, modulus> zero();
     static Fp_model<n, modulus> one();
