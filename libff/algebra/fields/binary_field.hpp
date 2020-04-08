@@ -1,10 +1,9 @@
 /** @file
  *****************************************************************************
- Declaration of common API for all finite fields.
+ Declaration of common API for all finite fields in the binary/ directory.
 
- Includes two types of fields, F[p^n] for selected n and F[2^n] for a separate
- range of n. All of these finite fields must implement all functions declared
- in this class.
+ Includes fields F2^n for specified n. All of the binary fields must implement
+ all functions declared in this class.
 
  However, this class is not actually the parent class of any field. All APIs
  are enforced through tests instead.
@@ -19,14 +18,28 @@
 namespace libff {
 
 template<typename T>
-class Field;
+class Binaryield;
 
 /* The type parameter T is intended to be set to the child class
  * when this class is extended. For example,
- * class Fp_model : public Field<Fp_model> ...
+ * class gf32 : public Binaryield<gf32> ...
  */
 template<typename T>
-class Field {
+class Binaryield {
+    /* Functions unique to binary fields */
+
+    /** Returns the constituent bits in 64 bit words, in little-endian order */
+    std::vector<uint64_t> as_words() const = 0;
+
+    static const constexpr uint64_t modulus_; // is uint32_t for gf32
+    static const constexpr uint64_t num_bits;
+
+    static T multiplicative_generator; // generator of gf2^n
+
+    static std::size_t extension_degree();
+
+    /* Functons common to all finite fields */
+
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator-=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator*=(const T& other) = 0; // has not been implemented in fp2 and above
@@ -63,13 +76,12 @@ class Field {
     static T zero();
     static T one();
     static T random_element();
-    static bigint<n> base_field_char() = 0; // has not been implemented in Fp or gf2^n
+    // how to deal with the template parameter n?
+    static bigint<n> base_field_char() { return bigint<n>(2) } // has not been implemented in Fp or gf2^n
 
-    // the following should be defined as well but can't be inherited;
-    // make sure binary and prime never serialize to same thing
+    // the following should be defined as well but can't be inherited
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n
     friend std::istream& operator>> <n,modulus>(std::istream &in, Fp_model<n, modulus> &p); // has not been implemented in gf2^n
-
 };
 
 // has not been implemented in gf2^n
