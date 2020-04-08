@@ -82,6 +82,10 @@ Optionally, you can specify the install location by providing the desired instal
 ```
 cmake .. -DCMAKE_INSTALL_PREFIX=/install/path
 ```
+You may also need to provide the path to openssl:
+```
+cmake -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2s -DOPENSSL_LIBRARIES=/usr/local/Cellar/openssl/1.0.2s/lib ..
+```
 
 Then, to compile and install the library, run this within the build directory:
 ```
