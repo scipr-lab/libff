@@ -63,8 +63,6 @@ public:
     static bigint<n> Rsquared; // R^2, where R = W^k, where k = ??
     static bigint<n> Rcubed;   // R^3
 
-    static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero
-
     Fp_model() {};
     Fp_model(const bigint<n> &b);
     Fp_model(const long x, const bool is_unsigned=false);
@@ -95,13 +93,15 @@ public:
     Fp_model& operator-=(const Fp_model& other);
     Fp_model& operator*=(const Fp_model& other);
     Fp_model& operator^=(const unsigned long pow);
-
     template<mp_size_t m>
     Fp_model& operator^=(const bigint<m> &pow);
 
     Fp_model operator+(const Fp_model& other) const;
     Fp_model operator-(const Fp_model& other) const;
     Fp_model operator*(const Fp_model& other) const;
+    Fp_model operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    Fp_model operator^(const bigint<m> &pow) const;
     Fp_model operator-() const;
 
     Fp_model& square();
@@ -110,13 +110,10 @@ public:
     Fp_model inverse() const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
-    Fp_model operator^(const unsigned long pow) const;
-    template<mp_size_t m>
-    Fp_model operator^(const bigint<m> &pow) const;
-
     static size_t size_in_bits() { return num_bits; }
     static size_t capacity() { return num_bits - 1; }
     static bigint<n> base_field_char() { return modulus; }
+    static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero
 
     static Fp_model<n, modulus> zero();
     static Fp_model<n, modulus> one();

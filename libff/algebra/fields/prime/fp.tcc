@@ -597,12 +597,6 @@ Fp_model<n,modulus> Fp_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-Fp_model<n,modulus>& Fp_model<n,modulus>::square()
-{
-    return NULL; // TODO
-}
-
-template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus> Fp_model<n,modulus>::squared() const
 {
 #ifdef PROFILE_OP_COUNTS
@@ -648,6 +642,12 @@ Fp_model<n,modulus> Fp_model<n,modulus>::squared() const
         Fp_model<n, modulus> r(*this);
         return (r *= r);
     }
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus>& Fp_model<n,modulus>::square()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

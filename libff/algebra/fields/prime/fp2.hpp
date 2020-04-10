@@ -52,31 +52,42 @@ public:
 
     void clear() { c0.clear(); c1.clear(); }
     void print() const { printf("c0/c1:\n"); c0.print(); c1.print(); }
-
-    static Fp2_model<n, modulus> zero();
-    static Fp2_model<n, modulus> one();
-    static Fp2_model<n, modulus> random_element();
+    void randomize();
 
     bool is_zero() const { return c0.is_zero() && c1.is_zero(); }
     bool operator==(const Fp2_model &other) const;
     bool operator!=(const Fp2_model &other) const;
 
+    Fp2_model& operator+=(const Fp2_model& other);
+    Fp2_model& operator-=(const Fp2_model& other);
+    Fp2_model& operator*=(const Fp2_model& other);
+    Fp2_model& operator^=(const unsigned long pow);
+    template<mp_size_t m>
+    Fp2_model& operator^=(const bigint<m> &pow);
+
     Fp2_model operator+(const Fp2_model &other) const;
     Fp2_model operator-(const Fp2_model &other) const;
     Fp2_model operator*(const Fp2_model &other) const;
+    Fp2_model operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    Fp2_model operator^(const bigint<m> &other) const;
     Fp2_model operator-() const;
+
+    Fp2_model& square(); // default is squared_complex
     Fp2_model squared() const; // default is squared_complex
+    Fp2_model& invert();
     Fp2_model inverse() const;
     Fp2_model Frobenius_map(unsigned long power) const;
     Fp2_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
     Fp2_model squared_karatsuba() const;
     Fp2_model squared_complex() const;
 
-    template<mp_size_t m>
-    Fp2_model operator^(const bigint<m> &other) const;
-
     static size_t size_in_bits() { return 2*my_Fp::size_in_bits(); }
     static bigint<n> base_field_char() { return modulus; }
+
+    static Fp2_model<n, modulus> zero();
+    static Fp2_model<n, modulus> one();
+    static Fp2_model<n, modulus> random_element();
 
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp2_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp2_model<n, modulus> &el);
