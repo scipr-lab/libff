@@ -76,13 +76,13 @@ void test_Frobenius()
 {
     FieldT a = FieldT::random_element();
     assert(a.Frobenius_map(0) == a);
-    FieldT a_q = a ^ FieldT::base_field_char();
+    FieldT a_q = a ^ FieldT::field_char();
     for (size_t power = 1; power < 10; ++power)
     {
         const FieldT a_qi = a.Frobenius_map(power);
         assert(a_qi == a_q);
 
-        a_q = a_q ^ FieldT::base_field_char();
+        a_q = a_q ^ FieldT::field_char();
     }
 }
 

@@ -112,7 +112,7 @@ public:
 
     static size_t size_in_bits() { return num_bits; }
     static size_t capacity() { return num_bits - 1; }
-    static bigint<n> base_field_char() { return modulus; }
+    static bigint<n> field_char() { return modulus; }
     static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero
 
     static Fp_model<n, modulus> zero();

@@ -63,7 +63,8 @@ class Field {
     static T zero();
     static T one();
     static T random_element();
-    static bigint<n> base_field_char() = 0; // has not been implemented in Fp or gf2^n
+    /** If extension field, returns the base field's characteristic. */
+    static bigint<n> field_char() = 0; // has not been implemented in Fp or gf2^n
 
     // the following should be defined as well but can't be inherited;
     // make sure binary and prime never serialize to same thing

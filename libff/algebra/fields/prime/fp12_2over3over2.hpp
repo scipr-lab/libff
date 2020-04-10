@@ -78,7 +78,7 @@ public:
     template<mp_size_t m>
     Fp12_2over3over2_model cyclotomic_exp(const bigint<m> &exponent) const;
 
-    static bigint<n> base_field_char() { return modulus; }
+    static bigint<n> field_char() { return modulus; }
     static size_t extension_degree() { return 12; }
 
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp12_2over3over2_model<n, modulus> &el);

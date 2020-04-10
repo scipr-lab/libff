@@ -116,7 +116,7 @@ template<typename GroupT>
 void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
-    assert((GroupT::base_field_char()*a) == a.mul_by_q());
+    assert((GroupT::field_char()*a) == a.mul_by_q());
 }
 
 template<typename GroupT>

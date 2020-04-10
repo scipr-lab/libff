@@ -82,7 +82,7 @@ public:
     Fp3_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
     static size_t size_in_bits() { return 3*my_Fp::size_in_bits(); }
-    static bigint<n> base_field_char() { return modulus; }
+    static bigint<n> field_char() { return modulus; }
 
     static Fp3_model<n, modulus> zero();
     static Fp3_model<n, modulus> one();

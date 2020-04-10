@@ -77,7 +77,8 @@ class Binaryield {
     static T one();
     static T random_element();
     // how to deal with the template parameter n?
-    static bigint<n> base_field_char() { return bigint<n>(2) } // has not been implemented in Fp or gf2^n
+    /** If extension field, returns the base field's characteristic. */
+    static bigint<n> field_char() { return bigint<n>(2) } // has not been implemented in Fp or gf2^n
 
     // the following should be defined as well but can't be inherited
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n

@@ -49,33 +49,48 @@ public:
 
     void print() const { printf("c0/c1:\n"); c0.print(); c1.print(); }
     void clear() { c0.clear(); c1.clear(); }
-
-    static Fp6_2over3_model<n, modulus> zero();
-    static Fp6_2over3_model<n, modulus> one();
-    static Fp6_2over3_model<n, modulus> random_element();
+    void randomize();
 
     bool is_zero() const { return c0.is_zero() && c1.is_zero(); }
     bool operator==(const Fp6_2over3_model &other) const;
     bool operator!=(const Fp6_2over3_model &other) const;
 
+    Fp6_2over3_model& operator+=(const Fp6_2over3_model& other);
+    Fp6_2over3_model& operator-=(const Fp6_2over3_model& other);
+    Fp6_2over3_model& operator*=(const Fp6_2over3_model& other);
+    Fp6_2over3_model& operator^=(const unsigned long pow);
+    template<mp_size_t m>
+    Fp6_2over3_model& operator^=(const bigint<m> &pow);
+
     Fp6_2over3_model operator+(const Fp6_2over3_model &other) const;
     Fp6_2over3_model operator-(const Fp6_2over3_model &other) const;
     Fp6_2over3_model operator*(const Fp6_2over3_model &other) const;
     Fp6_2over3_model mul_by_2345(const Fp6_2over3_model &other) const;
+    Fp6_2over3_model operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    Fp6_2over3_model<n, modulus> operator^(const bigint<m> &exponent) const;
     Fp6_2over3_model operator-() const;
+
+    Fp6_2over3_model& square();
     Fp6_2over3_model squared() const;
+    Fp6_2over3_model& invert();
     Fp6_2over3_model inverse() const;
     Fp6_2over3_model Frobenius_map(unsigned long power) const;
     Fp6_2over3_model unitary_inverse() const;
     Fp6_2over3_model cyclotomic_squared() const;
+    Fp6_2over3_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
     static my_Fp3 mul_by_non_residue(const my_Fp3 &elem);
 
     template<mp_size_t m>
     Fp6_2over3_model cyclotomic_exp(const bigint<m> &exponent) const;
 
-    static bigint<n> base_field_char() { return modulus; }
+    static bigint<n> field_char() { return modulus; }
     static constexpr size_t extension_degree() { return 6; }
+
+    static Fp6_2over3_model<n, modulus> zero();
+    static Fp6_2over3_model<n, modulus> one();
+    static Fp6_2over3_model<n, modulus> random_element();
 
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp6_2over3_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp6_2over3_model<n, modulus> &el);
@@ -89,9 +104,6 @@ std::istream& operator>>(std::istream& in, std::vector<Fp6_2over3_model<n, modul
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp6_2over3_model<n, modulus> &rhs);
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const bigint<m> &exponent);
 
 template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
 Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent);

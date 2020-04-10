@@ -83,7 +83,7 @@ public:
     Fp2_model squared_complex() const;
 
     static size_t size_in_bits() { return 2*my_Fp::size_in_bits(); }
-    static bigint<n> base_field_char() { return modulus; }
+    static bigint<n> field_char() { return modulus; }
 
     static Fp2_model<n, modulus> zero();
     static Fp2_model<n, modulus> one();

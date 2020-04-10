@@ -45,6 +45,12 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::random_element()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_2over3_model<n,modulus>::randomize()
+{
+    // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp6_2over3_model<n,modulus>::operator==(const Fp6_2over3_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1);
@@ -117,6 +123,56 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp6_2over3_model<n, modulus> Fp6_2over3_model<n,modulus>::operator^(const bigint<m> &exponent) const
+{
+    return power<Fp6_2over3_model<n, modulus>, m>(*this, exponent);
+}
+
+template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
+Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent)
+{
+    return self^(exponent.as_bigint()); // TODO: figure out this const bug
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::operator+=(const Fp6_2over3_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::operator-=(const Fp6_2over3_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::operator*=(const Fp6_2over3_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::squared() const
 {
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Complex) */
@@ -125,6 +181,12 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::squared() const
 
     return Fp6_2over3_model<n,modulus>((a+b)*(a+Fp6_2over3_model<n,modulus>::mul_by_non_residue(b))-ab-Fp6_2over3_model<n,modulus>::mul_by_non_residue(ab),
                                 ab + ab);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::square()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -139,6 +201,12 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::inverse() const
 
     return Fp6_2over3_model<n,modulus>(a * new_t1,
                                        - (b * new_t1));
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::invert()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -245,6 +313,12 @@ Fp6_2over3_model<n, modulus> Fp6_2over3_model<n,modulus>::cyclotomic_exp(const b
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::sqrt() const
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 std::ostream& operator<<(std::ostream &out, const Fp6_2over3_model<n, modulus> &el)
 {
     out << el.c0 << OUTPUT_SEPARATOR << el.c1;
@@ -256,18 +330,6 @@ std::istream& operator>>(std::istream &in, Fp6_2over3_model<n, modulus> &el)
 {
     in >> el.c0 >> el.c1;
     return in;
-}
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const bigint<m> &exponent)
-{
-    return power<Fp6_2over3_model<n, modulus>, m>(self, exponent);
-}
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
-Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent)
-{
-    return self^(exponent.as_bigint());
 }
 
 } // libff
