@@ -135,10 +135,11 @@ Fp6_2over3_model<n, modulus> Fp6_2over3_model<n,modulus>::operator^(const bigint
     return power<Fp6_2over3_model<n, modulus>, m>(*this, exponent);
 }
 
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
-Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent)
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m, const bigint<m>& exp_modulus>
+Fp6_2over3_model<n, modulus> Fp6_2over3_model<n,modulus>::operator^(const Fp_model<m, exp_modulus> &exponent) const
 {
-    return self^(exponent.as_bigint()); // TODO: figure out this const bug
+    return (*this)^(exponent.as_bigint());
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

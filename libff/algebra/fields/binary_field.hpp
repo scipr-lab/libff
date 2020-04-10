@@ -2,8 +2,8 @@
  *****************************************************************************
  Declaration of common API for all finite fields in the binary/ directory.
 
- Includes fields F2^n for specified n. All of the binary fields must implement
- all functions declared in this class.
+ Includes fields F2^n for specified n. All of the binary entension fields must
+ implement all functions declared in this class.
 
  However, this class is not actually the parent class of any field. All APIs
  are enforced through tests instead.
@@ -34,8 +34,12 @@ class Binaryield {
     static const constexpr uint64_t modulus_; // is uint32_t for gf32
     static const constexpr uint64_t num_bits;
 
-    static T multiplicative_generator; // generator of gf2^n
+    /** generator of gf2^n */
+    static T multiplicative_generator;
 
+    /** If extension field, returns the base field's characteristic. */
+    template<mp_size_t n>
+    static bigint<n> field_char() { return bigint<n>(2) } // has not been implemented in Fp or gf2^n
     static std::size_t extension_degree();
 
     /* Functons common to all finite fields */
@@ -57,7 +61,8 @@ class Binaryield {
 
     virtual T squared() const;
     virtual T inverse() const;
-    virtual T sqrt() const = 0; // HAS TO BE A SQUARE (else does not terminate) // has not been implemented in gf2^n or fp4 and above
+    /** HAS TO BE A SQUARE (else does not terminate). */
+    virtual T sqrt() const = 0; // has not been implemented in gf2^n or fp4 and above
 
     virtual T operator^(const unsigned long pow) const; // has not been implemented in gf2^n
     template<mp_size_t m>
@@ -76,9 +81,6 @@ class Binaryield {
     static T zero();
     static T one();
     static T random_element();
-    // how to deal with the template parameter n?
-    /** If extension field, returns the base field's characteristic. */
-    static bigint<n> field_char() { return bigint<n>(2) } // has not been implemented in Fp or gf2^n
 
     // the following should be defined as well but can't be inherited
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n

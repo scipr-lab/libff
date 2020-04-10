@@ -65,7 +65,9 @@ public:
     Fp4_model mul_by_023(const Fp4_model &other) const;
     Fp4_model operator^(const unsigned long pow) const;
     template<mp_size_t m>
-    Fp4_model<n, modulus> operator^(const bigint<m> &exponent);
+    Fp4_model operator^(const bigint<m> &exponent);
+    template<mp_size_t m, const bigint<m>& modulus_p>
+    Fp4_model operator^(const Fp_model<m, modulus_p> &exponent) const;
     Fp4_model operator-() const;
 
     Fp4_model& square();
@@ -98,9 +100,6 @@ Fp4_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp4_model
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, const Fp4_model<n, modulus> &rhs);
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& modulus_p>
-Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const Fp_model<m, modulus_p> &exponent);
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp4_model<n, modulus>::non_residue;

@@ -68,7 +68,9 @@ public:
     Fp6_2over3_model mul_by_2345(const Fp6_2over3_model &other) const;
     Fp6_2over3_model operator^(const unsigned long pow) const;
     template<mp_size_t m>
-    Fp6_2over3_model<n, modulus> operator^(const bigint<m> &exponent) const;
+    Fp6_2over3_model operator^(const bigint<m> &exponent) const;
+    template<mp_size_t m, const bigint<m>& exp_modulus>
+    Fp6_2over3_model operator^(const Fp_model<m, exp_modulus> &exponent) const;
     Fp6_2over3_model operator-() const;
 
     Fp6_2over3_model& square();
@@ -104,9 +106,6 @@ std::istream& operator>>(std::istream& in, std::vector<Fp6_2over3_model<n, modul
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp6_2over3_model<n, modulus> &rhs);
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
-Fp6_2over3_model<n, modulus> operator^(const Fp6_2over3_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent);
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp6_2over3_model<n, modulus>::non_residue;

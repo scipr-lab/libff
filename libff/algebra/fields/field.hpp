@@ -44,7 +44,8 @@ class Field {
 
     virtual T squared() const;
     virtual T inverse() const;
-    virtual T sqrt() const = 0; // HAS TO BE A SQUARE (else does not terminate) // has not been implemented in gf2^n or fp4 and above
+    /** HAS TO BE A SQUARE (else does not terminate). */
+    virtual T sqrt() const = 0; // has not been implemented in gf2^n or fp4 and above
 
     virtual T operator^(const unsigned long pow) const; // has not been implemented in gf2^n
     template<mp_size_t m>
@@ -63,8 +64,6 @@ class Field {
     static T zero();
     static T one();
     static T random_element();
-    /** If extension field, returns the base field's characteristic. */
-    static bigint<n> field_char() = 0; // has not been implemented in Fp or gf2^n
 
     // the following should be defined as well but can't be inherited;
     // make sure binary and prime never serialize to same thing

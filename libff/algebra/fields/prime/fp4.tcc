@@ -146,10 +146,11 @@ Fp4_model<n, modulus> Fp4_model<n,modulus>::operator^(const bigint<m> &exponent)
     return power<Fp4_model<n, modulus> >(*this, exponent);
 }
 
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& modulus_p>
-Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const Fp_model<m, modulus_p> &exponent)
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m, const bigint<m>& modulus_p>
+Fp4_model<n, modulus> Fp4_model<n,modulus>::operator^(const Fp_model<m, modulus_p> &exponent) const
 {
-    return self^(exponent.as_bigint());
+    return (*this)^(exponent.as_bigint());
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
