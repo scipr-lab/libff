@@ -38,6 +38,12 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::random_element()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp3_model<n,modulus>::randomize()
+{
+    // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp3_model<n,modulus>::operator==(const Fp3_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1 && this->c2 == other.c2);
@@ -98,6 +104,50 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus> Fp3_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp3_model<n,modulus> Fp3_model<n,modulus>::operator^(const bigint<m> &pow) const
+{
+    return power<Fp3_model<n, modulus> >(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator+=(const Fp3_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator-=(const Fp3_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator*=(const Fp3_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::squared() const
 {
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 4 (CH-SQR2) */
@@ -114,6 +164,12 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::squared() const
     return Fp3_model<n,modulus>(s0 + non_residue * s3,
                                 s1 + non_residue * s4,
                                 s1 + s2 + s3 - s0 - s4);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::square()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -134,6 +190,12 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::inverse() const
     const my_Fp c2 = t1 - t4; // typo in paper referenced above. should be "-" as per Scott, but is "*"
     const my_Fp t6 = (a * c0 + non_residue * (c * c1 + b * c2)).inverse();
     return Fp3_model<n,modulus>(t6 * c0, t6 * c1, t6 * c2);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::invert()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -197,13 +259,6 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::sqrt() const
     }
 
     return x;
-}
-
-template<mp_size_t n, const bigint<n>& modulus>
-template<mp_size_t m>
-Fp3_model<n,modulus> Fp3_model<n,modulus>::operator^(const bigint<m> &pow) const
-{
-    return power<Fp3_model<n, modulus> >(*this, pow);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

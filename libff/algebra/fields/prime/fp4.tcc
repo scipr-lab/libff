@@ -50,6 +50,12 @@ Fp4_model<n,modulus> Fp4_model<n,modulus>::random_element()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp4_model<n,modulus>::randomize()
+{
+    // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp4_model<n,modulus>::operator==(const Fp4_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1);
@@ -128,6 +134,56 @@ Fp4_model<n,modulus> Fp4_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus> Fp4_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp4_model<n, modulus> Fp4_model<n,modulus>::operator^(const bigint<m> &exponent)
+{
+    return power<Fp4_model<n, modulus> >(self, exponent);
+}
+
+template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& modulus_p>
+Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const Fp_model<m, modulus_p> &exponent)
+{
+    return self^(exponent.as_bigint());
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::operator+=(const Fp4_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::operator-=(const Fp4_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::operator*=(const Fp4_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n,modulus> Fp4_model<n,modulus>::squared() const
 {
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Complex) */
@@ -140,6 +196,12 @@ Fp4_model<n,modulus> Fp4_model<n,modulus>::squared() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::square()
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n,modulus> Fp4_model<n,modulus>::inverse() const
 {
     /* From "High-Speed Software Implementation of the Optimal Ate Pairing over Barreto-Naehrig Curves"; Algorithm 8 */
@@ -149,6 +211,12 @@ Fp4_model<n,modulus> Fp4_model<n,modulus>::inverse() const
     const my_Fp2 new_t1 = t0.inverse();
 
     return Fp4_model<n,modulus>(a * new_t1, - (b * new_t1));
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus>& Fp4_model<n,modulus>::invert()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -214,16 +282,10 @@ Fp4_model<n, modulus> Fp4_model<n,modulus>::cyclotomic_exp(const bigint<m> &expo
     return res;
 }
 
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const bigint<m> &exponent)
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n,modulus> Fp4_model<n,modulus>::sqrt() const
 {
-    return power<Fp4_model<n, modulus> >(self, exponent);
-}
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& modulus_p>
-Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const Fp_model<m, modulus_p> &exponent)
-{
-    return self^(exponent.as_bigint());
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

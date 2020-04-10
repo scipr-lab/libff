@@ -46,25 +46,36 @@ public:
 
     void print() const { printf("c0/c1:\n"); c0.print(); c1.print(); }
     void clear() { c0.clear(); c1.clear(); }
-
-    static Fp4_model<n, modulus> zero();
-    static Fp4_model<n, modulus> one();
-    static Fp4_model<n, modulus> random_element();
+    void randomize();
 
     bool is_zero() const { return c0.is_zero() && c1.is_zero(); }
     bool operator==(const Fp4_model &other) const;
     bool operator!=(const Fp4_model &other) const;
 
+    Fp4_model& operator+=(const Fp4_model& other);
+    Fp4_model& operator-=(const Fp4_model& other);
+    Fp4_model& operator*=(const Fp4_model& other);
+    Fp4_model& operator^=(const unsigned long pow);
+    template<mp_size_t m>
+    Fp4_model& operator^=(const bigint<m> &pow);
+
     Fp4_model operator+(const Fp4_model &other) const;
     Fp4_model operator-(const Fp4_model &other) const;
     Fp4_model operator*(const Fp4_model &other) const;
     Fp4_model mul_by_023(const Fp4_model &other) const;
+    Fp4_model operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    Fp4_model<n, modulus> operator^(const bigint<m> &exponent);
     Fp4_model operator-() const;
+
+    Fp4_model& square();
     Fp4_model squared() const;
+    Fp4_model& invert();
     Fp4_model inverse() const;
     Fp4_model Frobenius_map(unsigned long power) const;
     Fp4_model unitary_inverse() const;
     Fp4_model cyclotomic_squared() const;
+    Fp4_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
 
@@ -73,6 +84,10 @@ public:
 
     static bigint<n> base_field_char() { return modulus; }
     static constexpr size_t extension_degree() { return 4; }
+
+    static Fp4_model<n, modulus> zero();
+    static Fp4_model<n, modulus> one();
+    static Fp4_model<n, modulus> random_element();
 
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp4_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp4_model<n, modulus> &el);
@@ -83,9 +98,6 @@ Fp4_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp4_model
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, const Fp4_model<n, modulus> &rhs);
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const bigint<m> &exponent);
 
 template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& modulus_p>
 Fp4_model<n, modulus> operator^(const Fp4_model<n, modulus> &self, const Fp_model<m, modulus_p> &exponent);
