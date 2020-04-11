@@ -141,7 +141,7 @@ Fp4_model<n,modulus> Fp4_model<n,modulus>::operator^(const unsigned long pow) co
 
 template<mp_size_t n, const bigint<n>& modulus>
 template<mp_size_t m>
-Fp4_model<n, modulus> Fp4_model<n,modulus>::operator^(const bigint<m> &exponent)
+Fp4_model<n, modulus> Fp4_model<n,modulus>::operator^(const bigint<m> &exponent) const
 {
     return power<Fp4_model<n, modulus> >(*this, exponent);
 }

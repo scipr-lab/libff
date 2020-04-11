@@ -49,30 +49,42 @@ public:
 
     void clear() { c0.clear(); c1.clear(); c2.clear(); }
     void print() const { printf("c0/c1/c2:\n"); c0.print(); c1.print(); c2.print(); }
-
-    static Fp6_3over2_model<n, modulus> zero();
-    static Fp6_3over2_model<n, modulus> one();
-    static Fp6_3over2_model<n, modulus> random_element();
+    void randomize();
 
     bool is_zero() const { return c0.is_zero() && c1.is_zero() && c2.is_zero(); }
     bool operator==(const Fp6_3over2_model &other) const;
     bool operator!=(const Fp6_3over2_model &other) const;
 
+    Fp6_3over2_model& operator+=(const Fp6_3over2_model& other);
+    Fp6_3over2_model& operator-=(const Fp6_3over2_model& other);
+    Fp6_3over2_model& operator*=(const Fp6_3over2_model& other);
+    Fp6_3over2_model& operator^=(const unsigned long pow);
+    template<mp_size_t m>
+    Fp6_3over2_model& operator^=(const bigint<m> &pow);
+
     Fp6_3over2_model operator+(const Fp6_3over2_model &other) const;
     Fp6_3over2_model operator-(const Fp6_3over2_model &other) const;
     Fp6_3over2_model operator*(const Fp6_3over2_model &other) const;
+    Fp6_3over2_model operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    Fp6_3over2_model operator^(const bigint<m> &other) const;
     Fp6_3over2_model operator-() const;
+
+    Fp6_3over2_model& square();
     Fp6_3over2_model squared() const;
+    Fp6_3over2_model& invert();
     Fp6_3over2_model inverse() const;
     Fp6_3over2_model Frobenius_map(unsigned long power) const;
+    Fp6_3over2_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
 
-    template<mp_size_t m>
-    Fp6_3over2_model operator^(const bigint<m> &other) const;
-
     static bigint<n> field_char() { return modulus; }
     static size_t extension_degree() { return 6; }
+
+    static Fp6_3over2_model<n, modulus> zero();
+    static Fp6_3over2_model<n, modulus> one();
+    static Fp6_3over2_model<n, modulus> random_element();
 
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp6_3over2_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp6_3over2_model<n, modulus> &el);

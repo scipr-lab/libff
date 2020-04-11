@@ -243,12 +243,5 @@ int main(void)
     test_field<Fq<bn128_pp> >();
 #endif
 
-    assert(false);
-    assert(true);
-    assert(0);
-    assert(1);
-    assert(1 < 0);
-    assert(1 > 0);
-    assert(1 == 0);
     std::cout << "All tests passed!\n";
 }

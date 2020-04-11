@@ -86,6 +86,7 @@ You may also need to provide the path to openssl:
 ```
 cmake -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2s -DOPENSSL_LIBRARIES=/usr/local/Cellar/openssl/1.0.2s/lib ..
 ```
+To enable asserts, use the `-DCMAKE_BUILD_TYPE=Debug` flag.
 
 Then, to compile and install the library, run this within the build directory:
 ```

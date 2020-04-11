@@ -43,6 +43,12 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::random_element()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::randomize()
+{
+    // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp6_3over2_model<n,modulus>::operator==(const Fp6_3over2_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1 && this->c2 == other.c2);
@@ -111,6 +117,50 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::operator^(const bigint<m> &pow) const
+{
+    return power<Fp6_3over2_model<n, modulus>, m>(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::operator+=(const Fp6_3over2_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::operator-=(const Fp6_3over2_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::operator*=(const Fp6_3over2_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::squared() const
 {
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 4 (CH-SQR2) */
@@ -127,6 +177,12 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::squared() const
     return Fp6_3over2_model<n,modulus>(s0 + Fp6_3over2_model<n,modulus>::mul_by_non_residue(s3),
                                        s1 + Fp6_3over2_model<n,modulus>::mul_by_non_residue(s4),
                                        s1 + s2 + s3 - s0 - s4);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::square()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -149,6 +205,12 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n,modulus>& Fp6_3over2_model<n,modulus>::invert()
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::Frobenius_map(unsigned long power) const
 {
     return Fp6_3over2_model<n,modulus>(c0.Frobenius_map(power),
@@ -157,10 +219,9 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::Frobenius_map(unsigned 
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-template<mp_size_t m>
-Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::operator^(const bigint<m> &pow) const
+Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::sqrt() const
 {
-    return power<Fp6_3over2_model<n, modulus>, m>(*this, pow);
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

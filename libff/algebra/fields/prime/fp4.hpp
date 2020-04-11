@@ -65,7 +65,7 @@ public:
     Fp4_model mul_by_023(const Fp4_model &other) const;
     Fp4_model operator^(const unsigned long pow) const;
     template<mp_size_t m>
-    Fp4_model operator^(const bigint<m> &exponent);
+    Fp4_model operator^(const bigint<m> &exponent) const;
     template<mp_size_t m, const bigint<m>& modulus_p>
     Fp4_model operator^(const Fp_model<m, modulus_p> &exponent) const;
     Fp4_model operator-() const;
