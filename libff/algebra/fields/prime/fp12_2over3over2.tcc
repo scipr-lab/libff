@@ -41,6 +41,12 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::random_elem
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::randomize()
+{
+    // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp12_2over3over2_model<n,modulus>::operator==(const Fp12_2over3over2_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1);
@@ -109,9 +115,66 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::operator^(const bigint<m> &exponent) const
+{
+    return power<Fp12_2over3over2_model<n, modulus> >(*this, exponent);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m, const bigint<m>& exp_modulus>
+Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::operator^(const Fp_model<m, exp_modulus> &exponent) const
+{
+    return (*this)^(exponent.as_bigint());
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator+=(const Fp12_2over3over2_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator-=(const Fp12_2over3over2_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator*=(const Fp12_2over3over2_model<n,modulus>& other)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    return NULL; // TODO
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared() const
 {
     return squared_complex();
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::square()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -153,6 +216,12 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() c
     const my_Fp6 c1 = - (b * t3);
 
     return Fp12_2over3over2_model<n,modulus>(c0, c1);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::invert()
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -319,19 +388,6 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::mul_by_024(
 
 }
 
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const bigint<m> &exponent)
-{
-    return power<Fp12_2over3over2_model<n, modulus> >(self, exponent);
-}
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
-Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent)
-{
-    return self^(exponent.as_bigint());
-}
-
-
 template<mp_size_t n, const bigint<n>& modulus>
 template<mp_size_t m>
 Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic_exp(const bigint<m> &exponent) const
@@ -357,6 +413,12 @@ Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic
     }
 
     return res;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::sqrt() const
+{
+    return NULL; // TODO
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

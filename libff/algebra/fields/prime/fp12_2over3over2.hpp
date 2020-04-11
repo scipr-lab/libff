@@ -50,26 +50,39 @@ public:
 
     void clear() { c0.clear(); c1.clear(); }
     void print() const { printf("c0/c1:\n"); c0.print(); c1.print(); }
-
-    static Fp12_2over3over2_model<n, modulus> zero();
-    static Fp12_2over3over2_model<n, modulus> one();
-    static Fp12_2over3over2_model<n, modulus> random_element();
+    void randomize();
 
     bool is_zero() const { return c0.is_zero() && c1.is_zero(); }
     bool operator==(const Fp12_2over3over2_model &other) const;
     bool operator!=(const Fp12_2over3over2_model &other) const;
 
+    Fp12_2over3over2_model& operator+=(const Fp12_2over3over2_model& other);
+    Fp12_2over3over2_model& operator-=(const Fp12_2over3over2_model& other);
+    Fp12_2over3over2_model& operator*=(const Fp12_2over3over2_model& other);
+    Fp12_2over3over2_model& operator^=(const unsigned long pow);
+    template<mp_size_t m>
+    Fp12_2over3over2_model& operator^=(const bigint<m> &pow);
+
     Fp12_2over3over2_model operator+(const Fp12_2over3over2_model &other) const;
     Fp12_2over3over2_model operator-(const Fp12_2over3over2_model &other) const;
     Fp12_2over3over2_model operator*(const Fp12_2over3over2_model &other) const;
+    Fp12_2over3over2_model operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    Fp12_2over3over2_model operator^(const bigint<m> &exponent) const;
+    template<mp_size_t m, const bigint<m>& exp_modulus>
+    Fp12_2over3over2_model operator^(const Fp_model<m, exp_modulus> &exponent) const;
     Fp12_2over3over2_model operator-() const;
+
+    Fp12_2over3over2_model& square();
     Fp12_2over3over2_model squared() const; // default is squared_complex
     Fp12_2over3over2_model squared_karatsuba() const;
     Fp12_2over3over2_model squared_complex() const;
+    Fp12_2over3over2_model& invert();
     Fp12_2over3over2_model inverse() const;
     Fp12_2over3over2_model Frobenius_map(unsigned long power) const;
     Fp12_2over3over2_model unitary_inverse() const;
     Fp12_2over3over2_model cyclotomic_squared() const;
+    Fp12_2over3over2_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
     Fp12_2over3over2_model mul_by_024(const my_Fp2 &ell_0, const my_Fp2 &ell_VW, const my_Fp2 &ell_VV) const;
 
@@ -80,6 +93,10 @@ public:
 
     static bigint<n> field_char() { return modulus; }
     static size_t extension_degree() { return 12; }
+
+    static Fp12_2over3over2_model<n, modulus> zero();
+    static Fp12_2over3over2_model<n, modulus> one();
+    static Fp12_2over3over2_model<n, modulus> random_element();
 
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp12_2over3over2_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp12_2over3over2_model<n, modulus> &el);
@@ -99,12 +116,6 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, c
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp6_3over2_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs);
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const bigint<m> &exponent);
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
-Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent);
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n, modulus> Fp12_2over3over2_model<n, modulus>::non_residue;
