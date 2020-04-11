@@ -94,9 +94,26 @@ gf64& gf64::operator*=(const gf64 &other)
 #endif
 }
 
-void gf64::square()
+gf64& gf64::operator^=(const unsigned long pow)
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf64& gf64::operator^=(const bigint<m> &pow)
+{
+    return *this; // TODO
+}
+
+gf64& gf64::square()
 {
     this->operator*=(*this);
+    return *this;
+}
+
+gf64& gf64::invert()
+{
+    return *this; // TODO
 }
 
 gf64 gf64::operator+(const gf64 &other) const
@@ -121,6 +138,17 @@ gf64 gf64::operator*(const gf64 &other) const
 {
     gf64 result(*this);
     return (result*=(other));
+}
+
+gf64 gf64::operator^(const unsigned long pow) const
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf64 gf64::operator^(const bigint<m> &pow) const
+{
+    return *this; // TODO
 }
 
 gf64 gf64::squared() const
@@ -192,6 +220,11 @@ gf64 gf64::inverse() const
     }
     t0 *= t1;          //   74 : 18446744073709551614
     return t0;
+}
+
+gf64 gf64::sqrt() const
+{
+    return *this; // TODO
 }
 
 void gf64::randomize()

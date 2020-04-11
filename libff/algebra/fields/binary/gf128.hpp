@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <vector>
+#include <libff/algebra/fields/bigint.hpp>
 
 namespace libff {
 
@@ -33,15 +34,25 @@ public:
     gf128& operator+=(const gf128 &other);
     gf128& operator-=(const gf128 &other);
     gf128& operator*=(const gf128 &other);
-    void square();
+    gf128& operator^=(const unsigned long pow);
+    template<mp_size_t m>
+    gf128& operator^=(const bigint<m> &pow);
+    
+    gf128& square();
+    gf128& invert();
 
     gf128 operator+(const gf128 &other) const;
     gf128 operator-(const gf128 &other) const;
     gf128 operator-() const;
     gf128 operator*(const gf128 &other) const;
-    gf128 squared() const;
+    gf128 operator^(const unsigned long pow) const;
+    template<mp_size_t m>
+    gf128 operator^(const bigint<m> &pow) const;
 
+    gf128 squared() const;
     gf128 inverse() const;
+    /** HAS TO BE A SQUARE (else does not terminate). */
+    gf128 sqrt() const;
 
     void randomize();
 
@@ -59,6 +70,8 @@ public:
     static gf128 multiplicative_generator; // generator of gf128^*
 
     static std::size_t extension_degree() { return 128; }
+    template<mp_size_t n>
+    static bigint<n> field_char() { return bigint<n>(2); } 
 private:
     /* little-endian */
     uint64_t value_[2];

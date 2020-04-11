@@ -124,9 +124,26 @@ gf128& gf128::operator*=(const gf128 &other)
 #endif
 }
 
-void gf128::square()
+gf128& gf128::operator^=(const unsigned long pow)
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf128& gf128::operator^=(const bigint<m> &pow)
+{
+    return *this; // TODO
+}
+
+gf128& gf128::square()
 {
     this->operator*=(*this);
+    return *this;
+}
+
+gf128& gf128::invert()
+{
+    return *this; // TODO
 }
 
 gf128 gf128::operator+(const gf128 &other) const
@@ -150,6 +167,17 @@ gf128 gf128::operator*(const gf128 &other) const
 {
     gf128 result(*this);
     return (result*=(other));
+}
+
+gf128 gf128::operator^(const unsigned long pow) const
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf128 gf128::operator^(const bigint<m> &pow) const
+{
+    return *this; // TODO
 }
 
 gf128 gf128::squared() const
@@ -189,6 +217,11 @@ gf128 gf128::inverse() const
     }
     /* now result = el^{2^128-2} */
     return result;
+}
+
+gf128 gf128::sqrt() const
+{
+    return *this; // TODO
 }
 
 void gf128::randomize()

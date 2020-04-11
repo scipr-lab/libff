@@ -245,9 +245,26 @@ gf256& gf256::operator*=(const gf256 &other)
     return (*this);
 }
 
-void gf256::square()
+gf256& gf256::operator^=(const unsigned long pow)
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf256& gf256::operator^=(const bigint<m> &pow)
+{
+    return *this; // TODO
+}
+
+gf256& gf256::square()
 {
     this->operator*=(*this);
+    return *this;
+}
+
+gf256& gf256::invert()
+{
+    return *this; // TODO
 }
 
 gf256 gf256::operator+(const gf256 &other) const
@@ -271,6 +288,17 @@ gf256 gf256::operator*(const gf256 &other) const
 {
     gf256 result(*this);
     return (result*=(other));
+}
+
+gf256 gf256::operator^(const unsigned long pow) const
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf256 gf256::operator^(const bigint<m> &pow) const
+{
+    return *this; // TODO
 }
 
 gf256 gf256::squared() const
@@ -310,6 +338,11 @@ gf256 gf256::inverse() const
     }
     /* now result = el^{2^256-2} */
     return result;
+}
+
+gf256 gf256::sqrt() const
+{
+    return *this; // TODO
 }
 
 void gf256::randomize()

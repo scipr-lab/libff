@@ -39,7 +39,7 @@ class Binaryield {
 
     /** If extension field, returns the base field's characteristic. */
     template<mp_size_t n>
-    static bigint<n> field_char() { return bigint<n>(2) } // has not been implemented in Fp or gf2^n
+    static bigint<n> field_char() { return bigint<n>(2); } // has not been implemented in Fp or gf2^n
     static std::size_t extension_degree();
 
     /* Functons common to all finite fields */
@@ -57,16 +57,15 @@ class Binaryield {
     virtual T operator+(const T& other) const;
     virtual T operator-(const T& other) const;
     virtual T operator*(const T& other) const;
+    virtual T operator^(const unsigned long pow) const; // has not been implemented in gf2^n
+    template<mp_size_t m>
+    virtual T operator^(const bigint<m> &pow) const; // has not been implemented in gf2^n
     virtual T operator-() const = 0;
 
     virtual T squared() const;
     virtual T inverse() const;
     /** HAS TO BE A SQUARE (else does not terminate). */
     virtual T sqrt() const = 0; // has not been implemented in gf2^n or fp4 and above
-
-    virtual T operator^(const unsigned long pow) const; // has not been implemented in gf2^n
-    template<mp_size_t m>
-    virtual T operator^(const bigint<m> &pow) const; // has not been implemented in gf2^n
 
     bool operator==(const T& other) const = 0;
     bool operator!=(const T& other) const = 0;

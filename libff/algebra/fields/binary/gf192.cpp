@@ -165,9 +165,26 @@ gf192& gf192::operator*=(const gf192 &other)
 #endif
 }
 
-void gf192::square()
+gf192& gf192::operator^=(const unsigned long pow)
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf192& gf192::operator^=(const bigint<m> &pow)
+{
+    return *this; // TODO
+}
+
+gf192& gf192::square()
 {
     this->operator*=(*this);
+    return *this;
+}
+
+gf192& gf192::invert()
+{
+    return *this; // TODO
 }
 
 gf192 gf192::operator+(const gf192 &other) const
@@ -191,6 +208,17 @@ gf192 gf192::operator*(const gf192 &other) const
 {
     gf192 result(*this);
     return (result*=(other));
+}
+
+gf192 gf192::operator^(const unsigned long pow) const
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf192 gf192::operator^(const bigint<m> &pow) const
+{
+    return *this; // TODO
 }
 
 gf192 gf192::squared() const
@@ -239,6 +267,11 @@ gf192 gf192::inverse() const
     /* now result = el^{2^192 - 2*2^64}, prev_result = el^{2*2^64 - 4},
        thus el^{2^192 - 2} = result * prev_result * el^{2} */
     return result * prev_result * this->squared();
+}
+
+gf192 gf192::sqrt() const
+{
+    return *this; // TODO
 }
 
 void gf192::randomize()

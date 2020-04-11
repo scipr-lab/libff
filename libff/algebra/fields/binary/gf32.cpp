@@ -77,9 +77,26 @@ gf32& gf32::operator*=(const gf32 &other)
     return (*this);
 }
 
-void gf32::square()
+gf32& gf32::operator^=(const unsigned long pow)
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf32& gf32::operator^=(const bigint<m> &pow)
+{
+    return *this; // TODO
+}
+
+gf32& gf32::square()
 {
     this->operator*=(*this);
+    return *this;
+}
+
+gf32& gf32::invert()
+{
+    return *this; // TODO
 }
 
 gf32 gf32::operator+(const gf32 &other) const
@@ -104,6 +121,17 @@ gf32 gf32::operator*(const gf32 &other) const
 {
     gf32 result(*this);
     return (result*=(other));
+}
+
+gf32 gf32::operator^(const unsigned long pow) const
+{
+    return *this; // TODO
+}
+
+template<mp_size_t m>
+gf32 gf32::operator^(const bigint<m> &pow) const
+{
+    return *this; // TODO
 }
 
 gf32 gf32::squared() const
@@ -151,6 +179,11 @@ gf32 gf32::inverse() const
     }
     /* now result = el^{2^32-2} */
     return result;
+}
+
+gf32 gf32::sqrt() const
+{
+    return *this; // TODO
 }
 
 void gf32::randomize()
