@@ -29,7 +29,7 @@ class PrimeField {
     /* No functions unique to prime fields */
 
     /** If extension field, returns the base field's characteristic. */
-    static bigint<n> field_char() = 0; // has not been implemented in Fp or gf2^n
+    static constexpr bigint<n> field_char(); // has not been implemented in Fp or gf2^n
 
     /* Functons common to all finite fields */
 
@@ -69,6 +69,8 @@ class PrimeField {
     static T zero();
     static T one();
     static T random_element();
+    /** Equals 1 for prime field Fp. */
+    static constexpr std::size_t extension_degree();
 
     // the following should be defined as well but can't be inherited
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n

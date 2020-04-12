@@ -31,7 +31,7 @@ class Binaryield {
     /** Returns the constituent bits in 64 bit words, in little-endian order */
     std::vector<uint64_t> as_words() const = 0;
 
-    static const constexpr uint64_t modulus_; // is uint32_t for gf32
+    static const constexpr uint64_t modulus_;
     static const constexpr uint64_t num_bits;
 
     /** generator of gf2^n */
@@ -39,8 +39,7 @@ class Binaryield {
 
     /** If extension field, returns the base field's characteristic. */
     template<mp_size_t n>
-    static bigint<n> field_char() { return bigint<n>(2); } // has not been implemented in Fp or gf2^n
-    static std::size_t extension_degree();
+    static constexpr bigint<n> field_char() { return bigint<n>(2); } // has not been implemented in Fp or gf2^n
 
     /* Functons common to all finite fields */
 
@@ -80,6 +79,7 @@ class Binaryield {
     static T zero();
     static T one();
     static T random_element();
+    static constexpr std::size_t extension_degree();
 
     // the following should be defined as well but can't be inherited
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n

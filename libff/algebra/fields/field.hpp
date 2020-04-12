@@ -64,6 +64,8 @@ class Field {
     static T zero();
     static T one();
     static T random_element();
+    /** Equals 1 for prime field Fp. */
+    static constexpr std::size_t extension_degree();
 
     // the following should be defined as well but can't be inherited;
     // make sure binary and prime never serialize to same thing

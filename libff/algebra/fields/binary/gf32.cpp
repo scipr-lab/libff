@@ -17,7 +17,7 @@ namespace libff {
 
 using std::size_t;
 
-const uint32_t gf32::modulus_;
+const uint64_t gf32::modulus_;
 gf32 gf32::multiplicative_generator = gf32(2);
 
 gf32::gf32() : value_(0)

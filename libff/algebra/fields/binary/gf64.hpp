@@ -66,9 +66,9 @@ public:
     static gf64 one();
     static gf64 multiplicative_generator; // generator of gf64^*
 
-    static std::size_t extension_degree() { return 64; }
+    static constexpr std::size_t extension_degree() { return 64; }
     template<mp_size_t n>
-    static bigint<n> field_char() { return bigint<n>(2); } 
+    static constexpr bigint<n> field_char() { return bigint<n>(2); } 
 private:
     uint64_t value_;
 };

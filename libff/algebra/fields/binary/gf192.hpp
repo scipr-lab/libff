@@ -69,9 +69,9 @@ public:
     static gf192 one();
     static gf192 multiplicative_generator; // generator of gf192^*
 
-    static std::size_t extension_degree() { return 192; }
+    static constexpr std::size_t extension_degree() { return 192; }
     template<mp_size_t n>
-    static bigint<n> field_char() { return bigint<n>(2); } 
+    static constexpr bigint<n> field_char() { return bigint<n>(2); } 
 private:
     /* little-endian */
     uint64_t value_[3];

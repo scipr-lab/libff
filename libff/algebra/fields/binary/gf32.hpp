@@ -20,7 +20,7 @@ namespace libff {
 class gf32 {
 public:
     // x^32 + x^22 + x^2 + x^1 + 1
-    static const constexpr uint32_t modulus_ = 0b10000000000000000000111;
+    static const constexpr uint64_t modulus_ = 0b10000000000000000000111;
     static const constexpr uint64_t num_bits = 32;
 
     explicit gf32();
@@ -65,9 +65,9 @@ public:
     static gf32 one();
     static gf32 multiplicative_generator; // generator of gf32^*
 
-    static std::size_t extension_degree() { return 32; }
+    static constexpr std::size_t extension_degree() { return 32; }
     template<mp_size_t n>
-    static bigint<n> field_char() { return bigint<n>(2); } 
+    static constexpr bigint<n> field_char() { return bigint<n>(2); } 
 private:
     uint32_t value_;
 };
