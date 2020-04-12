@@ -38,7 +38,7 @@ public:
     typedef Fp_model<n, modulus> my_Fp;
 
     static bigint<2*n> euler; // (modulus^2-1)/2
-    static size_t s;       // modulus^2 = 2^s * t + 1
+    static std::size_t s;       // modulus^2 = 2^s * t + 1
     static bigint<2*n> t;  // with t odd
     static bigint<2*n> t_minus_1_over_2; // (t-1)/2
     static my_Fp non_residue; // X^4-non_residue irreducible over Fp; used for constructing Fp2 = Fp[X] / (X^2 - non_residue)
@@ -82,7 +82,7 @@ public:
     Fp2_model squared_karatsuba() const;
     Fp2_model squared_complex() const;
 
-    static size_t size_in_bits() { return 2*my_Fp::size_in_bits(); }
+    static std::size_t size_in_bits() { return 2*my_Fp::size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 2; }
     static constexpr bigint<n> field_char() { return modulus; }
 

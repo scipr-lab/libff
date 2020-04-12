@@ -65,7 +65,7 @@ public:
     static bn128_G2 one();
     static bn128_G2 random_element();
 
-    static size_t size_in_bits() { return 2*base_field::size_in_bits() + 1; }
+    static std::size_t size_in_bits() { return 2*base_field::size_in_bits() + 1; }
     static bigint<base_field::num_limbs> field_char() { return base_field::field_char(); }
     static bigint<scalar_field::num_limbs> order() { return scalar_field::field_char(); }
 

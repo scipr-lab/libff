@@ -24,12 +24,12 @@ extern bigint<bn128_r_limbs> bn128_modulus_r;
 extern bigint<bn128_q_limbs> bn128_modulus_q;
 
 extern bn::Fp bn128_coeff_b;
-extern size_t bn128_Fq_s;
+extern std::size_t bn128_Fq_s;
 extern bn::Fp bn128_Fq_nqr_to_t;
 extern mie::Vuint bn128_Fq_t_minus_1_over_2;
 
 extern bn::Fp2 bn128_twist_coeff_b;
-extern size_t bn128_Fq2_s;
+extern std::size_t bn128_Fq2_s;
 extern bn::Fp2 bn128_Fq2_nqr_to_t;
 extern mie::Vuint bn128_Fq2_t_minus_1_over_2;
 

@@ -15,6 +15,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 #ifdef PROFILE_OP_COUNTS
 long long mnt6_G1::add_cnt = 0;
 long long mnt6_G1::dbl_cnt = 0;

@@ -79,7 +79,7 @@ public:
 
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
 
-    static constexpr size_t extension_degree() { return 6; }
+    static constexpr std::size_t extension_degree() { return 6; }
     static constexpr bigint<n> field_char() { return modulus; }
 
     static Fp6_3over2_model<n, modulus> zero();

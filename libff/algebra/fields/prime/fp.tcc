@@ -19,6 +19,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
 {

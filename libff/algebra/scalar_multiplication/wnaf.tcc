@@ -18,6 +18,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n>
 std::vector<long> find_wnaf(const size_t window_size, const bigint<n> &scalar)
 {

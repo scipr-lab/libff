@@ -8,6 +8,8 @@
 
 using namespace libff;
 
+using std::size_t;
+
 template <typename GroupT>
 using run_result_t = std::pair<long long, std::vector<GroupT> >;
 

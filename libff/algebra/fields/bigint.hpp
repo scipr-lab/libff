@@ -45,8 +45,8 @@ public:
     bool operator!=(const bigint<n>& other) const;
     void clear();
     bool is_zero() const;
-    size_t max_bits() const { return n * GMP_NUMB_BITS; } /// Returns the number of bits representable by this bigint type
-    size_t num_bits() const; /// Returns the number of bits in this specific bigint value, i.e., position of the most-significant 1
+    std::size_t max_bits() const { return n * GMP_NUMB_BITS; } /// Returns the number of bits representable by this bigint type
+    std::size_t num_bits() const; /// Returns the number of bits in this specific bigint value, i.e., position of the most-significant 1
 
     unsigned long as_ulong() const; /// Return the last limb of the integer
     void to_mpz(mpz_t r) const;

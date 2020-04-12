@@ -22,6 +22,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 bool mnt6_ate_G1_precomp::operator==(const mnt6_ate_G1_precomp &other) const
 {
     return (this->PX == other.PX &&

@@ -27,6 +27,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n>
 class ordered_exponent {
 // to use std::push_heap and friends later

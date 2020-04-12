@@ -87,7 +87,7 @@ public:
     template<mp_size_t m>
     Fp6_2over3_model cyclotomic_exp(const bigint<m> &exponent) const;
 
-    static constexpr size_t extension_degree() { return 6; }
+    static constexpr std::size_t extension_degree() { return 6; }
     static constexpr bigint<n> field_char() { return modulus; }
 
     static Fp6_2over3_model<n, modulus> zero();

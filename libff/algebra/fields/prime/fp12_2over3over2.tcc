@@ -12,6 +12,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::mul_by_non_residue(const Fp6_3over2_model<n, modulus> &elt)
 {

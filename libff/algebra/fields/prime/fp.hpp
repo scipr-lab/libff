@@ -50,9 +50,9 @@ public:
     static long long sqr_cnt;
     static long long inv_cnt;
 #endif
-    static size_t num_bits;
+    static std::size_t num_bits;
     static bigint<n> euler; // (modulus-1)/2
-    static size_t s; // modulus = 2^s * t + 1
+    static std::size_t s; // modulus = 2^s * t + 1
     static bigint<n> t; // with t odd
     static bigint<n> t_minus_1_over_2; // (t-1)/2
     static Fp_model<n, modulus> nqr; // a quadratic nonresidue
@@ -110,8 +110,8 @@ public:
     Fp_model inverse() const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
-    static size_t size_in_bits() { return num_bits; }
-    static size_t capacity() { return num_bits - 1; }
+    static std::size_t size_in_bits() { return num_bits; }
+    static std::size_t capacity() { return num_bits - 1; }
     static constexpr std::size_t extension_degree() { return 1; }
     static constexpr bigint<n> field_char() { return modulus; }
     static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero

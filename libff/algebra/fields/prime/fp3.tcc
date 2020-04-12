@@ -14,6 +14,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::zero()
 {

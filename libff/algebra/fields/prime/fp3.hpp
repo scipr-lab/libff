@@ -38,7 +38,7 @@ public:
     typedef Fp_model<n, modulus> my_Fp;
 
     static bigint<3*n> euler; // (modulus^3-1)/2
-    static size_t s;       // modulus^3 = 2^s * t + 1
+    static std::size_t s;       // modulus^3 = 2^s * t + 1
     static bigint<3*n> t;  // with t odd
     static bigint<3*n> t_minus_1_over_2; // (t-1)/2
     static my_Fp non_residue; // X^6-non_residue irreducible over Fp; used for constructing Fp3 = Fp[X] / (X^3 - non_residue)
@@ -81,7 +81,7 @@ public:
     Fp3_model Frobenius_map(unsigned long power) const;
     Fp3_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
-    static size_t size_in_bits() { return 3*my_Fp::size_in_bits(); }
+    static std::size_t size_in_bits() { return 3*my_Fp::size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 3; }
     static constexpr bigint<n> field_char() { return modulus; }
 

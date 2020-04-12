@@ -15,6 +15,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n>
 bigint<n>::bigint(const unsigned long x) /// Initalize from a small integer
 {
