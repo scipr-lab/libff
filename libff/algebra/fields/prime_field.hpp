@@ -71,6 +71,7 @@ class PrimeField {
     static T random_element();
     /** Equals 1 for prime field Fp. */
     static constexpr std::size_t extension_degree();
+    static std::size_t size_in_bits();
 
     // the following should be defined as well but can't be inherited
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n

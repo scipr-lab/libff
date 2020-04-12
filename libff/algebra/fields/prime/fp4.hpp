@@ -84,6 +84,7 @@ public:
     template<mp_size_t m>
     Fp4_model cyclotomic_exp(const bigint<m> &exponent) const;
 
+    static std::size_t size_in_bits() { return 2*my_Fp2::size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 4; }
     static constexpr bigint<n> field_char() { return modulus; }
 

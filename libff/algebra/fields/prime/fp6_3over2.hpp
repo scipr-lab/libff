@@ -79,6 +79,7 @@ public:
 
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
 
+    static std::size_t size_in_bits() { return 3*my_Fp2::size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 6; }
     static constexpr bigint<n> field_char() { return modulus; }
 

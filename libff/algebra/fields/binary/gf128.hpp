@@ -69,9 +69,10 @@ public:
     static gf128 one();
     static gf128 multiplicative_generator; // generator of gf128^*
 
+    static std::size_t size_in_bits() { return num_bits; }
     static constexpr std::size_t extension_degree() { return 128; }
     template<mp_size_t n>
-    static constexpr bigint<n> field_char() { return bigint<n>(2); } 
+    static constexpr bigint<n> field_char() { return bigint<n>(2); }
 private:
     /* little-endian */
     uint64_t value_[2];
