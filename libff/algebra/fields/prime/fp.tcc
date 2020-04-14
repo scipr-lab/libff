@@ -229,7 +229,7 @@ void Fp_model<n,modulus>::clear()
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp_model<n,modulus>::randomize()
 {
-    // TODO
+    (*this) = Fp_model<n, modulus>::random_element();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -649,7 +649,8 @@ Fp_model<n,modulus> Fp_model<n,modulus>::squared() const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus>& Fp_model<n,modulus>::square()
 {
-    return NULL; // TODO
+    (*this) = squared();
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

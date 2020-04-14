@@ -41,7 +41,7 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::random_element()
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp2_model<n,modulus>::randomize()
 {
-    // TODO
+    (*this) = Fp2_model<n, modulus>::random_element();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -101,7 +101,7 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::operator-() const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::operator^(const unsigned long pow) const
 {
-    return NULL; // TODO
+    return power<Fp2_model<n, modulus>>(*this, pow);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -114,7 +114,8 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::operator^(const bigint<m> &pow) const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator+=(const Fp2_model<n,modulus>& other)
 {
-    return NULL; // TODO
+    (*this) = *this + other;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -151,7 +152,8 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::squared() const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::square()
 {
-    return NULL; // TODO
+    (*this) = squared();
+    return (*this);
 }
 
 
