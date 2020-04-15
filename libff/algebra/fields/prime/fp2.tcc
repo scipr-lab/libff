@@ -121,26 +121,30 @@ Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator+=(const Fp2_model<n,modulus
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator-=(const Fp2_model<n,modulus>& other)
 {
-    return NULL; // TODO
+    (*this) = *this - other;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator*=(const Fp2_model<n,modulus>& other)
 {
-    return NULL; // TODO
+    (*this) = *this * other;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator^=(const unsigned long pow)
 {
-    return NULL; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 template<mp_size_t m>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator^=(const bigint<m> &pow)
 {
-    return NULL; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -199,7 +203,8 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::inverse() const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus>& Fp2_model<n,modulus>::invert()
 {
-    return NULL; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

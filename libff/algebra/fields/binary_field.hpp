@@ -41,7 +41,7 @@ class Binaryield {
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); } // has not been implemented in Fp or gf2^n
 
-    /* Functons common to all finite fields */
+    /* Functions common to all finite fields */
 
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator-=(const T& other) = 0; // has not been implemented in fp2 and above

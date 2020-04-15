@@ -26,12 +26,12 @@ class PrimeField;
  */
 template<typename T, mp_size_t n, const bigint<n>& modulus>
 class PrimeField {
-    /* No functions unique to prime fields */
+    /* Functions unique to prime fields */
 
     /** If extension field, returns the base field's characteristic. */
     static constexpr bigint<n> field_char(); // has not been implemented in Fp or gf2^n
 
-    /* Functons common to all finite fields */
+    /* Functions common to all finite fields */
 
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator-=(const T& other) = 0; // has not been implemented in fp2 and above

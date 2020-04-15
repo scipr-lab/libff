@@ -81,11 +81,78 @@ private:
     }
 };
 
+/** Returns a random element of FieldT that is not equal to y. */
+template<typename FieldT>
+FieldT random_element_exclude(FieldT y)
+{
+    FieldT x = FieldT::random_element();
+    while (x == y)
+        x = FieldT::random_element();
+    return x;
+}
+
 template<typename FieldT>
 void test_field()
 {
+    const FieldT one = FieldT::one();
+    const FieldT zero = FieldT::zero();
+    const FieldT two = one + one;
+
+    /******************* Test standard field axioms and properties. *******************/
+
+    FieldT x = random_element_exclude(zero);
+    FieldT y = FieldT::random_element();
+    FieldT z = FieldT::random_element();
+    EXPECT_EQ(x + y, y + x); // commutative law of addition
+    EXPECT_EQ((x + y) + z, x + (y + z)); // associative law of addition
+    EXPECT_EQ(x + zero, x); // additive identity
+    EXPECT_EQ(x + (-x), zero); // additive inverse
+    EXPECT_EQ(x * y, y * x); // commutative law of multiplication
+    EXPECT_EQ((x * y) * z, x * (y * z)); // associative law of multiplication
+    EXPECT_EQ(x * one, x); // multiplicative identity
+    EXPECT_EQ(x * x.inverse(), one); // multiplicative inverse
+    EXPECT_EQ((x + y) * z, x * z + y * z); // distributive law
+
+    EXPECT_EQ(-zero, zero);
+    EXPECT_EQ(one.inverse(), one);
+    EXPECT_EQ(-(-x), x);
+    EXPECT_EQ(x.inverse().inverse(), x);
+    EXPECT_EQ(x * zero, zero);
+    EXPECT_EQ(x * (-y), -(x * y));
+
+    /*********************** Test +, -, *, zero(), and one(). ***********************/
+
+    x.randomize();
+    y = x + x;
+    EXPECT_EQ(x * two, y);
+    EXPECT_EQ(x + y, x + x + x);
+    EXPECT_EQ(two + two, two * two);
+
+    EXPECT_EQ(x - x, zero);
+    EXPECT_EQ(x - y, -x);
+    y.randomize();
+    EXPECT_EQ(x + (-y), x - y);
+    EXPECT_EQ(x - y, -(y - x));
+
+    EXPECT_EQ(x * (-one), -x);
+    EXPECT_EQ((-x) * (-y), x * y);
+
+    EXPECT_NE(zero, one);
+    EXPECT_NE(one, two);
+    EXPECT_NE(x + one, x);
+    x = random_element_exclude(zero);
+    y = random_element_exclude(zero);
+    z = random_element_exclude(one);
+    EXPECT_NE(x, -x);
+    EXPECT_NE(x + y, x);
+    EXPECT_NE(x * z, x);
+    y = random_element_exclude(x);
+    z = random_element_exclude(two);
+    EXPECT_NE(x - y, zero);
+    EXPECT_NE(x * z, x + x);
+
     // test square()
-    FieldT x = FieldT::random_element();
+    x = FieldT::random_element();
     FieldT x2 = x * x;
     x.square();
     EXPECT_EQ(x, x2);
@@ -93,27 +160,31 @@ void test_field()
     // test squared()
     x.randomize();
     x2 = x * x;
-    FieldT y = x;
+    y = x;
     EXPECT_EQ(x.squared(), x2);
     EXPECT_EQ(x, y);
     x += x;
     EXPECT_EQ(x, y + y);
 
     // test +=
-    FieldT z = FieldT::random_element();
+    z.randomize();
     y = x;
     x += z;
     EXPECT_EQ(x, y + z);
-    x += FieldT::zero();
+    x += zero;
     EXPECT_EQ(x, y + z);
-    x += FieldT::one();
+    x += one;
     EXPECT_NE(x, y + z);
 }
 
-TEST_F(AllFieldsTest, AllFieldsApiTest)
+TEST(AllFieldsTest, AllFieldsApiTest)
 {
-    test_field<AllFieldsTest::Fp>();
-    test_field<AllFieldsTest::Fp2>();
+    // test_field<AllFieldsTest::Fp>();
+    // test_field<AllFieldsTest::Fp2>();
+
+    alt_bn128_pp::init_public_params();
+    test_field<alt_bn128_Fq>();
+    test_field<alt_bn128_Fq2>();
 }
 
 }
