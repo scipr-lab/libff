@@ -100,9 +100,10 @@ void test_field()
 
     /******************* Test standard field axioms and properties. *******************/
 
-    FieldT x = random_element_exclude(zero);
+    FieldT x = FieldT::random_element();
     FieldT y = FieldT::random_element();
     FieldT z = FieldT::random_element();
+    FieldT w = random_element_exclude(zero);
     EXPECT_EQ(x + y, y + x); // commutative law of addition
     EXPECT_EQ((x + y) + z, x + (y + z)); // associative law of addition
     EXPECT_EQ(x + zero, x); // additive identity
@@ -110,13 +111,13 @@ void test_field()
     EXPECT_EQ(x * y, y * x); // commutative law of multiplication
     EXPECT_EQ((x * y) * z, x * (y * z)); // associative law of multiplication
     EXPECT_EQ(x * one, x); // multiplicative identity
-    EXPECT_EQ(x * x.inverse(), one); // multiplicative inverse
+    EXPECT_EQ(w * w.inverse(), one); // multiplicative inverse
     EXPECT_EQ((x + y) * z, x * z + y * z); // distributive law
 
     EXPECT_EQ(-zero, zero);
     EXPECT_EQ(one.inverse(), one);
     EXPECT_EQ(-(-x), x);
-    EXPECT_EQ(x.inverse().inverse(), x);
+    EXPECT_EQ(w.inverse().inverse(), w);
     EXPECT_EQ(x * zero, zero);
     EXPECT_EQ(x * (-y), -(x * y));
 
@@ -136,6 +137,10 @@ void test_field()
 
     EXPECT_EQ(x * (-one), -x);
     EXPECT_EQ((-x) * (-y), x * y);
+    z.randomize();
+    w.randomize();
+    EXPECT_EQ((x + y) * (z + w), x * z + x * w + y * z + y * w);
+
 
     EXPECT_NE(zero, one);
     EXPECT_NE(one, two);
@@ -151,6 +156,16 @@ void test_field()
     EXPECT_NE(x - y, zero);
     EXPECT_NE(x * z, x + x);
 
+    // test assignment
+    x.randomize();
+    y = x;
+    x += one;
+    EXPECT_NE(x, y);
+    y += one;
+    EXPECT_EQ(x, y);
+    x.square();
+    EXPECT_EQ(x, y * y);
+
     // test square()
     x = FieldT::random_element();
     FieldT x2 = x * x;
@@ -159,12 +174,14 @@ void test_field()
 
     // test squared()
     x.randomize();
+    y.randomize();
     x2 = x * x;
     y = x;
     EXPECT_EQ(x.squared(), x2);
     EXPECT_EQ(x, y);
     x += x;
     EXPECT_EQ(x, y + y);
+    EXPECT_EQ(x.squared() + two * x * y + y.squared(), (x + y).squared());
 
     // test +=
     z.randomize();
