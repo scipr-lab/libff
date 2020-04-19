@@ -31,6 +31,9 @@ class PrimeField {
     /** If extension field, returns the base field's characteristic. */
     static constexpr bigint<n> field_char(); // has not been implemented in Fp or gf2^n
 
+    /** If base field, is the identity. */
+    T Frobenius_map(unsigned long power) const;
+
     /* Functions common to all finite fields */
 
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above

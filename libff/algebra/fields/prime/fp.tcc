@@ -707,6 +707,13 @@ Fp_model<n,modulus> Fp_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus> Fp_model<n,modulus>::Frobenius_map(unsigned long power) const
+{
+    Fp_model<n,modulus> copy = *this;
+    return copy;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random element of Fp_model
 {
     /* note that as Montgomery representation is a bijection then

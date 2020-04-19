@@ -108,6 +108,7 @@ public:
     Fp_model squared() const;
     Fp_model& invert();
     Fp_model inverse() const;
+    Fp_model Frobenius_map(unsigned long power) const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
     static std::size_t size_in_bits() { return num_bits; }
