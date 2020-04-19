@@ -14,8 +14,8 @@
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
-#include <libff/algebra/fields/prime/fp12_2over3over2.hpp>
-#include <libff/algebra/fields/prime/fp6_3over2.hpp>
+#include <libff/algebra/fields/prime_extension/fp12_2over3over2.hpp>
+#include <libff/algebra/fields/prime_extension/fp6_3over2.hpp>
 
 namespace libff {
 

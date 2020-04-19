@@ -1,6 +1,7 @@
 /** @file
  *****************************************************************************
- Declaration of common API for all finite fields in the prime/ directory.
+ Declaration of common API for all finite fields in the prime_base/ and
+ prime_extension/ directories.
 
  Includes fields Fp^n for specified n. All of the prime extension fields must
  implement all functions declared in this class.

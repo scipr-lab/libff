@@ -8,10 +8,10 @@
 #ifndef ALT_BN128_INIT_HPP_
 #define ALT_BN128_INIT_HPP_
 #include <libff/algebra/curves/public_params.hpp>
-#include <libff/algebra/fields/prime/fp.hpp>
-#include <libff/algebra/fields/prime/fp12_2over3over2.hpp>
-#include <libff/algebra/fields/prime/fp2.hpp>
-#include <libff/algebra/fields/prime/fp6_3over2.hpp>
+#include <libff/algebra/fields/prime_base/fp.hpp>
+#include <libff/algebra/fields/prime_extension/fp12_2over3over2.hpp>
+#include <libff/algebra/fields/prime_extension/fp2.hpp>
+#include <libff/algebra/fields/prime_extension/fp6_3over2.hpp>
 
 namespace libff {
 

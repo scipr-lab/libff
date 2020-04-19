@@ -181,6 +181,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n, modulus>::Rcubed;
 
 } // libff
-#include <libff/algebra/fields/prime/fp.tcc>
+#include <libff/algebra/fields/prime_base/fp.tcc>
 
 #endif // FP_HPP_

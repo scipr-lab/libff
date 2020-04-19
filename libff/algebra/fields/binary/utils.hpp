@@ -14,7 +14,7 @@
 #include "libff/algebra/fields/binary/gf192.hpp"
 #include "libff/algebra/fields/binary/gf256.hpp"
 
-#include "libff/algebra/fields/prime/fp.hpp"
+#include "libff/algebra/fields/prime_base/fp.hpp"
 
 namespace libff {
 

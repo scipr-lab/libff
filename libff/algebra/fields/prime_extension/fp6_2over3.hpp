@@ -9,9 +9,9 @@
 
 #ifndef FP6_2OVER3_HPP_
 #define FP6_2OVER3_HPP_
-#include <libff/algebra/fields/prime/fp.hpp>
-#include <libff/algebra/fields/prime/fp2.hpp>
-#include <libff/algebra/fields/prime/fp3.hpp>
+#include <libff/algebra/fields/prime_base/fp.hpp>
+#include <libff/algebra/fields/prime_extension/fp2.hpp>
+#include <libff/algebra/fields/prime_extension/fp3.hpp>
 
 namespace libff {
 
@@ -115,6 +115,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp6_2over3_model<n, modulus>::Frobenius_coeffs_c1[6];
 
 } // libff
-#include <libff/algebra/fields/prime/fp6_2over3.tcc>
+#include <libff/algebra/fields/prime_extension/fp6_2over3.tcc>
 
 #endif // FP6_2OVER3_HPP_

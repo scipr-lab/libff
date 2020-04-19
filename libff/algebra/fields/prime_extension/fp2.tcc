@@ -10,7 +10,7 @@
 #ifndef FP2_TCC_
 #define FP2_TCC_
 
-#include <libff/algebra/fields/prime/field_utils.hpp>
+#include <libff/algebra/fields/prime_base/field_utils.hpp>
 
 namespace libff {
 

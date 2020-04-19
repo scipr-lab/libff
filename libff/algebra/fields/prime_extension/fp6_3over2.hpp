@@ -11,8 +11,8 @@
 #define FP6_3OVER2_HPP_
 #include <vector>
 
-#include <libff/algebra/fields/prime/fp.hpp>
-#include <libff/algebra/fields/prime/fp2.hpp>
+#include <libff/algebra/fields/prime_base/fp.hpp>
+#include <libff/algebra/fields/prime_extension/fp2.hpp>
 
 namespace libff {
 
@@ -113,6 +113,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n, modulus> Fp6_3over2_model<n, modulus>::Frobenius_coeffs_c2[6];
 
 } // libff
-#include <libff/algebra/fields/prime/fp6_3over2.tcc>
+#include <libff/algebra/fields/prime_extension/fp6_3over2.tcc>
 
 #endif // FP6_3OVER2_HPP_

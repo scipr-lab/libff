@@ -52,6 +52,6 @@ template<typename FieldT>
 void batch_invert(std::vector<FieldT> &vec);
 
 } // libff
-#include <libff/algebra/fields/prime/field_utils.tcc>
+#include <libff/algebra/fields/prime_base/field_utils.tcc>
 
 #endif // FIELD_UTILS_HPP_

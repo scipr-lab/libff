@@ -143,7 +143,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_prime_fields_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/prime/tests/test_prime_fields.cpp
+    algebra/fields/tests/test_prime_fields.cpp
   )
   target_link_libraries(
     algebra_prime_fields_test
@@ -192,7 +192,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_gf32_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/binary/tests/test_gf32.cpp
+    algebra/fields/tests/test_gf32.cpp
   )
   target_link_libraries(
     algebra_gf32_test
@@ -204,7 +204,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_gf64_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/binary/tests/test_gf64.cpp
+    algebra/fields/tests/test_gf64.cpp
   )
   target_link_libraries(
     algebra_gf64_test
@@ -216,7 +216,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_gf128_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/binary/tests/test_gf128.cpp
+    algebra/fields/tests/test_gf128.cpp
   )
   target_link_libraries(
     algebra_gf128_test
@@ -228,7 +228,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_gf192_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/binary/tests/test_gf192.cpp
+    algebra/fields/tests/test_gf192.cpp
   )
   target_link_libraries(
     algebra_gf192_test
@@ -240,7 +240,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_gf256_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/binary/tests/test_gf256.cpp
+    algebra/fields/tests/test_gf256.cpp
   )
   target_link_libraries(
     algebra_gf256_test

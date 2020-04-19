@@ -14,8 +14,8 @@
 #include <cstdlib>
 #include <limits>
 
-#include <libff/algebra/fields/prime/field_utils.hpp>
-#include <libff/algebra/fields/prime/fp_aux.tcc>
+#include <libff/algebra/fields/prime_base/field_utils.hpp>
+#include <libff/algebra/fields/prime_base/fp_aux.tcc>
 
 namespace libff {
 

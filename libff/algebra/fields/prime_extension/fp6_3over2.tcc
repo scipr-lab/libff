@@ -9,7 +9,7 @@
 
 #ifndef FP6_3OVER2_TCC_
 #define FP6_3OVER2_TCC_
-#include <libff/algebra/fields/prime/field_utils.hpp>
+#include <libff/algebra/fields/prime_base/field_utils.hpp>
 
 namespace libff {
 

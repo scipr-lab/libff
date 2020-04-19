@@ -8,9 +8,9 @@
 #ifndef EDWARDS_INIT_HPP_
 #define EDWARDS_INIT_HPP_
 #include <libff/algebra/curves/public_params.hpp>
-#include <libff/algebra/fields/prime/fp.hpp>
-#include <libff/algebra/fields/prime/fp3.hpp>
-#include <libff/algebra/fields/prime/fp6_2over3.hpp>
+#include <libff/algebra/fields/prime_base/fp.hpp>
+#include <libff/algebra/fields/prime_extension/fp3.hpp>
+#include <libff/algebra/fields/prime_extension/fp6_2over3.hpp>
 
 namespace libff {
 
