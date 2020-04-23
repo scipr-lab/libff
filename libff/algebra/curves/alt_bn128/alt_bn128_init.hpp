@@ -12,9 +12,6 @@
 
 namespace libff {
 
-extern bigint<alt_bn128_r_limbs> alt_bn128_modulus_r;
-extern bigint<alt_bn128_q_limbs> alt_bn128_modulus_q;
-
 // parameters for Barreto--Naehrig curve E/Fq : y^2 = x^3 + b
 extern alt_bn128_Fq alt_bn128_coeff_b;
 // parameters for twisted Barreto--Naehrig curve E'/Fq2 : y^2 = x^3 + b/xi

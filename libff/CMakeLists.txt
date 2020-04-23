@@ -5,6 +5,7 @@ if(${CURVE} STREQUAL "BN128")
     FF_EXTRASRCS
 
     ${FF_EXTRASRCS}
+    algebra/curves/bn128/bn128_fields.cpp
     algebra/curves/bn128/bn128_g1.cpp
     algebra/curves/bn128/bn128_g2.cpp
     algebra/curves/bn128/bn128_gt.cpp
@@ -30,17 +31,20 @@ add_library(
   algebra/curves/alt_bn128/alt_bn128_init.cpp
   algebra/curves/alt_bn128/alt_bn128_pairing.cpp
   algebra/curves/alt_bn128/alt_bn128_pp.cpp
+  algebra/curves/edwards/edwards_fields.cpp
   algebra/curves/edwards/edwards_g1.cpp
   algebra/curves/edwards/edwards_g2.cpp
   algebra/curves/edwards/edwards_init.cpp
   algebra/curves/edwards/edwards_pairing.cpp
   algebra/curves/edwards/edwards_pp.cpp
+  algebra/curves/mnt/mnt4/mnt4_fields.cpp
   algebra/curves/mnt/mnt4/mnt4_g1.cpp
   algebra/curves/mnt/mnt4/mnt4_g2.cpp
   algebra/curves/mnt/mnt4/mnt4_init.cpp
   algebra/curves/mnt/mnt4/mnt4_pairing.cpp
   algebra/curves/mnt/mnt4/mnt4_pp.cpp
   algebra/curves/mnt/mnt46_common.cpp
+  algebra/curves/mnt/mnt6/mnt6_fields.cpp
   algebra/curves/mnt/mnt6/mnt6_g1.cpp
   algebra/curves/mnt/mnt6/mnt6_g2.cpp
   algebra/curves/mnt/mnt6/mnt6_init.cpp
