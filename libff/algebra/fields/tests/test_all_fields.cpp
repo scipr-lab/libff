@@ -21,63 +21,25 @@ namespace libff {
 
 class AllFieldsTest: public ::testing::Test { 
 public:
-    static const mp_size_t bitcount = 254;
-    static const mp_size_t limbs = (bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    // p, q, r are three different primes
+    typedef alt_bn128_Fq Fp;
+    typedef alt_bn128_Fq2 Fp2;
+    typedef alt_bn128_Fq6 Fp6_3_2;
+    typedef alt_bn128_Fq12 Fp12_2_3_2;
 
-    static bigint<limbs> p;
+    typedef mnt4_Fq Fq;
+    typedef mnt4_Fq2 Fq2;
+    typedef mnt4_Fq4 Fq4;
 
-    typedef Fp_model<limbs, p> Fp;
-    typedef Fp2_model<limbs, p> Fp2;
-    typedef Fp6_3over2_model<limbs, p> Fp6_3_2;
-    typedef Fp12_2over3over2_model<limbs, p> Fp12_2_3_2;
+    typedef mnt6_Fq Fr;
+    typedef mnt6_Fq3 Fr3;
+    typedef mnt6_Fq6 Fr6_2_3;
     
     AllFieldsTest()
     { 
-        init_Fp();
-        init_Fp2();
-    }
-
-private:
-    /** Same as alt_bn128_Fq */
-    void init_Fp()
-    {
-        p = bigint<limbs>("21888242871839275222246405745257275088696311157297823662689037894645226208583");
-        assert(Fp::modulus_is_valid());
-        if (sizeof(mp_limb_t) == 8)
-        {
-            Fp::Rsquared = bigint<limbs>("3096616502983703923843567936837374451735540968419076528771170197431451843209");
-            Fp::Rcubed = bigint<limbs>("14921786541159648185948152738563080959093619838510245177710943249661917737183");
-            Fp::inv = 0x87d20782e4866389;
-        }
-        else if (sizeof(mp_limb_t) == 4)
-        {
-            Fp::Rsquared = bigint<limbs>("3096616502983703923843567936837374451735540968419076528771170197431451843209");
-            Fp::Rcubed = bigint<limbs>("14921786541159648185948152738563080959093619838510245177710943249661917737183");
-            Fp::inv = 0xe4866389;
-        }
-        Fp::num_bits = 254;
-        Fp::euler = bigint<limbs>("10944121435919637611123202872628637544348155578648911831344518947322613104291");
-        Fp::s = 1;
-        Fp::t = bigint<limbs>("10944121435919637611123202872628637544348155578648911831344518947322613104291");
-        Fp::t_minus_1_over_2 = bigint<limbs>("5472060717959818805561601436314318772174077789324455915672259473661306552145");
-        Fp::multiplicative_generator = Fp("3");
-        Fp::root_of_unity = Fp("21888242871839275222246405745257275088696311157297823662689037894645226208582");
-        Fp::nqr = Fp("3");
-        Fp::nqr_to_t = Fp("21888242871839275222246405745257275088696311157297823662689037894645226208582");
-    }
-
-    /** Same as alt_bn128_Fq2 */
-    void init_Fp2()
-    {
-        Fp2::euler = bigint<2*limbs>("239547588008311421220994022608339370399626158265550411218223901127035046843189118723920525909718935985594116157406550130918127817069793474323196511433944");
-        Fp2::s = 4;
-        Fp2::t = bigint<2*limbs>("29943448501038927652624252826042421299953269783193801402277987640879380855398639840490065738714866998199264519675818766364765977133724184290399563929243");
-        Fp2::t_minus_1_over_2 = bigint<2*limbs>("14971724250519463826312126413021210649976634891596900701138993820439690427699319920245032869357433499099632259837909383182382988566862092145199781964621");
-        Fp2::non_residue = Fp("21888242871839275222246405745257275088696311157297823662689037894645226208582");
-        Fp2::nqr = Fp2(Fp("2"),Fp("1"));
-        Fp2::nqr_to_t = Fp2(Fp("5033503716262624267312492558379982687175200734934877598599011485707452665730"), Fp("314498342015008975724433667930697407966947188435857772134235984660852259084"));
-        Fp2::Frobenius_coeffs_c1[0] = Fp("1");
-        Fp2::Frobenius_coeffs_c1[1] = Fp("21888242871839275222246405745257275088696311157297823662689037894645226208582");
+        init_alt_bn128_fields();
+        init_mnt4_fields();
+        init_mnt6_fields();
     }
 };
 
@@ -194,14 +156,10 @@ void test_field()
     EXPECT_NE(x, y + z);
 }
 
-TEST(AllFieldsTest, AllFieldsApiTest)
+TEST_F(AllFieldsTest, AllFieldsApiTest)
 {
-    // test_field<AllFieldsTest::Fp>();
-    // test_field<AllFieldsTest::Fp2>();
-
-    alt_bn128_pp::init_public_params();
-    test_field<alt_bn128_Fq>();
-    test_field<alt_bn128_Fq2>();
+    test_field<AllFieldsTest::Fp>();
+    test_field<AllFieldsTest::Fp2>();
 }
 
 }
