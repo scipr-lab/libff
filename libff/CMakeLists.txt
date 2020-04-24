@@ -194,92 +194,24 @@ if ("${IS_LIBFF_PARENT}")
 
   # Tests for binary fields
   add_executable(
-    algebra_gf32_test
+    algebra_binary_fields_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/tests/test_gf32.cpp
+    algebra/fields/tests/test_binary_fields.cpp
   )
   target_link_libraries(
-    algebra_gf32_test
-
-    ff
-    gtest_main
-  )
-  add_executable(
-    algebra_gf64_test
-    EXCLUDE_FROM_ALL
-
-    algebra/fields/tests/test_gf64.cpp
-  )
-  target_link_libraries(
-    algebra_gf64_test
-
-    ff
-    gtest_main
-  )
-  add_executable(
-    algebra_gf128_test
-    EXCLUDE_FROM_ALL
-
-    algebra/fields/tests/test_gf128.cpp
-  )
-  target_link_libraries(
-    algebra_gf128_test
-
-    ff
-    gtest_main
-  )
-  add_executable(
-    algebra_gf192_test
-    EXCLUDE_FROM_ALL
-
-    algebra/fields/tests/test_gf192.cpp
-  )
-  target_link_libraries(
-    algebra_gf192_test
-
-    ff
-    gtest_main
-  )
-  add_executable(
-    algebra_gf256_test
-    EXCLUDE_FROM_ALL
-
-    algebra/fields/tests/test_gf256.cpp
-  )
-  target_link_libraries(
-    algebra_gf256_test
+    algebra_binary_fields_test
 
     ff
     gtest_main
   )
 
   add_test(
-    NAME algebra_gf32_test
-    COMMAND algebra_gf32_test
-  )
-  add_test(
-    NAME algebra_gf64_test
-    COMMAND algebra_gf32_test
-  )
-  add_test(
-    NAME algebra_gf128_test
-    COMMAND algebra_gf32_test
-  )
-  add_test(
-    NAME algebra_gf192_test
-    COMMAND algebra_gf32_test
-  )
-  add_test(
-    NAME algebra_gf256_test
-    COMMAND algebra_gf32_test
+    NAME algebra_binary_fields_test
+    COMMAND algebra_binary_fields_test
   )
 
-  add_dependencies(check algebra_gf32_test)
-  add_dependencies(check algebra_gf64_test)
-  add_dependencies(check algebra_gf128_test)
-  add_dependencies(check algebra_gf192_test)
-  add_dependencies(check algebra_gf256_test)
+  add_dependencies(check algebra_binary_fields_test)
 
   # Profiling for prime fields
   add_executable(
