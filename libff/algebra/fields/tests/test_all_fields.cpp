@@ -56,6 +56,7 @@ FieldT random_element_exclude(FieldT y)
 template<typename FieldT>
 void test_field()
 {
+    // constants
     const FieldT one = FieldT::one();
     const FieldT zero = FieldT::zero();
     const FieldT two = one + one;
@@ -66,6 +67,7 @@ void test_field()
     FieldT y = FieldT::random_element();
     FieldT z = FieldT::random_element();
     FieldT w = random_element_exclude(zero);
+    
     EXPECT_EQ(x + y, y + x); // commutative law of addition
     EXPECT_EQ((x + y) + z, x + (y + z)); // associative law of addition
     EXPECT_EQ(x + zero, x); // additive identity
@@ -103,7 +105,6 @@ void test_field()
     w.randomize();
     EXPECT_EQ((x + y) * (z + w), x * z + x * w + y * z + y * w);
 
-
     EXPECT_NE(zero, one);
     EXPECT_NE(one, two);
     EXPECT_NE(x + one, x);
@@ -128,22 +129,48 @@ void test_field()
     x.square();
     EXPECT_EQ(x, y * y);
 
-    // test square()
-    x = FieldT::random_element();
-    FieldT x2 = x * x;
-    x.square();
-    EXPECT_EQ(x, x2);
+    /******************** Test squared(), inverse(), sqrt(), and ^. ********************/
 
-    // test squared()
     x.randomize();
-    y.randomize();
-    x2 = x * x;
+    FieldT x2 = x * x;
     y = x;
     EXPECT_EQ(x.squared(), x2);
     EXPECT_EQ(x, y);
     x += x;
     EXPECT_EQ(x, y + y);
+    y.randomize();
     EXPECT_EQ(x.squared() + two * x * y + y.squared(), (x + y).squared());
+    EXPECT_EQ((x * y).squared(), x.squared() * y.squared());
+
+    // EXPECT_EQ((x * x).sqrt(), x);
+    // EXPECT_EQ((x * (x + x + x + x)).sqrt(), two * x);
+    // EXPECT_EQ(one.sqrt(), one);
+    // EXPECT_EQ(zero.sqrt(), zero);
+    // EXPECT_EQ((two + two).sqrt(), two);
+
+    x = random_element_exclude(zero);
+    y = random_element_exclude(zero);
+    EXPECT_EQ(x.squared().inverse(), x.inverse().squared());
+    EXPECT_EQ((x * y).inverse(), x.inverse() * y.inverse());
+    EXPECT_EQ((x * y.inverse()).inverse(), x.inverse() * y);
+
+    x.randomize();
+    y.randomize();
+    EXPECT_EQ(x.squared(), x^2);
+    EXPECT_EQ(x * x * x, x^3);
+    EXPECT_EQ(x.squared().squared().squared() * x, x^9);
+
+    // I tried using random bigints, but it was too much work
+    bigint<1> pow1 = bigint<1>("64703871");
+    bigint<1> pow2 = bigint<1>("42796681");
+    bigint<1> sum = bigint<1>("107500552");
+    bigint<1> diff = bigint<1>("21907190");
+    EXPECT_EQ((x^pow1) * (x^pow2), x^sum);
+    EXPECT_EQ((x * y)^pow1, (x^pow1) * (y^pow1));
+
+    x = random_element_exclude(zero);
+    EXPECT_EQ(x.inverse()^pow1, (x^pow1).inverse());
+    EXPECT_EQ((x^pow1) * (x.inverse()^pow2), x^diff);
 
     // test +=
     z.randomize();
@@ -154,6 +181,12 @@ void test_field()
     EXPECT_EQ(x, y + z);
     x += one;
     EXPECT_NE(x, y + z);
+
+    // test square()
+    x = FieldT::random_element();
+    x2 = x * x;
+    x.square();
+    EXPECT_EQ(x, x2);
 }
 
 TEST_F(AllFieldsTest, AllFieldsApiTest)
