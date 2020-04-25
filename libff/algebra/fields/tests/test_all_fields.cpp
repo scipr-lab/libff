@@ -6,16 +6,9 @@
  *****************************************************************************/
 #include <gtest/gtest.h>
 
-#include <libff/algebra/curves/edwards/edwards_pp.hpp>
-#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
-#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
-#include <libff/common/profiling.hpp>
-#ifdef CURVE_BN128
-#include <libff/algebra/curves/bn128/bn128_pp.hpp>
-#endif
-#include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
-#include <libff/algebra/fields/prime_extension/fp12_2over3over2.hpp>
-#include <libff/algebra/fields/prime_extension/fp6_3over2.hpp>
+#include <libff/algebra/curves/mnt/mnt4/mnt4_fields.hpp>
+#include <libff/algebra/curves/mnt/mnt6/mnt6_fields.hpp>
+#include <libff/algebra/curves/alt_bn128/alt_bn128_fields.hpp>
 
 namespace libff {
 
@@ -51,6 +44,12 @@ FieldT random_element_exclude(FieldT y)
     while (x == y)
         x = FieldT::random_element();
     return x;
+}
+
+template<typename FieldT>
+void expect_equal_or_negative(FieldT x, FieldT y)
+{
+    EXPECT_TRUE(x == y || x == -y);
 }
 
 template<typename FieldT>
@@ -142,11 +141,11 @@ void test_field()
     EXPECT_EQ(x.squared() + two * x * y + y.squared(), (x + y).squared());
     EXPECT_EQ((x * y).squared(), x.squared() * y.squared());
 
-    // EXPECT_EQ((x * x).sqrt(), x);
-    // EXPECT_EQ((x * (x + x + x + x)).sqrt(), two * x);
-    // EXPECT_EQ(one.sqrt(), one);
-    // EXPECT_EQ(zero.sqrt(), zero);
-    // EXPECT_EQ((two + two).sqrt(), two);
+    expect_equal_or_negative((x * x).sqrt(), x);
+    expect_equal_or_negative((x * (x + x + x + x)).sqrt(), two * x);
+    expect_equal_or_negative(one.sqrt(), one);
+    expect_equal_or_negative((two + two).sqrt(), two);
+    // expect_equal_or_negative(zero.sqrt(), zero); // fails
 
     x = random_element_exclude(zero);
     y = random_element_exclude(zero);
@@ -204,6 +203,26 @@ void test_field()
     z = x^pow1;
     x ^= pow1;
     EXPECT_EQ(x, z);
+
+    /****************** Test is_zero(), print(), clear(), <<, and >>. ******************/
+
+    EXPECT_TRUE(zero.is_zero());
+    EXPECT_FALSE(one.is_zero());
+    EXPECT_FALSE(random_element_exclude(zero).is_zero());
+
+    EXPECT_NO_THROW(x.print());
+
+    x.clear();
+    EXPECT_EQ(x, zero);
+    EXPECT_TRUE(x.is_zero());
+
+    x.randomize();
+    EXPECT_EQ(reserialize<FieldT>(x), x);
+
+    /****************** Test extension_degree() and size_in_bits(). ******************/
+
+    EXPECT_GE(FieldT::extension_degree(), 1);
+    EXPECT_GE(FieldT::size_in_bits(), 1);
 }
 
 TEST_F(AllFieldsTest, AllFieldsApiTest)
