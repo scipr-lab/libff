@@ -172,21 +172,38 @@ void test_field()
     EXPECT_EQ(x.inverse()^pow1, (x^pow1).inverse());
     EXPECT_EQ((x^pow1) * (x.inverse()^pow2), x^diff);
 
-    // test +=
-    z.randomize();
-    y = x;
-    x += z;
-    EXPECT_EQ(x, y + z);
-    x += zero;
-    EXPECT_EQ(x, y + z);
-    x += one;
-    EXPECT_NE(x, y + z);
+    /******************** Test +=, -=, *=, square(), inverse(), ^=. ********************/
 
-    // test square()
-    x = FieldT::random_element();
-    x2 = x * x;
+    x.randomize();
+    y.randomize();
+    z = x + y;
+    x += y;
+    EXPECT_EQ(x, z);
+    x.randomize();
+    z = x - y;
+    x -= y;
+    EXPECT_EQ(x, z);
+    x.randomize();
+    z = x * y;
+    x *= y;
+    EXPECT_EQ(x, z);
+
+    x.randomize();
+    z = x.squared();
     x.square();
-    EXPECT_EQ(x, x2);
+    EXPECT_EQ(x, z);
+    x = random_element_exclude(zero);
+    z = x.inverse();
+    x.invert();
+    EXPECT_EQ(x, z);
+    x.randomize();
+    z = x^82;
+    x ^= 82;
+    EXPECT_EQ(x, z);
+    x.randomize();
+    z = x^pow1;
+    x ^= pow1;
+    EXPECT_EQ(x, z);
 }
 
 TEST_F(AllFieldsTest, AllFieldsApiTest)
