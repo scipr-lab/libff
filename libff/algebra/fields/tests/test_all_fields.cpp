@@ -225,10 +225,36 @@ void test_field()
     EXPECT_GE(FieldT::size_in_bits(), 1);
 }
 
+template<typename FieldT>
+void test_prime_field()
+{
+    EXPECT_GE(FieldT::field_char().num_bits(), 2); // characteristic is at least 2
+
+    FieldT x = FieldT::random_element();
+    FieldT x_q = x;
+    for (size_t power = 0; power < 10; ++power)
+    {
+        const FieldT x_qi = x.Frobenius_map(power);
+        EXPECT_EQ(x_qi, x_q);
+
+        x_q = x_q^FieldT::field_char();
+    }
+}
+
 TEST_F(AllFieldsTest, AllFieldsApiTest)
 {
     test_field<AllFieldsTest::Fp>();
     test_field<AllFieldsTest::Fp2>();
+
+    // test_field<AllFieldsTest::Fr3>();
+}
+
+TEST_F(AllFieldsTest, PrimeFieldsApiTest)
+{
+    test_prime_field<AllFieldsTest::Fp>();
+    test_prime_field<AllFieldsTest::Fp2>();
+
+    test_prime_field<AllFieldsTest::Fr3>();
 }
 
 }
