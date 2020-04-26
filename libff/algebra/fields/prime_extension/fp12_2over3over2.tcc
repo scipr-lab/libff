@@ -45,7 +45,7 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::random_elem
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp12_2over3over2_model<n,modulus>::randomize()
 {
-    // TODO
+    (*this) = Fp12_2over3over2_model<n, modulus>::random_element();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -119,7 +119,7 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-()
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator^(const unsigned long pow) const
 {
-    return NULL; // TODO
+    return power<Fp12_2over3over2_model<n, modulus> >(*this, pow);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -139,32 +139,37 @@ Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::operator^(
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator+=(const Fp12_2over3over2_model<n,modulus>& other)
 {
-    return NULL; // TODO
+    (*this) = *this + other;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator-=(const Fp12_2over3over2_model<n,modulus>& other)
 {
-    return NULL; // TODO
+    (*this) = *this - other;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator*=(const Fp12_2over3over2_model<n,modulus>& other)
 {
-    return NULL; // TODO
+    (*this) = *this * other;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator^=(const unsigned long pow)
 {
-    return NULL; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 template<mp_size_t m>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator^=(const bigint<m> &pow)
 {
-    return NULL; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -176,7 +181,8 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared() c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::square()
 {
-    return NULL; // TODO
+    (*this) = squared();
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -223,7 +229,8 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::invert()
 {
-    return NULL; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
