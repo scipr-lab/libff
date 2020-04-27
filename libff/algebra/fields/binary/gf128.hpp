@@ -55,6 +55,7 @@ public:
     gf128 sqrt() const;
 
     void randomize();
+    void clear();
 
     bool operator==(const gf128 &other) const;
     bool operator!=(const gf128 &other) const;
@@ -79,5 +80,6 @@ private:
 };
 
 } // namespace libff
+#include <libff/algebra/fields/binary/gf128.tcc>
 
 #endif // LIBFF_ALGEBRA_GF128_HPP_

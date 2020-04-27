@@ -6,6 +6,7 @@
 #include <sodium/randombytes.h>
 
 #include "libff/algebra/fields/binary/gf32.hpp"
+#include "libff/algebra/exponentiation/exponentiation.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
@@ -79,13 +80,15 @@ gf32& gf32::operator*=(const gf32 &other)
 
 gf32& gf32::operator^=(const unsigned long pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t m>
 gf32& gf32::operator^=(const bigint<m> &pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 gf32& gf32::square()
@@ -96,7 +99,8 @@ gf32& gf32::square()
 
 gf32& gf32::invert()
 {
-    return *this; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 gf32 gf32::operator+(const gf32 &other) const
@@ -125,13 +129,13 @@ gf32 gf32::operator*(const gf32 &other) const
 
 gf32 gf32::operator^(const unsigned long pow) const
 {
-    return *this; // TODO
+    return power<gf32>(*this, pow);
 }
 
 template<mp_size_t m>
 gf32 gf32::operator^(const bigint<m> &pow) const
 {
-    return *this; // TODO
+    return power<gf32>(*this, pow);
 }
 
 gf32 gf32::squared() const
@@ -144,7 +148,7 @@ gf32 gf32::squared() const
 // repeatedly square pt, num_times. For use in inverse.
 void square_multi(gf32* pt, int8_t num_times)
 {
-    for (size_t i = 0; i < num_times; i++)
+    for (int8_t i = 0; i < num_times; i++)
     {
         (*pt).square();
     }
@@ -153,6 +157,7 @@ void square_multi(gf32* pt, int8_t num_times)
 /* calculate el^{-1} as el^{2^{32}-2}. */
 gf32 gf32::inverse() const
 {
+    assert(!this->is_zero());
     gf32 a(*this);
 
     gf32 result(0);
@@ -189,6 +194,11 @@ gf32 gf32::sqrt() const
 void gf32::randomize()
 {
     randombytes_buf(&this->value_, 32/8);
+}
+
+void gf32::clear()
+{
+    this->value_ = 0;
 }
 
 bool gf32::operator==(const gf32 &other) const

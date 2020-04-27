@@ -6,6 +6,7 @@
 #include <sodium/randombytes.h>
 
 #include "libff/algebra/fields/binary/gf256.hpp"
+#include "libff/algebra/exponentiation/exponentiation.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
@@ -247,13 +248,15 @@ gf256& gf256::operator*=(const gf256 &other)
 
 gf256& gf256::operator^=(const unsigned long pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t m>
 gf256& gf256::operator^=(const bigint<m> &pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 gf256& gf256::square()
@@ -264,7 +267,8 @@ gf256& gf256::square()
 
 gf256& gf256::invert()
 {
-    return *this; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 gf256 gf256::operator+(const gf256 &other) const
@@ -292,13 +296,13 @@ gf256 gf256::operator*(const gf256 &other) const
 
 gf256 gf256::operator^(const unsigned long pow) const
 {
-    return *this; // TODO
+    return power<gf256>(*this, pow);
 }
 
 template<mp_size_t m>
 gf256 gf256::operator^(const bigint<m> &pow) const
 {
-    return *this; // TODO
+    return power<gf256>(*this, pow);
 }
 
 gf256 gf256::squared() const
@@ -312,6 +316,7 @@ gf256 gf256::squared() const
    requires 270 mul/sqr operations total. */
 gf256 gf256::inverse() const
 {
+    assert(!this->is_zero());
     gf256 a(*this);
 
     gf256 result(0);
@@ -348,6 +353,14 @@ gf256 gf256::sqrt() const
 void gf256::randomize()
 {
     randombytes_buf(&this->value_, 256/8);
+}
+
+void gf256::clear()
+{
+    this->value_[0] = 0;
+    this->value_[1] = 0;
+    this->value_[2] = 0;
+    this->value_[3] = 0;
 }
 
 bool gf256::operator==(const gf256 &other) const

@@ -57,6 +57,7 @@ public:
     gf256 sqrt() const;
 
     void randomize();
+    void clear();
 
     bool operator==(const gf256 &other) const;
     bool operator!=(const gf256 &other) const;
@@ -81,5 +82,6 @@ private:
 };
 
 } // namespace libff
+#include <libff/algebra/fields/binary/gf256.tcc>
 
 #endif // LIBFF_ALGEBRA_GF256_HPP_

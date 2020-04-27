@@ -51,6 +51,7 @@ public:
     gf32 sqrt() const;
 
     void randomize();
+    void clear();
 
     bool operator==(const gf32 &other) const;
     bool operator!=(const gf32 &other) const;
@@ -74,5 +75,6 @@ private:
 };
 
 } // namespace libff
+#include <libff/algebra/fields/binary/gf32.tcc>
 
 #endif // #ifndef LIBFF_ALGEBRA_GF32_HPP_

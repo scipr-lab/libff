@@ -6,6 +6,7 @@
 #include <sodium/randombytes.h>
 
 #include "libff/algebra/fields/binary/gf64.hpp"
+#include "libff/algebra/exponentiation/exponentiation.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
@@ -96,13 +97,15 @@ gf64& gf64::operator*=(const gf64 &other)
 
 gf64& gf64::operator^=(const unsigned long pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t m>
 gf64& gf64::operator^=(const bigint<m> &pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 gf64& gf64::square()
@@ -113,7 +116,8 @@ gf64& gf64::square()
 
 gf64& gf64::invert()
 {
-    return *this; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 gf64 gf64::operator+(const gf64 &other) const
@@ -142,13 +146,13 @@ gf64 gf64::operator*(const gf64 &other) const
 
 gf64 gf64::operator^(const unsigned long pow) const
 {
-    return *this; // TODO
+    return power<gf64>(*this, pow);
 }
 
 template<mp_size_t m>
 gf64 gf64::operator^(const bigint<m> &pow) const
 {
-    return *this; // TODO
+    return power<gf64>(*this, pow);
 }
 
 gf64 gf64::squared() const
@@ -161,7 +165,7 @@ gf64 gf64::squared() const
 // repeatedly square pt, num_times. For use in inverse.
 void square_multi(gf64* pt, int8_t num_times)
 {
-    for (size_t i = 0; i < num_times; i++)
+    for (int8_t i = 0; i < num_times; i++)
     {
         (*pt).square();
     }
@@ -173,6 +177,7 @@ void square_multi(gf64* pt, int8_t num_times)
    https://github.com/kwantam/addchain. */
 gf64 gf64::inverse() const
 {
+    assert(!this->is_zero());
     // comments on the right side are of the form operation_number : exponent at the set variable
     gf64 t0 = *this;        //    1 : 1
     gf64 t1 = t0 * t0;      //    2 : 2
@@ -230,6 +235,11 @@ gf64 gf64::sqrt() const
 void gf64::randomize()
 {
     randombytes_buf(&this->value_, 64/8);
+}
+
+void gf64::clear()
+{
+    this->value_ = 0;
 }
 
 bool gf64::operator==(const gf64 &other) const

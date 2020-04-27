@@ -6,6 +6,7 @@
 #include <sodium/randombytes.h>
 
 #include "libff/algebra/fields/binary/gf192.hpp"
+#include "libff/algebra/exponentiation/exponentiation.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
@@ -167,13 +168,15 @@ gf192& gf192::operator*=(const gf192 &other)
 
 gf192& gf192::operator^=(const unsigned long pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t m>
 gf192& gf192::operator^=(const bigint<m> &pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 gf192& gf192::square()
@@ -184,7 +187,8 @@ gf192& gf192::square()
 
 gf192& gf192::invert()
 {
-    return *this; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 gf192 gf192::operator+(const gf192 &other) const
@@ -212,13 +216,13 @@ gf192 gf192::operator*(const gf192 &other) const
 
 gf192 gf192::operator^(const unsigned long pow) const
 {
-    return *this; // TODO
+    return power<gf192>(*this, pow);
 }
 
 template<mp_size_t m>
 gf192 gf192::operator^(const bigint<m> &pow) const
 {
-    return *this; // TODO
+    return power<gf192>(*this, pow);
 }
 
 gf192 gf192::squared() const
@@ -232,6 +236,7 @@ gf192 gf192::squared() const
    requires 210 mul/sqr operations total. */
 gf192 gf192::inverse() const
 {
+    assert(!this->is_zero());
     gf192 a(*this);
 
     gf192 result(0);
@@ -277,6 +282,13 @@ gf192 gf192::sqrt() const
 void gf192::randomize()
 {
     randombytes_buf(&this->value_, 192/8);
+}
+
+void gf192::clear()
+{
+    this->value_[0] = 0;
+    this->value_[1] = 0;
+    this->value_[2] = 0;
 }
 
 bool gf192::operator==(const gf192 &other) const

@@ -6,6 +6,7 @@
 #include <sodium/randombytes.h>
 
 #include "libff/algebra/fields/binary/gf128.hpp"
+#include "libff/algebra/exponentiation/exponentiation.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
@@ -126,13 +127,15 @@ gf128& gf128::operator*=(const gf128 &other)
 
 gf128& gf128::operator^=(const unsigned long pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 template<mp_size_t m>
 gf128& gf128::operator^=(const bigint<m> &pow)
 {
-    return *this; // TODO
+    (*this) = *this ^ pow;
+    return (*this);
 }
 
 gf128& gf128::square()
@@ -143,7 +146,8 @@ gf128& gf128::square()
 
 gf128& gf128::invert()
 {
-    return *this; // TODO
+    (*this) = inverse();
+    return (*this);
 }
 
 gf128 gf128::operator+(const gf128 &other) const
@@ -171,13 +175,13 @@ gf128 gf128::operator*(const gf128 &other) const
 
 gf128 gf128::operator^(const unsigned long pow) const
 {
-    return *this; // TODO
+    return power<gf128>(*this, pow);
 }
 
 template<mp_size_t m>
 gf128 gf128::operator^(const bigint<m> &pow) const
 {
-    return *this; // TODO
+    return power<gf128>(*this, pow);
 }
 
 gf128 gf128::squared() const
@@ -191,6 +195,7 @@ gf128 gf128::squared() const
    requires 142 mul/sqr operations total. */
 gf128 gf128::inverse() const
 {
+    assert(!this->is_zero());
     gf128 a(*this);
 
     gf128 result(0);
@@ -227,6 +232,12 @@ gf128 gf128::sqrt() const
 void gf128::randomize()
 {
     randombytes_buf(&this->value_, 128/8);
+}
+
+void gf128::clear()
+{
+    this->value_[0] = 0;
+    this->value_[1] = 0;
 }
 
 bool gf128::operator==(const gf128 &other) const

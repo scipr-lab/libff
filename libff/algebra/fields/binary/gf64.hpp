@@ -52,6 +52,7 @@ public:
     gf64 sqrt() const;
 
     void randomize();
+    void clear();
 
     bool operator==(const gf64 &other) const;
     bool operator!=(const gf64 &other) const;
@@ -75,5 +76,6 @@ private:
 };
 
 } // namespace libff
+#include <libff/algebra/fields/binary/gf64.tcc>
 
 #endif // LIBFF_ALGEBRA_GF64_HPP_

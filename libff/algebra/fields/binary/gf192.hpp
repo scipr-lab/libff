@@ -55,6 +55,7 @@ public:
     gf192 sqrt() const;
 
     void randomize();
+    void clear();
 
     bool operator==(const gf192 &other) const;
     bool operator!=(const gf192 &other) const;
@@ -79,5 +80,6 @@ private:
 };
 
 } // namespace libff
+#include <libff/algebra/fields/binary/gf192.tcc>
 
 #endif // LIBFF_ALGEBRA_GF192_HPP_
