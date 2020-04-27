@@ -22,16 +22,20 @@ long long mnt6_G1::dbl_cnt = 0;
 
 std::vector<size_t> mnt6_G1::wnaf_window_table;
 std::vector<size_t> mnt6_G1::fixed_base_exp_window_table;
-mnt6_G1 mnt6_G1::G1_zero;
-mnt6_G1 mnt6_G1::G1_one;
+mnt6_G1 mnt6_G1::G1_zero = {};
+mnt6_G1 mnt6_G1::G1_one = {};
+bool mnt6_G1::initialized = false;
 mnt6_Fq mnt6_G1::coeff_a;
 mnt6_Fq mnt6_G1::coeff_b;
 
 mnt6_G1::mnt6_G1()
 {
-    this->X_ = G1_zero.X_;
-    this->Y_ = G1_zero.Y_;
-    this->Z_ = G1_zero.Z_;
+    if (mnt6_G1::initialized)
+    {
+        this->X_ = G1_zero.X_;
+        this->Y_ = G1_zero.Y_;
+        this->Z_ = G1_zero.Z_;
+    }
 }
 
 void mnt6_G1::print() const

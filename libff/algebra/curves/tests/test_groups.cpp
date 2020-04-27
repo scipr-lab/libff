@@ -17,6 +17,7 @@
 
 using namespace libff;
 
+#ifndef NDEBUG
 template<typename GroupT>
 void test_mixed_add()
 {
@@ -174,3 +175,11 @@ int main(void)
     test_output<G2<bn128_pp> >();
 #endif
 }
+
+#else // NDEBUG
+
+int main()
+{
+    printf("All tests here depend on assert() which is disabled by -DNDEBUG. Please recompile and run again.\n");
+}
+#endif // NDEBUG

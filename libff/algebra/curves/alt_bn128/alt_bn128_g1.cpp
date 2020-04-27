@@ -16,14 +16,18 @@ long long alt_bn128_G1::dbl_cnt = 0;
 
 std::vector<size_t> alt_bn128_G1::wnaf_window_table;
 std::vector<size_t> alt_bn128_G1::fixed_base_exp_window_table;
-alt_bn128_G1 alt_bn128_G1::G1_zero;
-alt_bn128_G1 alt_bn128_G1::G1_one;
+alt_bn128_G1 alt_bn128_G1::G1_zero = {};
+alt_bn128_G1 alt_bn128_G1::G1_one = {};
+bool alt_bn128_G1::initialized = false;
 
 alt_bn128_G1::alt_bn128_G1()
 {
-    this->X = G1_zero.X;
-    this->Y = G1_zero.Y;
-    this->Z = G1_zero.Z;
+    if (initialized)
+    {
+        this->X = G1_zero.X;
+        this->Y = G1_zero.Y;
+        this->Z = G1_zero.Z;
+    }
 }
 
 void alt_bn128_G1::print() const

@@ -25,14 +25,18 @@ std::vector<size_t> mnt6_G2::fixed_base_exp_window_table;
 mnt6_Fq3 mnt6_G2::twist;
 mnt6_Fq3 mnt6_G2::coeff_a;
 mnt6_Fq3 mnt6_G2::coeff_b;
-mnt6_G2 mnt6_G2::G2_zero;
-mnt6_G2 mnt6_G2::G2_one;
+mnt6_G2 mnt6_G2::G2_zero = {};
+mnt6_G2 mnt6_G2::G2_one = {};
+bool mnt6_G2::initialized = false;
 
 mnt6_G2::mnt6_G2()
 {
-    this->X_ = G2_zero.X_;
-    this->Y_ = G2_zero.Y_;
-    this->Z_ = G2_zero.Z_;
+    if (mnt6_G2::initialized)
+    {
+        this->X_ = G2_zero.X_;
+        this->Y_ = G2_zero.Y_;
+        this->Z_ = G2_zero.Z_;
+    }
 }
 
 mnt6_Fq3 mnt6_G2::mul_by_a(const mnt6_Fq3 &elt)

@@ -22,16 +22,20 @@ long long mnt4_G1::dbl_cnt = 0;
 
 std::vector<size_t> mnt4_G1::wnaf_window_table;
 std::vector<size_t> mnt4_G1::fixed_base_exp_window_table;
-mnt4_G1 mnt4_G1::G1_zero;
-mnt4_G1 mnt4_G1::G1_one;
+mnt4_G1 mnt4_G1::G1_zero = {};
+mnt4_G1 mnt4_G1::G1_one = {};
+bool mnt4_G1::initialized = false;
 mnt4_Fq mnt4_G1::coeff_a;
 mnt4_Fq mnt4_G1::coeff_b;
 
 mnt4_G1::mnt4_G1()
 {
-    this->X_ = G1_zero.X_;
-    this->Y_ = G1_zero.Y_;
-    this->Z_ = G1_zero.Z_;
+    if (mnt4_G1::initialized)
+    {
+        this->X_ = G1_zero.X_;
+        this->Y_ = G1_zero.Y_;
+        this->Z_ = G1_zero.Z_;
+    }
 }
 
 void mnt4_G1::print() const

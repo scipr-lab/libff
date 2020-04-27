@@ -25,8 +25,9 @@ std::vector<size_t> mnt4_G2::fixed_base_exp_window_table;
 mnt4_Fq2 mnt4_G2::twist;
 mnt4_Fq2 mnt4_G2::coeff_a;
 mnt4_Fq2 mnt4_G2::coeff_b;
-mnt4_G2 mnt4_G2::G2_zero;
-mnt4_G2 mnt4_G2::G2_one;
+mnt4_G2 mnt4_G2::G2_zero = {};
+mnt4_G2 mnt4_G2::G2_one = {};
+bool mnt4_G2::initialized;
 
 mnt4_Fq2 mnt4_G2::mul_by_a(const mnt4_Fq2 &elt)
 {
@@ -40,9 +41,12 @@ mnt4_Fq2 mnt4_G2::mul_by_b(const mnt4_Fq2 &elt)
 
 mnt4_G2::mnt4_G2()
 {
-    this->X_ = G2_zero.X_;
-    this->Y_ = G2_zero.Y_;
-    this->Z_ = G2_zero.Z_;
+    if (mnt4_G2::initialized)
+    {
+        this->X_ = G2_zero.X_;
+        this->Y_ = G2_zero.Y_;
+        this->Z_ = G2_zero.Z_;
+    }
 }
 
 void mnt4_G2::print() const

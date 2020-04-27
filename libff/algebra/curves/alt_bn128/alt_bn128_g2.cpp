@@ -16,14 +16,18 @@ long long alt_bn128_G2::dbl_cnt = 0;
 
 std::vector<size_t> alt_bn128_G2::wnaf_window_table;
 std::vector<size_t> alt_bn128_G2::fixed_base_exp_window_table;
-alt_bn128_G2 alt_bn128_G2::G2_zero;
-alt_bn128_G2 alt_bn128_G2::G2_one;
+alt_bn128_G2 alt_bn128_G2::G2_zero = {};
+alt_bn128_G2 alt_bn128_G2::G2_one = {};
+bool alt_bn128_G2::initialized = false;
 
 alt_bn128_G2::alt_bn128_G2()
 {
-    this->X = G2_zero.X;
-    this->Y = G2_zero.Y;
-    this->Z = G2_zero.Z;
+    if (initialized)
+    {
+        this->X = G2_zero.X;
+        this->Y = G2_zero.Y;
+        this->Z = G2_zero.Z;
+    }
 }
 
 alt_bn128_Fq2 alt_bn128_G2::mul_by_b(const alt_bn128_Fq2 &elt)

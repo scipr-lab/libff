@@ -35,7 +35,11 @@ bigint<n>::bigint(const char* s) /// Initialize from a string containing an inte
     }
 
     mp_size_t limbs_written = mpn_set_str(this->data, s_copy, l, 10);
+#ifndef NDEBUG
     assert(limbs_written <= n);
+#else
+    UNUSED(limbs_written);
+#endif
 
     delete[] s_copy;
 }

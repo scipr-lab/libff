@@ -35,6 +35,7 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static mnt4_G2 G2_zero;
     static mnt4_G2 G2_one;
+    static bool initialized;
     static mnt4_Fq2 twist;
     static mnt4_Fq2 coeff_a;
     static mnt4_Fq2 coeff_b;

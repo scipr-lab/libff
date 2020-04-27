@@ -106,6 +106,8 @@ void init_bn128_params()
     bn128_G1::G1_one.coord[1] = bn::Fp(2);
     bn128_G1::G1_one.coord[2] = bn::Fp(1);
 
+    bn128_G1::initialized = true;
+
     bn128_G1::wnaf_window_table.resize(0);
     bn128_G1::wnaf_window_table.push_back(10);
     bn128_G1::wnaf_window_table.push_back(24);
@@ -168,6 +170,8 @@ void init_bn128_params()
     bn128_G2::G2_one.coord[1] = bn::Fp2(bn::Fp("644888581738283025171396578091639672120333224302184904896215738366765861164"),
                                         bn::Fp("20532875081203448695448744255224543661959516361327385779878476709582931298750"));
     bn128_G2::G2_one.coord[2] = bn::Fp2(bn::Fp(1), bn::Fp(0));
+
+    bn128_G2::initialized = true;
 
     bn128_G2::wnaf_window_table.resize(0);
     bn128_G2::wnaf_window_table.push_back(7);

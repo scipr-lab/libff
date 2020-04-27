@@ -17,8 +17,9 @@ long long bn128_G2::dbl_cnt = 0;
 
 std::vector<size_t> bn128_G2::wnaf_window_table;
 std::vector<size_t> bn128_G2::fixed_base_exp_window_table;
-bn128_G2 bn128_G2::G2_zero;
-bn128_G2 bn128_G2::G2_one;
+bn128_G2 bn128_G2::G2_zero = {};
+bn128_G2 bn128_G2::G2_one = {};
+bool bn128_G2::initialized = false;
 
 bn::Fp2 bn128_G2::sqrt(const bn::Fp2 &el)
 {
@@ -72,9 +73,12 @@ bn::Fp2 bn128_G2::sqrt(const bn::Fp2 &el)
 
 bn128_G2::bn128_G2()
 {
-    this->coord[0] = G2_zero.coord[0];
-    this->coord[1] = G2_zero.coord[1];
-    this->coord[2] = G2_zero.coord[2];
+    if (bn128_G2::initialized)
+    {
+        this->coord[0] = G2_zero.coord[0];
+        this->coord[1] = G2_zero.coord[1];
+        this->coord[2] = G2_zero.coord[2];
+    }
 }
 
 void bn128_G2::print() const
