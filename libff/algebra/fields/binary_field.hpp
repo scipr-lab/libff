@@ -28,7 +28,7 @@ template<typename T>
 class Binaryield {
     /* Functions unique to binary fields */
 
-    /** Returns the constituent bits in 64 bit words, in little-endian order */
+    /** Returns the constituent bits in 64 bit words, in little-endian order. */
     std::vector<uint64_t> as_words() const = 0;
 
     static const constexpr uint64_t modulus_;

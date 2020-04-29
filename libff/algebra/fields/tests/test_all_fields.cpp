@@ -5,6 +5,7 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 #include <gtest/gtest.h>
+#include <set>
 
 #include "libff/algebra/curves/mnt/mnt4/mnt4_fields.hpp"
 #include "libff/algebra/curves/mnt/mnt6/mnt6_fields.hpp"
@@ -249,6 +250,45 @@ void test_prime_field()
     }
 }
 
+template<typename FieldT>
+void test_binary_field()
+{
+    FieldT zero = FieldT::zero();
+    FieldT one = FieldT::one();
+    FieldT x = FieldT::random_element();
+    FieldT y = random_element_exclude<FieldT>(x);
+    FieldT z = x;
+
+    std::vector<uint64_t> x_words = x.as_words();
+    std::vector<uint64_t> y_words = y.as_words();
+    std::vector<uint64_t> z_words = z.as_words();
+    std::vector<uint64_t> zero_words = zero.as_words();
+    EXPECT_NE(x_words, y_words);
+    EXPECT_EQ(x_words, z_words);
+    for (uint64_t word : zero_words)
+        EXPECT_EQ(word, 0);
+
+    EXPECT_GE(FieldT::modulus_, 1);
+    const uint64_t bits = FieldT::num_bits;
+    EXPECT_GE(bits, 1);
+    const bigint<1> characteristic = FieldT::template field_char<1>();
+    EXPECT_EQ(characteristic, bigint<1>(2));
+
+    FieldT generator = FieldT::multiplicative_generator;
+    x = generator;
+    EXPECT_NE(generator, zero);
+    EXPECT_NE(generator, one);
+    std::set<std::vector<uint64_t> > values;
+    for (uint16_t i = 0; i < 10000; i++)
+    {
+        if (x == one)
+            break;
+        EXPECT_EQ(values.find(x.as_words()), values.end()); // generator^n never repeats
+        values.insert(x.as_words());
+        x *= generator;
+    }
+}
+
 TEST_F(AllFieldsTest, AllFieldsApiTest)
 {
     test_field<AllFieldsTest::Fp>();
@@ -279,6 +319,15 @@ TEST_F(AllFieldsTest, PrimeFieldsApiTest)
 
     test_prime_field<AllFieldsTest::Fr3>();
     test_prime_field<AllFieldsTest::Fr6_2_3>();
+}
+
+TEST_F(AllFieldsTest, BinaryFieldsApiTest)
+{
+    test_binary_field<gf32>();
+    test_binary_field<gf64>();
+    test_binary_field<gf128>();
+    test_binary_field<gf192>();
+    test_binary_field<gf256>();
 }
 
 }
