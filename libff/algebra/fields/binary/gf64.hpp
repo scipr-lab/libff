@@ -71,6 +71,9 @@ public:
     static constexpr std::size_t extension_degree() { return 64; }
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); }
+
+    friend std::ostream& operator<<(std::ostream &out, const gf64 &p);
+    friend std::istream& operator>>(std::istream &in, gf64 &p);
 private:
     uint64_t value_;
 };

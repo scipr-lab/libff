@@ -406,4 +406,16 @@ gf256 gf256::one()
     return gf256(1);
 }
 
+std::ostream& operator<<(std::ostream &out, const gf256 &el)
+{
+    out << el.value_[0] << " " << el.value_[1] << " " << el.value_[2] << " " << el.value_[3];
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, gf256 &el)
+{
+    in >> el.value_[0] >> el.value_[1] >> el.value_[2] >> el.value_[3];
+    return in;
+}
+
 } // namespace libff

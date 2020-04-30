@@ -225,8 +225,8 @@ void test_field()
     EXPECT_EQ(x, zero);
     EXPECT_TRUE(x.is_zero());
 
-    // x.randomize();
-    // EXPECT_EQ(reserialize<FieldT>(x), x);
+    x.randomize();
+    EXPECT_EQ(reserialize<FieldT>(x), x);
 
     /****************** Test extension_degree() and size_in_bits(). ******************/
 

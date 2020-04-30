@@ -277,4 +277,18 @@ gf128 gf128::one()
     return gf128(1);
 }
 
+std::ostream& operator<<(std::ostream &out, const gf128 &el)
+{
+    out << el.value_[0] << " " << el.value_[1];
+    std::cout << "before: " << el.value_[0] << " " << el.value_[1] << "\n";
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, gf128 &el)
+{
+    in >> el.value_[0] >> el.value_[1];
+    std::cout << "after: " << el.value_[0] << " " << el.value_[1] << "\n";
+    return in;
+}
+
 } // namespace libff

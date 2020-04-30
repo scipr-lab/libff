@@ -330,4 +330,16 @@ gf192 gf192::one()
     return gf192(1);
 }
 
+std::ostream& operator<<(std::ostream &out, const gf192 &el)
+{
+    out << el.value_[0] << " " << el.value_[1] << " " << el.value_[2];
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, gf192 &el)
+{
+    in >> el.value_[0] >> el.value_[1] >> el.value_[2];
+    return in;
+}
+
 } // namespace libff

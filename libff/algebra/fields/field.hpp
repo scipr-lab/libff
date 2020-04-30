@@ -70,8 +70,8 @@ class Field {
 
     // the following should be defined as well but can't be inherited;
     // make sure binary and prime never serialize to same thing
-    friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p); // has not been implemented in gf2^n
-    friend std::istream& operator>> <n,modulus>(std::istream &in, Fp_model<n, modulus> &p); // has not been implemented in gf2^n
+    friend std::ostream& operator<<(std::ostream &out, const T &p); // has not been implemented in gf2^n
+    friend std::istream& operator>>(std::istream &in, T &p); // has not been implemented in gf2^n
 
 };
 

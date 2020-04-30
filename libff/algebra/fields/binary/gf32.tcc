@@ -238,4 +238,16 @@ gf32 gf32::random_element()
     return result;
 }
 
+std::ostream& operator<<(std::ostream &out, const gf32 &el)
+{
+    out << el.value_;
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, gf32 &el)
+{
+    in >> el.value_;
+    return in;
+}
+
 } // namespace libff
