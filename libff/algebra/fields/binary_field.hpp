@@ -26,6 +26,7 @@ class Binaryield;
  */
 template<typename T>
 class Binaryield {
+public:
     /* Functions unique to binary fields */
 
     /** Returns the constituent bits in 64 bit words, in little-endian order. */
@@ -42,6 +43,14 @@ class Binaryield {
     static constexpr bigint<n> field_char() { return bigint<n>(2); } // has not been implemented in Fp or gf2^n
 
     /* Functions common to all finite fields */
+    // has not been implemented in gf2^n
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
 
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator-=(const T& other) = 0; // has not been implemented in fp2 and above
@@ -86,23 +95,5 @@ class Binaryield {
     friend std::ostream& operator<<(std::ostream &out, const T &p); // has not been implemented in gf2^n
     friend std::istream& operator>>(std::istream &in, T &p); // has not been implemented in gf2^n
 };
-
-// has not been implemented in gf2^n
-#ifdef PROFILE_OP_COUNTS
-template<typename T>
-long long Field<T>::add_cnt = 0;
-
-template<typename T>
-long long Field<T>::sub_cnt = 0;
-
-template<typename T>
-long long Field<T>::mul_cnt = 0;
-
-template<typename T>
-long long Field<T>::sqr_cnt = 0;
-
-template<typename T>
-long long Field<T>::inv_cnt = 0;
-#endif
 
 } // libff

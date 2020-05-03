@@ -9,6 +9,7 @@
 
 #ifndef FP_HPP_
 #define FP_HPP_
+#define PROFILE_OP_COUNTS
 
 #include <libff/algebra/exponentiation/exponentiation.hpp>
 #include <libff/algebra/fields/bigint.hpp>
@@ -35,7 +36,7 @@ std::istream& operator>>(std::istream &, Fp_model<n, modulus> &);
  * But for the integer sizes of interest for libff (3 to 5 limbs of 64 bits each),
  * we implement performance-critical routines, like addition and multiplication,
  * using hand-optimzied assembly code.
-*/
+ */
 template<mp_size_t n, const bigint<n>& modulus>
 class Fp_model {
 public:
@@ -43,7 +44,7 @@ public:
 public:
     static const mp_size_t num_limbs = n;
     static const constexpr bigint<n>& mod = modulus;
-#ifdef PROFILE_OP_COUNTS
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
     static long long add_cnt;
     static long long sub_cnt;
     static long long mul_cnt;

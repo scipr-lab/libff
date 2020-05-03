@@ -235,6 +235,36 @@ void test_field()
 }
 
 template<typename FieldT>
+void test_op_profiling()
+{
+    FieldT::add_cnt = 0;
+    FieldT::sub_cnt = 0;
+    FieldT::mul_cnt = 0;
+    FieldT::sqr_cnt = 0;
+    FieldT::inv_cnt = 0;
+
+    FieldT x = FieldT::random_element();
+    FieldT y = FieldT::random_element();
+    FieldT one = FieldT::one();
+    FieldT zero = FieldT::zero();
+    x += y;
+    y = x + one;
+    x *= x + y;
+    y = x * y + one.inverse() - (x * one);
+    y.square();
+    x -= y.squared();
+    x = random_element_exclude(zero);
+    x.invert();
+    x = x - one;
+
+    EXPECT_EQ(FieldT::add_cnt, 4);
+    EXPECT_EQ(FieldT::sub_cnt, 3);
+    EXPECT_EQ(FieldT::mul_cnt, 3);
+    EXPECT_EQ(FieldT::sqr_cnt, 2);
+    EXPECT_EQ(FieldT::inv_cnt, 2);
+}
+
+template<typename FieldT>
 void test_prime_field()
 {
     EXPECT_GE(FieldT::field_char().num_bits(), 2); // characteristic is at least 2
@@ -307,6 +337,13 @@ TEST_F(AllFieldsTest, AllFieldsApiTest)
     test_field<gf192>();
     test_field<gf256>();
 }
+
+#ifdef PROFILE_OP_COUNTS
+TEST_F(AllFieldsTest, AllFieldsOpCountTest)
+{
+    test_op_profiling<AllFieldsTest::Fp>();
+}
+#endif
 
 TEST_F(AllFieldsTest, PrimeFieldsApiTest)
 {

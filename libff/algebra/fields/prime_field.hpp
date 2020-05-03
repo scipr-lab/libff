@@ -27,6 +27,7 @@ class PrimeField;
  */
 template<typename T, mp_size_t n, const bigint<n>& modulus>
 class PrimeField {
+public:
     /* Functions unique to prime fields */
 
     /** If extension field, returns the base field's characteristic. */
@@ -36,6 +37,15 @@ class PrimeField {
     T Frobenius_map(unsigned long power) const;
 
     /* Functions common to all finite fields */
+    // has not been implemented in gf2^n
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
+
 
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator-=(const T& other) = 0; // has not been implemented in fp2 and above
@@ -81,23 +91,5 @@ class PrimeField {
     friend std::ostream& operator<<(std::ostream &out, const T &p); // has not been implemented in gf2^n
     friend std::istream& operator>>(std::istream &in, T &p); // has not been implemented in gf2^n
 };
-
-// has not been implemented in gf2^n
-#ifdef PROFILE_OP_COUNTS
-template<typename T>
-long long Field<T>::add_cnt = 0;
-
-template<typename T>
-long long Field<T>::sub_cnt = 0;
-
-template<typename T>
-long long Field<T>::mul_cnt = 0;
-
-template<typename T>
-long long Field<T>::sqr_cnt = 0;
-
-template<typename T>
-long long Field<T>::inv_cnt = 0;
-#endif
 
 } // libff
