@@ -36,6 +36,13 @@ public:
     typedef Fp_model<n, modulus> my_Fp;
     typedef Fp2_model<n, modulus> my_Fp2;
     typedef my_Fp2 my_Fpe;
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
 
     static my_Fp non_residue;
     static my_Fp Frobenius_coeffs_c1[4]; // non_residue^((modulus^i-1)/4) for i=0,1,2,3
@@ -95,6 +102,23 @@ public:
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp4_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp4_model<n, modulus> &el);
 };
+
+#ifdef PROFILE_OP_COUNTS
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp4_model<n, modulus>::add_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp4_model<n, modulus>::sub_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp4_model<n, modulus>::mul_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp4_model<n, modulus>::sqr_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp4_model<n, modulus>::inv_cnt = 0;
+#endif
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp4_model<n, modulus> &rhs);

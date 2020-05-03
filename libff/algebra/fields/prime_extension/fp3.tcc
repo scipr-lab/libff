@@ -60,6 +60,9 @@ bool Fp3_model<n,modulus>::operator!=(const Fp3_model<n,modulus> &other) const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::operator+(const Fp3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     return Fp3_model<n,modulus>(this->c0 + other.c0,
                                 this->c1 + other.c1,
                                 this->c2 + other.c2);
@@ -68,6 +71,9 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::operator+(const Fp3_model<n,modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::operator-(const Fp3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     return Fp3_model<n,modulus>(this->c0 - other.c0,
                                 this->c1 - other.c1,
                                 this->c2 - other.c2);
@@ -76,6 +82,9 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::operator-(const Fp3_model<n,modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp3_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp3_model<n,modulus>(lhs*rhs.c0,
                                 lhs*rhs.c1,
                                 lhs*rhs.c2);
@@ -84,6 +93,9 @@ Fp3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp3_model
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::operator*(const Fp3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 4 (Karatsuba) */
     const my_Fp
         &A = other.c0, &B = other.c1, &C = other.c2,
@@ -157,6 +169,9 @@ Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator^=(const bigint<m> &pow)
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::squared() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 4 (CH-SQR2) */
     const my_Fp
         &a = this->c0, &b = this->c1, &c = this->c2;
@@ -183,6 +198,9 @@ Fp3_model<n,modulus>& Fp3_model<n,modulus>::square()
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+#endif
     const my_Fp
         &a = this->c0, &b = this->c1, &c = this->c2;
 

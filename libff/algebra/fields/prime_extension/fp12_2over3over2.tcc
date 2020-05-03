@@ -63,6 +63,9 @@ bool Fp12_2over3over2_model<n,modulus>::operator!=(const Fp12_2over3over2_model<
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator+(const Fp12_2over3over2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(this->c0 + other.c0,
                                              this->c1 + other.c1);
 }
@@ -70,6 +73,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator+(c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-(const Fp12_2over3over2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(this->c0 - other.c0,
                                              this->c1 - other.c1);
 }
@@ -77,6 +83,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-(c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(lhs*rhs.c0,
                                              lhs*rhs.c1);
 }
@@ -84,6 +93,9 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, co
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(lhs*rhs.c0,
                                              lhs*rhs.c1);
 }
@@ -91,6 +103,9 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp6_3over2_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(lhs*rhs.c0,
                                              lhs*rhs.c1);
 }
@@ -98,6 +113,9 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp6_3over2_model<n, modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator*(const Fp12_2over3over2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba) */
 
     const my_Fp6 &A = other.c0, &B = other.c1,
@@ -188,6 +206,9 @@ Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::square()
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_karatsuba() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba squaring) */
 
     const my_Fp6 &a = this->c0, &b = this->c1;
@@ -201,6 +222,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_kar
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_complex() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Complex squaring) */
 
     const my_Fp6 &a = this->c0, &b = this->c1;
@@ -213,6 +237,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_com
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+#endif
     /* From "High-Speed Software Implementation of the Optimal Ate Pairing over Barreto-Naehrig Curves"; Algorithm 8 */
 
     const my_Fp6 &a = this->c0, &b = this->c1;

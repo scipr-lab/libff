@@ -65,6 +65,9 @@ bool Fp6_2over3_model<n,modulus>::operator!=(const Fp6_2over3_model<n,modulus> &
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator+(const Fp6_2over3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     return Fp6_2over3_model<n,modulus>(this->c0 + other.c0,
                                 this->c1 + other.c1);
 }
@@ -72,6 +75,9 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator+(const Fp6_2ov
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator-(const Fp6_2over3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     return Fp6_2over3_model<n,modulus>(this->c0 - other.c0,
                                 this->c1 - other.c1);
 }
@@ -79,6 +85,9 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator-(const Fp6_2ov
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp6_2over3_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp6_2over3_model<n,modulus>(lhs*rhs.c0,
                                 lhs*rhs.c1);
 }
@@ -86,6 +95,9 @@ Fp6_2over3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator*(const Fp6_2over3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba) */
 
     const my_Fp3 &B = other.c1, &A = other.c0,
@@ -101,6 +113,9 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::operator*(const Fp6_2ov
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::mul_by_2345(const Fp6_2over3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba) */
     assert(other.c0.c0.is_zero());
     assert(other.c0.c1.is_zero());
@@ -181,6 +196,9 @@ Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::operator^=(const bigin
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::squared() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Complex) */
     const my_Fp3 &b = this->c1, &a = this->c0;
     const my_Fp3 ab = a * b;
@@ -199,6 +217,9 @@ Fp6_2over3_model<n,modulus>& Fp6_2over3_model<n,modulus>::square()
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+#endif
     /* From "High-Speed Software Implementation of the Optimal Ate Pairing over Barreto-Naehrig Curves"; Algorithm 8 */
 
     const my_Fp3 &b = this->c1, &a = this->c0;

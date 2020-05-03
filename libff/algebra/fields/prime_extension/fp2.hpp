@@ -36,6 +36,13 @@ template<mp_size_t n, const bigint<n>& modulus>
 class Fp2_model {
 public:
     typedef Fp_model<n, modulus> my_Fp;
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
 
     static bigint<2*n> euler; // (modulus^2-1)/2
     static std::size_t s;       // modulus^2 = 2^s * t + 1
@@ -93,6 +100,23 @@ public:
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp2_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp2_model<n, modulus> &el);
 };
+
+#ifdef PROFILE_OP_COUNTS
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp2_model<n, modulus>::add_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp2_model<n, modulus>::sub_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp2_model<n, modulus>::mul_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp2_model<n, modulus>::sqr_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp2_model<n, modulus>::inv_cnt = 0;
+#endif
 
 template<mp_size_t n, const bigint<n>& modulus>
 std::ostream& operator<<(std::ostream& out, const std::vector<Fp2_model<n, modulus> > &v);

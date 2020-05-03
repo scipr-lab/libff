@@ -40,6 +40,13 @@ public:
     typedef Fp_model<n, modulus> my_Fp;
     typedef Fp2_model<n, modulus> my_Fp2;
     typedef Fp6_3over2_model<n, modulus> my_Fp6;
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
 
     static Fp2_model<n, modulus> non_residue;
     static Fp2_model<n, modulus> Frobenius_coeffs_c1[12]; // non_residue^((modulus^i-1)/6) for i=0,...,11
@@ -102,6 +109,23 @@ public:
     friend std::ostream& operator<< <n, modulus>(std::ostream &out, const Fp12_2over3over2_model<n, modulus> &el);
     friend std::istream& operator>> <n, modulus>(std::istream &in, Fp12_2over3over2_model<n, modulus> &el);
 };
+
+#ifdef PROFILE_OP_COUNTS
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp12_2over3over2_model<n, modulus>::add_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp12_2over3over2_model<n, modulus>::sub_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp12_2over3over2_model<n, modulus>::mul_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp12_2over3over2_model<n, modulus>::sqr_cnt = 0;
+
+template<mp_size_t n, const bigint<n>& modulus>
+long long Fp12_2over3over2_model<n, modulus>::inv_cnt = 0;
+#endif
 
 template<mp_size_t n, const bigint<n>& modulus>
 std::ostream& operator<<(std::ostream& out, const std::vector<Fp12_2over3over2_model<n, modulus> > &v);

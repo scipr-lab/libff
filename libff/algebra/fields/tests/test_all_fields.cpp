@@ -256,11 +256,12 @@ void test_op_profiling()
     x = random_element_exclude(zero);
     x.invert();
     x = x - one;
+    x *= x * x.squared();
 
     EXPECT_EQ(FieldT::add_cnt, 4);
     EXPECT_EQ(FieldT::sub_cnt, 3);
-    EXPECT_EQ(FieldT::mul_cnt, 3);
-    EXPECT_EQ(FieldT::sqr_cnt, 2);
+    EXPECT_EQ(FieldT::mul_cnt, 5);
+    EXPECT_EQ(FieldT::sqr_cnt, 3);
     EXPECT_EQ(FieldT::inv_cnt, 2);
 }
 
@@ -342,6 +343,14 @@ TEST_F(AllFieldsTest, AllFieldsApiTest)
 TEST_F(AllFieldsTest, AllFieldsOpCountTest)
 {
     test_op_profiling<AllFieldsTest::Fp>();
+    test_op_profiling<AllFieldsTest::Fp2>();
+    test_op_profiling<AllFieldsTest::Fp6_3_2>();
+    test_op_profiling<AllFieldsTest::Fp12_2_3_2>();
+
+    test_op_profiling<AllFieldsTest::Fq4>();
+
+    test_op_profiling<AllFieldsTest::Fr3>();
+    test_op_profiling<AllFieldsTest::Fr6_2_3>();
 }
 #endif
 
