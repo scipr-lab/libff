@@ -41,6 +41,9 @@ std::vector<uint64_t> gf128::as_words() const
 
 gf128& gf128::operator+=(const gf128 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     this->value_[0] ^= other.value_[0];
     this->value_[1] ^= other.value_[1];
     return (*this);
@@ -48,6 +51,9 @@ gf128& gf128::operator+=(const gf128 &other)
 
 gf128& gf128::operator-=(const gf128 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     this->value_[0] ^= other.value_[0];
     this->value_[1] ^= other.value_[1];
     return (*this);
@@ -55,6 +61,9 @@ gf128& gf128::operator-=(const gf128 &other)
 
 gf128& gf128::operator*=(const gf128 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Does not require *this and other to be different, and therefore
        also works for squaring, implemented below. */
 #ifdef USE_ASM
@@ -140,6 +149,10 @@ gf128& gf128::operator^=(const bigint<m> &pow)
 
 gf128& gf128::square()
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+    this->mul_cnt--;
+#endif
     this->operator*=(*this);
     return *this;
 }
@@ -195,6 +208,11 @@ gf128 gf128::squared() const
    requires 142 mul/sqr operations total. */
 gf128 gf128::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+    this->mul_cnt -= 13;
+    this->sqr_cnt -= 127;
+#endif
     assert(!this->is_zero());
     gf128 a(*this);
 

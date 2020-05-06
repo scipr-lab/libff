@@ -20,6 +20,13 @@ namespace libff {
    Elements are represented internally with four uint64s */
 class gf256 {
 public:
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
     // x^256 + x^10 + x^5 + x^2 + 1
     static const constexpr uint64_t modulus_ = 0b10000100101;
     static const constexpr uint64_t num_bits = 256;
@@ -83,6 +90,14 @@ private:
     /* little-endian */
     uint64_t value_[4];
 };
+
+#ifdef PROFILE_OP_COUNTS
+long long gf256::add_cnt = 0;
+long long gf256::sub_cnt = 0;
+long long gf256::mul_cnt = 0;
+long long gf256::sqr_cnt = 0;
+long long gf256::inv_cnt = 0;
+#endif
 
 } // namespace libff
 #include <libff/algebra/fields/binary/gf256.tcc>

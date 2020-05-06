@@ -19,6 +19,13 @@ namespace libff {
    Elements are represented internally with two uint64s */
 class gf128 {
 public:
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
     // x^128 + x^7 + x^2 + x + 1
     static const constexpr uint64_t modulus_ = 0b10000111;
     static const constexpr uint64_t num_bits = 128;
@@ -81,6 +88,14 @@ private:
     /* little-endian */
     uint64_t value_[2];
 };
+
+#ifdef PROFILE_OP_COUNTS
+long long gf128::add_cnt = 0;
+long long gf128::sub_cnt = 0;
+long long gf128::mul_cnt = 0;
+long long gf128::sqr_cnt = 0;
+long long gf128::inv_cnt = 0;
+#endif
 
 } // namespace libff
 #include <libff/algebra/fields/binary/gf128.tcc>

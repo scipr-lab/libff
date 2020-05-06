@@ -42,6 +42,9 @@ std::vector<uint64_t> gf256::as_words() const
 
 gf256& gf256::operator+=(const gf256 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     this->value_[0] ^= other.value_[0];
     this->value_[1] ^= other.value_[1];
     this->value_[2] ^= other.value_[2];
@@ -51,6 +54,9 @@ gf256& gf256::operator+=(const gf256 &other)
 
 gf256& gf256::operator-=(const gf256 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     this->value_[0] ^= other.value_[0];
     this->value_[1] ^= other.value_[1];
     this->value_[2] ^= other.value_[2];
@@ -60,6 +66,9 @@ gf256& gf256::operator-=(const gf256 &other)
 
 gf256& gf256::operator*=(const gf256 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Does not require *this and other to be different, and therefore
        also works for squaring, implemented below. */
 #ifdef USE_ASM
@@ -261,6 +270,10 @@ gf256& gf256::operator^=(const bigint<m> &pow)
 
 gf256& gf256::square()
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+    this->mul_cnt--;
+#endif
     this->operator*=(*this);
     return *this;
 }
@@ -316,6 +329,11 @@ gf256 gf256::squared() const
    requires 270 mul/sqr operations total. */
 gf256 gf256::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+    this->mul_cnt -= 15;
+    this->sqr_cnt -= 255;
+#endif
     assert(!this->is_zero());
     gf256 a(*this);
 

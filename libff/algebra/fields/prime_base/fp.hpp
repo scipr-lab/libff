@@ -9,7 +9,6 @@
 
 #ifndef FP_HPP_
 #define FP_HPP_
-#define PROFILE_OP_COUNTS
 
 #include <libff/algebra/exponentiation/exponentiation.hpp>
 #include <libff/algebra/fields/bigint.hpp>

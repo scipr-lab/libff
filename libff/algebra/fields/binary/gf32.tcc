@@ -36,12 +36,18 @@ std::vector<uint64_t> gf32::as_words() const
 
 gf32& gf32::operator+=(const gf32 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     this->value_ ^= other.value_;
     return (*this);
 }
 
 gf32& gf32::operator-=(const gf32 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     this->value_ ^= other.value_;
     return (*this);
 }
@@ -49,6 +55,9 @@ gf32& gf32::operator-=(const gf32 &other)
 // multiplication over GF(2^k) is carryless multiplication
 gf32& gf32::operator*=(const gf32 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Does not require *this and other to be different, and therefore
        also works for squaring, implemented below. */
 
@@ -93,6 +102,10 @@ gf32& gf32::operator^=(const bigint<m> &pow)
 
 gf32& gf32::square()
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+    this->mul_cnt--;
+#endif
     this->operator*=(*this);
     return *this;
 }
@@ -157,6 +170,11 @@ void square_multi(gf32* pt, int8_t num_times)
 /* calculate el^{-1} as el^{2^{32}-2}. */
 gf32 gf32::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+    this->mul_cnt -= 9;
+    this->sqr_cnt -= 31;
+#endif
     assert(!this->is_zero());
     gf32 a(*this);
 

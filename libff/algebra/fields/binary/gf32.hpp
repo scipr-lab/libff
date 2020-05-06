@@ -19,6 +19,13 @@ namespace libff {
    Elements are represented internally with a single uint32 */
 class gf32 {
 public:
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
     // x^32 + x^22 + x^2 + x^1 + 1
     static const constexpr uint64_t modulus_ = 0b10000000000000000000111;
     static const constexpr uint64_t num_bits = 32;
@@ -76,6 +83,14 @@ public:
 private:
     uint32_t value_;
 };
+
+#ifdef PROFILE_OP_COUNTS
+long long gf32::add_cnt = 0;
+long long gf32::sub_cnt = 0;
+long long gf32::mul_cnt = 0;
+long long gf32::sqr_cnt = 0;
+long long gf32::inv_cnt = 0;
+#endif
 
 } // namespace libff
 #include <libff/algebra/fields/binary/gf32.tcc>

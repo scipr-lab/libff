@@ -351,6 +351,12 @@ TEST_F(AllFieldsTest, AllFieldsOpCountTest)
 
     test_op_profiling<AllFieldsTest::Fr3>();
     test_op_profiling<AllFieldsTest::Fr6_2_3>();
+
+    test_op_profiling<gf32>();
+    test_op_profiling<gf64>();
+    test_op_profiling<gf128>();
+    test_op_profiling<gf192>();
+    test_op_profiling<gf256>();
 }
 #endif
 

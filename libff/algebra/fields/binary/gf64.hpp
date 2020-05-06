@@ -19,6 +19,13 @@ namespace libff {
    Elements are represented internally with a single uint64 */
 class gf64 {
 public:
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
+    static long long add_cnt;
+    static long long sub_cnt;
+    static long long mul_cnt;
+    static long long sqr_cnt;
+    static long long inv_cnt;
+#endif
     // x^64 + x^4 + x^3 + x + 1. The assembly code assumes that no term other
     // than x^64 is greater than x^31, to enable faster multiplication.
     static const constexpr uint64_t modulus_ = 0b11011;
@@ -77,6 +84,14 @@ public:
 private:
     uint64_t value_;
 };
+
+#ifdef PROFILE_OP_COUNTS
+long long gf64::add_cnt = 0;
+long long gf64::sub_cnt = 0;
+long long gf64::mul_cnt = 0;
+long long gf64::sqr_cnt = 0;
+long long gf64::inv_cnt = 0;
+#endif
 
 } // namespace libff
 #include <libff/algebra/fields/binary/gf64.tcc>

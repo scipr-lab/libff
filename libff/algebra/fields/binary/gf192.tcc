@@ -41,6 +41,9 @@ std::vector<uint64_t> gf192::as_words() const
 
 gf192& gf192::operator+=(const gf192 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     this->value_[0] ^= other.value_[0];
     this->value_[1] ^= other.value_[1];
     this->value_[2] ^= other.value_[2];
@@ -49,6 +52,9 @@ gf192& gf192::operator+=(const gf192 &other)
 
 gf192& gf192::operator-=(const gf192 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     this->value_[0] ^= other.value_[0];
     this->value_[1] ^= other.value_[1];
     this->value_[2] ^= other.value_[2];
@@ -57,6 +63,9 @@ gf192& gf192::operator-=(const gf192 &other)
 
 gf192& gf192::operator*=(const gf192 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Does not require *this and other to be different, and therefore
        also works for squaring, implemented below. */
 #ifdef USE_ASM
@@ -181,6 +190,10 @@ gf192& gf192::operator^=(const bigint<m> &pow)
 
 gf192& gf192::square()
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+    this->mul_cnt--;
+#endif
     this->operator*=(*this);
     return *this;
 }
@@ -236,6 +249,11 @@ gf192 gf192::squared() const
    requires 210 mul/sqr operations total. */
 gf192 gf192::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+    this->mul_cnt -= 15;
+    this->sqr_cnt -= 193;
+#endif
     assert(!this->is_zero());
     gf192 a(*this);
 

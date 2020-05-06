@@ -36,12 +36,18 @@ std::vector<uint64_t> gf64::as_words() const
 
 gf64& gf64::operator+=(const gf64 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     this->value_ ^= other.value_;
     return (*this);
 }
 
 gf64& gf64::operator-=(const gf64 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     this->value_ ^= other.value_;
     return (*this);
 }
@@ -49,6 +55,9 @@ gf64& gf64::operator-=(const gf64 &other)
 // multiplication over GF(2^k) is carryless multiplication
 gf64& gf64::operator*=(const gf64 &other)
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Does not require *this and other to be different, and therefore
        also works for squaring, implemented below. */
 #ifdef USE_ASM
@@ -110,6 +119,10 @@ gf64& gf64::operator^=(const bigint<m> &pow)
 
 gf64& gf64::square()
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+    this->mul_cnt--;
+#endif
     this->operator*=(*this);
     return *this;
 }
@@ -177,6 +190,11 @@ void square_multi(gf64* pt, int8_t num_times)
    https://github.com/kwantam/addchain. */
 gf64 gf64::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+    this->mul_cnt -= 15;
+    this->sqr_cnt -= 58;
+#endif
     assert(!this->is_zero());
     // comments on the right side are of the form operation_number : exponent at the set variable
     gf64 t0 = *this;        //    1 : 1
