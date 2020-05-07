@@ -16,7 +16,7 @@
 #include "libff/algebra/fields/binary/gf192.hpp"
 #include "libff/algebra/fields/binary/gf256.hpp"
 
-namespace libff {
+using namespace libff;
 
 class AllFieldsTest: public ::testing::Test { 
 public:
@@ -380,6 +380,4 @@ TEST_F(AllFieldsTest, BinaryFieldsApiTest)
     test_binary_field<gf128>();
     test_binary_field<gf192>();
     test_binary_field<gf256>();
-}
-
 }

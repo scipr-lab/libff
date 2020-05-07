@@ -6,7 +6,7 @@
 #include "libff/algebra/fields/binary/gf192.hpp"
 #include "libff/algebra/fields/binary/gf256.hpp"
 
-namespace libff {
+using namespace libff;
 
 gf32 gf32_mul(const uint32_t &a_val, const uint32_t &b_val)
 {
@@ -149,6 +149,4 @@ TEST(GF256Test, InverseTest) {
     const gf256 a_inv = a.inverse();
 
     EXPECT_EQ(a*a_inv, gf256(1));
-}
-
 }

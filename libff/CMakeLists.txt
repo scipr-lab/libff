@@ -148,6 +148,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_prime_fields_test
 
     ff
+    gtest_main
   )
 
   add_executable(
@@ -168,10 +169,10 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_bilinearity_test
     COMMAND algebra_bilinearity_test
   )
-  # add_test(
-  #   NAME algebra_groups_test
-  #   COMMAND algebra_groups_test
-  # )
+  add_test(
+    NAME algebra_groups_test
+    COMMAND algebra_groups_test
+  )
   add_test(
     NAME algebra_prime_fields_test
     COMMAND algebra_prime_fields_test
