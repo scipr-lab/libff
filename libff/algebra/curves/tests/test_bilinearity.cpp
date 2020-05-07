@@ -4,6 +4,8 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <gtest/gtest.h>
+
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/common/profiling.hpp>
 #ifdef CURVE_BN128
@@ -14,6 +16,21 @@
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 
 using namespace libff;
+
+class CurveBilinearityTest: public ::testing::Test {
+public:
+    CurveBilinearityTest()
+    {
+        start_profiling();
+        edwards_pp::init_public_params();
+        mnt4_pp::init_public_params();
+        mnt6_pp::init_public_params();
+        alt_bn128_pp::init_public_params();
+#ifdef CURVE_BN128 // BN128 has fancy dependencies so it may be disabled
+        bn128_pp::init_public_params();
+#endif
+    }
+};
 
 template<typename ppT>
 void pairing_test()
@@ -46,11 +63,11 @@ void pairing_test()
     ans1.print();
     ans2.print();
     ans3.print();
-    assert(ans1 == ans2);
-    assert(ans2 == ans3);
+    EXPECT_EQ(ans1, ans2);
+    EXPECT_EQ(ans2, ans3);
 
-    assert(ans1 != GT_one);
-    assert((ans1^Fr<ppT>::field_char()) == GT_one);
+    EXPECT_NE(ans1, GT_one);
+    EXPECT_EQ((ans1^Fr<ppT>::field_char()), GT_one);
     printf("\n\n");
 }
 
@@ -70,7 +87,7 @@ void double_miller_loop_test()
     const Fqk<ppT> ans_1 = ppT::miller_loop(prec_P1, prec_Q1);
     const Fqk<ppT> ans_2 = ppT::miller_loop(prec_P2, prec_Q2);
     const Fqk<ppT> ans_12 = ppT::double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
-    assert(ans_1 * ans_2 == ans_12);
+    EXPECT_EQ(ans_1 * ans_2, ans_12);
 }
 
 template<typename ppT>
@@ -99,38 +116,38 @@ void affine_pairing_test()
     ans1.print();
     ans2.print();
     ans3.print();
-    assert(ans1 == ans2);
-    assert(ans2 == ans3);
+    EXPECT_EQ(ans1, ans2);
+    EXPECT_EQ(ans2, ans3);
 
-    assert(ans1 != GT_one);
-    assert((ans1^Fr<ppT>::field_char()) == GT_one);
+    EXPECT_NE(ans1, GT_one);
+    EXPECT_EQ((ans1^Fr<ppT>::field_char()), GT_one);
     printf("\n\n");
 }
 
-int main(void)
+TEST_F(CurveBilinearityTest, PairingTest)
 {
-    start_profiling();
-    edwards_pp::init_public_params();
     pairing_test<edwards_pp>();
-    double_miller_loop_test<edwards_pp>();
-
-    mnt6_pp::init_public_params();
     pairing_test<mnt6_pp>();
-    double_miller_loop_test<mnt6_pp>();
-    affine_pairing_test<mnt6_pp>();
-
-    mnt4_pp::init_public_params();
     pairing_test<mnt4_pp>();
-    double_miller_loop_test<mnt4_pp>();
-    affine_pairing_test<mnt4_pp>();
-
-    alt_bn128_pp::init_public_params();
     pairing_test<alt_bn128_pp>();
-    double_miller_loop_test<alt_bn128_pp>();
-
 #ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
-    bn128_pp::init_public_params();
     pairing_test<bn128_pp>();
+#endif
+}
+
+TEST_F(CurveBilinearityTest, DoubleMillerLoopTest)
+{
+    double_miller_loop_test<edwards_pp>();
+    double_miller_loop_test<mnt6_pp>();
+    double_miller_loop_test<mnt4_pp>();
+    double_miller_loop_test<alt_bn128_pp>();
+#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     double_miller_loop_test<bn128_pp>();
 #endif
+}
+
+TEST_F(CurveBilinearityTest, AffinePairingTest)
+{
+    affine_pairing_test<mnt6_pp>();
+    affine_pairing_test<mnt4_pp>();
 }

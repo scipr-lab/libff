@@ -124,6 +124,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_bilinearity_test
 
     ff
+    gtest_main
   )
 
   add_executable(
