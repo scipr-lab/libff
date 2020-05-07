@@ -19,10 +19,10 @@
 
 using namespace libff;
 
-class PrimeFieldsTest: public ::testing::Test { 
+class PrimeFieldsTest: public ::testing::Test {
 public:
     PrimeFieldsTest()
-    { 
+    {
         init_edwards_fields();
         init_mnt4_fields();
         init_mnt6_fields();
@@ -33,7 +33,7 @@ public:
     }
 };
 
-/** Returns a random element of FieldT that is not zero or one. */
+/** Returns a random element of FieldT that is not zero. */
 template<typename FieldT>
 FieldT random_element_non_zero()
 {

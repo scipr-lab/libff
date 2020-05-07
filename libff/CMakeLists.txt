@@ -136,6 +136,7 @@ if ("${IS_LIBFF_PARENT}")
     algebra_groups_test
 
     ff
+    gtest_main
   )
 
   add_executable(

@@ -18,7 +18,7 @@
 
 using namespace libff;
 
-class AllFieldsTest: public ::testing::Test { 
+class AllFieldsTest: public ::testing::Test {
 public:
     // p, q, r are three different primes
     typedef alt_bn128_Fq Fp;
@@ -35,7 +35,7 @@ public:
     typedef mnt6_Fq6 Fr6_2_3;
     
     AllFieldsTest()
-    { 
+    {
         init_alt_bn128_fields();
         init_mnt4_fields();
         init_mnt6_fields();
