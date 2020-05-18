@@ -12,7 +12,7 @@
 #ifndef MNT46_COMMON_HPP_
 #define MNT46_COMMON_HPP_
 
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 
 namespace libff {
 

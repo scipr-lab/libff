@@ -14,8 +14,8 @@
 #include <cstdlib>
 #include <limits>
 
-#include <libff/algebra/fields/prime_base/field_utils.hpp>
-#include <libff/algebra/fields/prime_base/fp_aux.tcc>
+#include <libff/algebra/field_utils/field_utils.hpp>
+#include <libff/algebra/field_utils/fp_aux.tcc>
 
 namespace libff {
 
@@ -745,56 +745,7 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus> Fp_model<n,modulus>::sqrt() const
 {
-    Fp_model<n,modulus> one = Fp_model<n,modulus>::one();
-
-    size_t v = Fp_model<n,modulus>::s;
-    Fp_model<n,modulus> z = Fp_model<n,modulus>::nqr_to_t;
-    Fp_model<n,modulus> w = (*this)^Fp_model<n,modulus>::t_minus_1_over_2;
-    Fp_model<n,modulus> x = (*this) * w;
-    Fp_model<n,modulus> b = x * w; // b = (*this)^t
-
-#if DEBUG
-    // check if square with euler's criterion
-    Fp_model<n,modulus> check = b;
-    for (size_t i = 0; i < v-1; ++i)
-    {
-        check = check.squared();
-    }
-    if (check != one)
-    {
-        assert(0);
-    }
-#endif
-
-    // compute square root with Tonelli--Shanks
-    // (does not terminate if not a square!)
-
-    while (b != one)
-    {
-        size_t m = 0;
-        Fp_model<n,modulus> b2m = b;
-        while (b2m != one)
-        {
-            /* invariant: b2m = b^(2^m) after entering this loop */
-            b2m = b2m.squared();
-            m += 1;
-        }
-
-        int j = v-m-1;
-        w = z;
-        while (j > 0)
-        {
-            w = w.squared();
-            --j;
-        } // w = z^2^(v-m-1)
-
-        z = w.squared();
-        b = b * z;
-        x = x * w;
-        v = m;
-    }
-
-    return x;
+    return tonelli_shanks_sqrt(*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

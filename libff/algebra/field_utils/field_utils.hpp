@@ -9,7 +9,7 @@
 #define FIELD_UTILS_HPP_
 #include <cstdint>
 
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 #include <libff/common/double.hpp>
 #include <libff/common/utils.hpp>
 
@@ -52,6 +52,6 @@ template<typename FieldT>
 void batch_invert(std::vector<FieldT> &vec);
 
 } // libff
-#include <libff/algebra/fields/prime_base/field_utils.tcc>
+#include <libff/algebra/field_utils/field_utils.tcc>
 
 #endif // FIELD_UTILS_HPP_

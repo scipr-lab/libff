@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 
 namespace libff {
 

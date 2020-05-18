@@ -14,18 +14,24 @@
 
 #include <cstdint>
 
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 
 namespace libff {
 
+/** Repeated squaring. */
 template<typename FieldT, mp_size_t m>
 FieldT power(const FieldT &base, const bigint<m> &exponent);
 
+/** Repeated squaring. */
 template<typename FieldT>
 FieldT power(const FieldT &base, const unsigned long exponent);
 
+/** Tonelli-Shanks square root. */
+template<typename FieldT>
+FieldT tonelli_shanks_sqrt(const FieldT &value);
+
 } // libff
 
-#include <libff/algebra/exponentiation/exponentiation.tcc>
+#include <libff/algebra/field_utils/algorithms.tcc>
 
 #endif // EXPONENTIATION_HPP_

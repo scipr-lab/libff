@@ -6,7 +6,7 @@
 #include <sodium/randombytes.h>
 
 #include "libff/algebra/fields/binary/gf32.hpp"
-#include "libff/algebra/exponentiation/exponentiation.hpp"
+#include "libff/algebra/field_utils/algorithms.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>

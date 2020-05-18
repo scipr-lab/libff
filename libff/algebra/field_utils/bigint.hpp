@@ -59,5 +59,5 @@ public:
 };
 
 } // libff
-#include <libff/algebra/fields/bigint.tcc>
+#include <libff/algebra/field_utils/bigint.tcc>
 #endif

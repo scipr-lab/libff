@@ -10,8 +10,8 @@
 #ifndef FP_HPP_
 #define FP_HPP_
 
-#include <libff/algebra/exponentiation/exponentiation.hpp>
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/algorithms.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 
 namespace libff {
 
