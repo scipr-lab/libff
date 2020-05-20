@@ -66,7 +66,6 @@ FieldT tonelli_shanks_sqrt(const FieldT &value)
     }
 
     // Find a quadratic non-residue by generating random elements and testing with Euler's criterion.
-    FieldT zero = FieldT::zero();
     FieldT neg_one = -FieldT::one();
     bigint<m> euler = p_to_n_minus_1 / 2;
     FieldT nqr;

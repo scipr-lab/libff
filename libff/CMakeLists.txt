@@ -166,6 +166,19 @@ if ("${IS_LIBFF_PARENT}")
     gtest_main
   )
 
+  add_executable(
+    algebra_field_utils_test
+    EXCLUDE_FROM_ALL
+
+    algebra/field_utils/tests/test_field_utils.cpp
+  )
+  target_link_libraries(
+    algebra_field_utils_test
+
+    ff
+    gtest_main
+  )
+
   include(CTest)
   add_test(
     NAME algebra_bilinearity_test
@@ -183,11 +196,16 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_all_fields_test
     COMMAND algebra_all_fields_test
   )
+  add_test(
+    NAME algebra_field_utils_test
+    COMMAND algebra_field_utils_test
+  )
 
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_prime_fields_test)
   add_dependencies(check algebra_all_fields_test)
+  add_dependencies(check algebra_field_utils_test)
 
   # Tests for binary fields
   add_executable(
