@@ -317,7 +317,7 @@ Fp4_model<n, modulus> Fp4_model<n,modulus>::cyclotomic_exp(const bigint<m> &expo
 template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n,modulus> Fp4_model<n,modulus>::sqrt() const
 {
-    return NULL; // TODO
+    return tonelli_shanks_sqrt<Fp4_model<n,modulus>, n>(*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

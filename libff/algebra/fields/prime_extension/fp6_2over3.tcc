@@ -344,7 +344,7 @@ Fp6_2over3_model<n, modulus> Fp6_2over3_model<n,modulus>::cyclotomic_exp(const b
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::sqrt() const
 {
-    return NULL; // TODO
+    return tonelli_shanks_sqrt<Fp6_2over3_model<n,modulus>, n>(*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

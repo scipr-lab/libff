@@ -39,6 +39,12 @@ public:
     bigint(const char* s); /// Initialize from a string containing an integer in decimal notation
     bigint(const mpz_t r); /// Initialize from MPZ element
 
+    bigint operator-(const bigint<n>& other) const;
+    bigint operator/(const mp_limb_t other) const;
+    bigint operator%(const mp_limb_t other) const;
+    template<mp_size_t m>
+    bigint<m> power(const std::size_t exp) const;
+
     void print() const;
     void print_hex() const;
     bool operator==(const bigint<n>& other) const;

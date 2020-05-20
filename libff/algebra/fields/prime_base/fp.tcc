@@ -707,8 +707,9 @@ Fp_model<n,modulus> Fp_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-Fp_model<n,modulus> Fp_model<n,modulus>::Frobenius_map([[maybe_unused]] unsigned long power) const
+Fp_model<n,modulus> Fp_model<n,modulus>::Frobenius_map(unsigned long power) const
 {
+    UNUSED(power); // only for API consistency
     Fp_model<n,modulus> copy = *this;
     return copy;
 }
@@ -745,7 +746,7 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus> Fp_model<n,modulus>::sqrt() const
 {
-    return tonelli_shanks_sqrt(*this);
+    return tonelli_shanks_sqrt(*this, Fp_model<n,modulus>::s, Fp_model<n,modulus>::nqr_to_t, Fp_model<n,modulus>::t_minus_1_over_2);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
