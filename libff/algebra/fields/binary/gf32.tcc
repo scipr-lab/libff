@@ -206,7 +206,7 @@ gf32 gf32::inverse() const
 
 gf32 gf32::sqrt() const
 {
-    return *this; // TODO
+    return (*this)^bigint<1>("2147483648");
 }
 
 void gf32::randomize()

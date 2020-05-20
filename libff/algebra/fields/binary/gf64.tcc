@@ -247,7 +247,7 @@ gf64 gf64::inverse() const
 
 gf64 gf64::sqrt() const
 {
-    return *this; // TODO
+    return (*this)^bigint<1>("9223372036854775808");
 }
 
 void gf64::randomize()

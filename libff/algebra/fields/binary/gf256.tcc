@@ -365,7 +365,7 @@ gf256 gf256::inverse() const
 
 gf256 gf256::sqrt() const
 {
-    return *this; // TODO
+    return (*this)^bigint<4>("57896044618658097711785492504343953926634992332820282019728792003956564819968");
 }
 
 void gf256::randomize()

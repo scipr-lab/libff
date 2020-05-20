@@ -294,7 +294,7 @@ gf192 gf192::inverse() const
 
 gf192 gf192::sqrt() const
 {
-    return *this; // TODO
+    return (*this)^bigint<3>("3138550867693340381917894711603833208051177722232017256448");
 }
 
 void gf192::randomize()

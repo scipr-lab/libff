@@ -244,7 +244,7 @@ gf128 gf128::inverse() const
 
 gf128 gf128::sqrt() const
 {
-    return *this; // TODO
+    return (*this)^bigint<2>("170141183460469231731687303715884105728");
 }
 
 void gf128::randomize()
@@ -298,14 +298,12 @@ gf128 gf128::one()
 std::ostream& operator<<(std::ostream &out, const gf128 &el)
 {
     out << el.value_[0] << " " << el.value_[1];
-    std::cout << "before: " << el.value_[0] << " " << el.value_[1] << "\n";
     return out;
 }
 
 std::istream& operator>>(std::istream &in, gf128 &el)
 {
     in >> el.value_[0] >> el.value_[1];
-    std::cout << "after: " << el.value_[0] << " " << el.value_[1] << "\n";
     return in;
 }
 

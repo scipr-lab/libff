@@ -146,6 +146,7 @@ void test_field()
     EXPECT_EQ(x, y);
     x += x;
     EXPECT_EQ(x, y + y);
+    x.randomize();
     y.randomize();
     EXPECT_EQ(x.squared() + two * x * y + y.squared(), (x + y).squared());
     EXPECT_EQ((x * y).squared(), x.squared() * y.squared());
@@ -332,11 +333,11 @@ TEST_F(AllFieldsTest, AllFieldsApiTest)
     test_field<AllFieldsTest::Fr3>();
     test_field<AllFieldsTest::Fr6_2_3>();
 
-    // test_field<gf32>();
-    // test_field<gf64>();
-    // test_field<gf128>();
-    // test_field<gf192>();
-    // test_field<gf256>();
+    test_field<gf32>();
+    test_field<gf64>();
+    test_field<gf128>();
+    test_field<gf192>();
+    test_field<gf256>();
 }
 
 #ifdef PROFILE_OP_COUNTS
