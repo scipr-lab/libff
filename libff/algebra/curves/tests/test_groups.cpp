@@ -4,6 +4,13 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+
+// If NDEBUG is defined, assert turns into nothing. No checks are made and a
+// lot of warnings are generated.
+#ifdef NDEBUG
+# undef NDEBUG
+#endif
+
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
@@ -11,9 +18,9 @@
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
-#include <sstream>
-
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+
+#include <sstream>
 
 using namespace libff;
 
