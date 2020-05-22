@@ -69,8 +69,10 @@ public:
     static bigint<base_field::num_limbs> base_field_char() { return base_field::field_char(); }
     static bigint<scalar_field::num_limbs> order() { return scalar_field::field_char(); }
 
-    friend std::ostream& operator<<(std::ostream &out, const alt_bn128_G1 &g);
-    friend std::istream& operator>>(std::istream &in, alt_bn128_G1 &g);
+    void write_uncompressed(std::ostream &) const;
+    void write_compressed(std::ostream &) const;
+    static void read_uncompressed(std::istream &, alt_bn128_G1 &);
+    static void read_compressed(std::istream &, alt_bn128_G1 &);
 
     static void batch_to_special_all_non_zeros(std::vector<alt_bn128_G1> &vec);
 };
@@ -86,9 +88,6 @@ alt_bn128_G1 operator*(const Fp_model<m,modulus_p> &lhs, const alt_bn128_G1 &rhs
 {
     return scalar_mul<alt_bn128_G1, m>(rhs, lhs.as_bigint());
 }
-
-std::ostream& operator<<(std::ostream& out, const std::vector<alt_bn128_G1> &v);
-std::istream& operator>>(std::istream& in, std::vector<alt_bn128_G1> &v);
 
 } // libff
 #endif // ALT_BN128_G1_HPP_

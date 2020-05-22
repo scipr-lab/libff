@@ -129,9 +129,19 @@ void test_output()
     {
         std::stringstream ss;
         ss << g;
+        g.write_compressed(ss);
+        g.write_uncompressed(ss);
+
         GroupT gg;
+        GroupT gg_comp;
+        GroupT gg_uncomp;
         ss >> gg;
+        GroupT::read_compressed(ss, gg_comp);
+        GroupT::read_uncompressed(ss, gg_uncomp);
+
         assert(g == gg);
+        assert(g == gg_comp);
+        assert(g == gg_uncomp);
         /* use a random point in next iteration */
         g = GroupT::random_element();
     }

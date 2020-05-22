@@ -405,31 +405,51 @@ alt_bn128_G1 alt_bn128_G1::random_element()
     return (scalar_field::random_element().as_bigint()) * G1_one;
 }
 
-std::ostream& operator<<(std::ostream &out, const alt_bn128_G1 &g)
+void alt_bn128_G1::write_uncompressed(std::ostream &out) const
 {
-    alt_bn128_G1 copy(g);
+    alt_bn128_G1 copy(*this);
     copy.to_affine_coordinates();
 
     out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
-#ifdef NO_PT_COMPRESSION
     out << copy.X << OUTPUT_SEPARATOR << copy.Y;
-#else
-    /* storing LSB of Y */
-    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.as_bigint().data[0] & 1);
-#endif
-
-    return out;
 }
 
-std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
+void alt_bn128_G1::write_compressed(std::ostream &out) const
+{
+    alt_bn128_G1 copy(*this);
+    copy.to_affine_coordinates();
+
+    out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
+    /* storing LSB of Y */
+    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.as_bigint().data[0] & 1);
+}
+
+void alt_bn128_G1::read_uncompressed(std::istream &in, alt_bn128_G1 &g)
 {
     char is_zero;
     alt_bn128_Fq tX, tY;
 
-#ifdef NO_PT_COMPRESSION
     in >> is_zero >> tX >> tY;
     is_zero -= '0';
-#else
+
+    // using Jacobian coordinates
+    if (!is_zero)
+    {
+        g.X = tX;
+        g.Y = tY;
+        g.Z = alt_bn128_Fq::one();
+    }
+    else
+    {
+        g = alt_bn128_G1::zero();
+    }
+}
+
+void alt_bn128_G1::read_compressed(std::istream &in, alt_bn128_G1 &g)
+{
+    char is_zero;
+    alt_bn128_Fq tX, tY;
+
     in.read((char*)&is_zero, 1); // this reads is_zero;
     is_zero -= '0';
     consume_OUTPUT_SEPARATOR(in);
@@ -452,7 +472,7 @@ std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
             tY = -tY;
         }
     }
-#endif
+
     // using Jacobian coordinates
     if (!is_zero)
     {
@@ -464,39 +484,25 @@ std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
     {
         g = alt_bn128_G1::zero();
     }
-
-    return in;
 }
 
-std::ostream& operator<<(std::ostream& out, const std::vector<alt_bn128_G1> &v)
+std::ostream& operator<<(std::ostream &out, const alt_bn128_G1 &g)
 {
-    out << v.size() << "\n";
-    for (const alt_bn128_G1& t : v)
-    {
-        out << t << OUTPUT_NEWLINE;
-    }
-
+#ifdef NO_PT_COMPRESSION
+    g.write_uncompressed(out);
+#else
+    g.write_compressed(out);
+#endif
     return out;
 }
 
-std::istream& operator>>(std::istream& in, std::vector<alt_bn128_G1> &v)
+std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
 {
-    v.clear();
-
-    size_t s;
-    in >> s;
-    consume_newline(in);
-
-    v.reserve(s);
-
-    for (size_t i = 0; i < s; ++i)
-    {
-        alt_bn128_G1 g;
-        in >> g;
-        consume_OUTPUT_NEWLINE(in);
-        v.emplace_back(g);
-    }
-
+#ifdef NO_PT_COMPRESSION
+    alt_bn128_G1::read_uncompressed(in, g);
+#else
+    alt_bn128_G1::read_compressed(in, g);
+#endif
     return in;
 }
 

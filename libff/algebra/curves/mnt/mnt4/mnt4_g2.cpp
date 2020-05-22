@@ -414,31 +414,49 @@ mnt4_G2 mnt4_G2::random_element()
     return (mnt4_Fr::random_element().as_bigint()) * G2_one;
 }
 
-std::ostream& operator<<(std::ostream &out, const mnt4_G2 &g)
+void mnt4_G2::write_uncompressed(std::ostream &out) const
 {
-    mnt4_G2 copy(g);
+    mnt4_G2 copy(*this);
     copy.to_affine_coordinates();
 
     out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
-#ifdef NO_PT_COMPRESSION
     out << copy.X << OUTPUT_SEPARATOR << copy.Y;
-#else
-    /* storing LSB of Y */
-    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.c0.as_bigint().data[0] & 1);
-#endif
-
-    return out;
 }
 
-std::istream& operator>>(std::istream &in, mnt4_G2 &g)
+void mnt4_G2::write_compressed(std::ostream &out) const
+{
+    mnt4_G2 copy(*this);
+    copy.to_affine_coordinates();
+
+    out << (copy.is_zero() ? 1 : 0) << OUTPUT_SEPARATOR;
+    /* storing LSB of Y */
+    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.c0.as_bigint().data[0] & 1);
+}
+
+void mnt4_G2::read_uncompressed(std::istream &in, mnt4_G2 &g)
 {
     char is_zero;
     mnt4_Fq2 tX, tY;
-
-#ifdef NO_PT_COMPRESSION
     in >> is_zero >> tX >> tY;
     is_zero -= '0';
-#else
+
+    // using projective coordinates
+    if (!is_zero)
+    {
+        g.X = tX;
+        g.Y = tY;
+        g.Z = mnt4_Fq2::one();
+    }
+    else
+    {
+        g = mnt4_G2::zero();
+    }
+}
+
+void mnt4_G2::read_compressed(std::istream &in, mnt4_G2 &g)
+{
+    char is_zero;
+    mnt4_Fq2 tX, tY;
     in.read((char*)&is_zero, 1); // this reads is_zero;
     is_zero -= '0';
     consume_OUTPUT_SEPARATOR(in);
@@ -461,7 +479,7 @@ std::istream& operator>>(std::istream &in, mnt4_G2 &g)
             tY = -tY;
         }
     }
-#endif
+
     // using projective coordinates
     if (!is_zero)
     {
@@ -473,8 +491,6 @@ std::istream& operator>>(std::istream &in, mnt4_G2 &g)
     {
         g = mnt4_G2::zero();
     }
-
-    return in;
 }
 
 void mnt4_G2::batch_to_special_all_non_zeros(std::vector<mnt4_G2> &vec)
@@ -494,6 +510,26 @@ void mnt4_G2::batch_to_special_all_non_zeros(std::vector<mnt4_G2> &vec)
     {
         vec[i] = mnt4_G2(vec[i].X * Z_vec[i], vec[i].Y * Z_vec[i], one);
     }
+}
+
+std::ostream& operator<<(std::ostream &out, const mnt4_G2 &g)
+{
+#ifdef NO_PT_COMPRESSION
+    g.write_uncompressed(out);
+#else
+    g.write_compressed(out);
+#endif
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, mnt4_G2 &g)
+{
+#ifdef NO_PT_COMPRESSION
+    mnt4_G2::read_uncompressed(in, g);
+#else
+    mnt4_G2::read_compressed(in, g);
+#endif
+    return in;
 }
 
 } // libff
