@@ -304,33 +304,44 @@ edwards_G1 edwards_G1::random_element()
     return edwards_Fr::random_element().as_bigint() * G1_one;
 }
 
-std::ostream& operator<<(std::ostream &out, const edwards_G1 &g)
+void edwards_G1::write_uncompressed(std::ostream &out) const
 {
-    edwards_G1 copy(g);
+    edwards_G1 copy(*this);
     copy.to_affine_coordinates();
-#ifdef NO_PT_COMPRESSION
     out << copy.X << OUTPUT_SEPARATOR << copy.Y;
-#else
-    /* storing LSB of Y */
-    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.as_bigint().data[0] & 1);
-#endif
-
-    return out;
 }
 
-std::istream& operator>>(std::istream &in, edwards_G1 &g)
+void edwards_G1::write_compressed(std::ostream &out) const
+{
+    edwards_G1 copy(*this);
+    copy.to_affine_coordinates();
+    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.as_bigint().data[0] & 1);
+}
+
+void edwards_G1::read_uncompressed(std::istream &in, edwards_G1 &g)
 {
     edwards_Fq tX, tY;
-
-#ifdef NO_PT_COMPRESSION
     in >> tX;
     consume_OUTPUT_SEPARATOR(in);
     in >> tY;
-#else
+
+    // using inverted coordinates
+    g.X = tY;
+    g.Y = tX;
+    g.Z = tX * tY;
+
+#ifdef USE_MIXED_ADDITION
+    g.to_special();
+#endif
+}
+
+void edwards_G1::read_compressed(std::istream &in, edwards_G1 &g)
+{
     /*
       a x^2 + y^2 = 1 + d x^2 y^2
       y = sqrt((1-ax^2)/(1-dx^2))
     */
+    edwards_Fq tX, tY;
     unsigned char Y_lsb;
     in >> tX;
 
@@ -347,7 +358,6 @@ std::istream& operator>>(std::istream &in, edwards_G1 &g)
     {
         tY = -tY;
     }
-#endif
 
     // using inverted coordinates
     g.X = tY;
@@ -357,38 +367,25 @@ std::istream& operator>>(std::istream &in, edwards_G1 &g)
 #ifdef USE_MIXED_ADDITION
     g.to_special();
 #endif
-
-    return in;
 }
 
-std::ostream& operator<<(std::ostream& out, const std::vector<edwards_G1> &v)
+std::ostream& operator<<(std::ostream &out, const edwards_G1 &g)
 {
-    out << v.size() << "\n";
-    for (const edwards_G1& t : v)
-    {
-        out << t << OUTPUT_NEWLINE;
-    }
-
+#ifdef NO_PT_COMPRESSION
+    g.write_uncompressed(out);
+#else
+    g.write_compressed(out);
+#endif
     return out;
 }
 
-std::istream& operator>>(std::istream& in, std::vector<edwards_G1> &v)
+std::istream& operator>>(std::istream &in, edwards_G1 &g)
 {
-    v.clear();
-
-    size_t s;
-    in >> s;
-    v.reserve(s);
-    consume_newline(in);
-
-    for (size_t i = 0; i < s; ++i)
-    {
-        edwards_G1 g;
-        in >> g;
-        v.emplace_back(g);
-        consume_OUTPUT_NEWLINE(in);
-    }
-
+#ifdef NO_PT_COMPRESSION
+    edwards_G1::read_uncompressed(in, g);
+#else
+    edwards_G1::read_compressed(in, g);
+#endif
     return in;
 }
 

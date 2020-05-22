@@ -336,32 +336,45 @@ edwards_G2 edwards_G2::random_element()
     return edwards_Fr::random_element().as_bigint() * G2_one;
 }
 
-std::ostream& operator<<(std::ostream &out, const edwards_G2 &g)
+void edwards_G2::write_uncompressed(std::ostream &out) const
 {
-    edwards_G2 copy(g);
+    edwards_G2 copy(*this);
     copy.to_affine_coordinates();
-#ifdef NO_PT_COMPRESSION
     out << copy.X << OUTPUT_SEPARATOR << copy.Y;
-#else
-    /* storing LSB of Y */
-    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.c0.as_bigint().data[0] & 1);
-#endif
-    return out;
 }
 
-std::istream& operator>>(std::istream &in, edwards_G2 &g)
+void edwards_G2::write_compressed(std::ostream &out) const
+{
+    edwards_G2 copy(*this);
+    copy.to_affine_coordinates();
+    /* storing LSB of Y */
+    out << copy.X << OUTPUT_SEPARATOR << (copy.Y.c0.as_bigint().data[0] & 1);
+}
+
+void edwards_G2::read_uncompressed(std::istream &in, edwards_G2 &g)
 {
     edwards_Fq3 tX, tY;
-
-#ifdef NO_PT_COMPRESSION
     in >> tX;
     consume_OUTPUT_SEPARATOR(in);
     in >> tY;
-#else
+
+    // using inverted coordinates
+    g.X = tY;
+    g.Y = tX;
+    g.Z = tX * tY;
+
+#ifdef USE_MIXED_ADDITION
+    g.to_special();
+#endif
+}
+
+void edwards_G2::read_compressed(std::istream &in, edwards_G2 &g)
+{
     /*
       a x^2 + y^2 = 1 + d x^2 y^2
       y = sqrt((1-ax^2)/(1-dx^2))
     */
+    edwards_Fq3 tX, tY;
     unsigned char Y_lsb;
     in >> tX;
     consume_OUTPUT_SEPARATOR(in);
@@ -379,7 +392,6 @@ std::istream& operator>>(std::istream &in, edwards_G2 &g)
     {
         tY = -tY;
     }
-#endif
 
     // using inverted coordinates
     g.X = tY;
@@ -389,7 +401,25 @@ std::istream& operator>>(std::istream &in, edwards_G2 &g)
 #ifdef USE_MIXED_ADDITION
     g.to_special();
 #endif
+}
 
+std::ostream& operator<<(std::ostream &out, const edwards_G2 &g)
+{
+#ifdef NO_PT_COMPRESSION
+    g.write_uncompressed(out);
+#else
+    g.write_compressed(out);
+#endif
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, edwards_G2 &g)
+{
+#ifdef NO_PT_COMPRESSION
+    edwards_G2::read_uncompressed(in, g);
+#else
+    edwards_G2::read_compressed(in, g);
+#endif
     return in;
 }
 

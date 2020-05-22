@@ -77,8 +77,10 @@ public:
     static bigint<base_field::num_limbs> base_field_char() { return base_field::field_char(); }
     static bigint<scalar_field::num_limbs> order() { return scalar_field::field_char(); }
 
-    friend std::ostream& operator<<(std::ostream &out, const mnt6_G1 &g);
-    friend std::istream& operator>>(std::istream &in, mnt6_G1 &g);
+    void write_uncompressed(std::ostream &) const;
+    void write_compressed(std::ostream &) const;
+    static void read_uncompressed(std::istream &, mnt6_G1 &);
+    static void read_compressed(std::istream &, mnt6_G1 &);
 
     static void batch_to_special_all_non_zeros(std::vector<mnt6_G1> &vec);
 };
@@ -94,9 +96,6 @@ mnt6_G1 operator*(const Fp_model<m,modulus_p> &lhs, const mnt6_G1 &rhs)
 {
     return scalar_mul<mnt6_G1, m>(rhs, lhs.as_bigint());
 }
-
-std::ostream& operator<<(std::ostream& out, const std::vector<mnt6_G1> &v);
-std::istream& operator>>(std::istream& in, std::vector<mnt6_G1> &v);
 
 } // libff
 

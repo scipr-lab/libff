@@ -383,14 +383,13 @@ bn128_G2 bn128_G2::random_element()
     return bn128_Fr::random_element().as_bigint() * G2_one;
 }
 
-std::ostream& operator<<(std::ostream &out, const bn128_G2 &g)
+void bn128_G2::write_uncompressed(std::ostream &out) const
 {
-    bn128_G2 gcopy(g);
+    bn128_G2 gcopy(*this);
     gcopy.to_affine_coordinates();
 
     out << (gcopy.is_zero() ? '1' : '0') << OUTPUT_SEPARATOR;
 
-#ifdef NO_PT_COMPRESSION
     /* no point compression case */
 #ifndef BINARY_OUTPUT
     out << gcopy.X.a_ << OUTPUT_SEPARATOR << gcopy.X.b_ << OUTPUT_SEPARATOR;
@@ -401,9 +400,15 @@ std::ostream& operator<<(std::ostream &out, const bn128_G2 &g)
     out.write((char*) &gcopy.Y.a_, sizeof(gcopy.Y.a_));
     out.write((char*) &gcopy.Y.b_, sizeof(gcopy.Y.b_));
 #endif
+}
 
-#else
-    /* point compression case */
+void bn128_G2::write_compressed(std::ostream &out) const
+{
+    bn128_G2 gcopy(*this);
+    gcopy.to_affine_coordinates();
+
+    out << (gcopy.is_zero() ? '1' : '0') << OUTPUT_SEPARATOR;
+
 #ifndef BINARY_OUTPUT
     out << gcopy.X.a_ << OUTPUT_SEPARATOR << gcopy.X.b_;
 #else
@@ -411,20 +416,15 @@ std::ostream& operator<<(std::ostream &out, const bn128_G2 &g)
     out.write((char*) &gcopy.X.b_, sizeof(gcopy.X.b_));
 #endif
     out << OUTPUT_SEPARATOR << (((unsigned char*)&gcopy.Y.a_)[0] & 1 ? '1' : '0');
-#endif
-
-    return out;
 }
 
-std::istream& operator>>(std::istream &in, bn128_G2 &g)
+void bn128_G2::read_uncompressed(std::istream &in, bn128_G2 &g)
 {
     char is_zero;
     in.read((char*)&is_zero, 1); // this reads is_zero;
     is_zero -= '0';
     consume_OUTPUT_SEPARATOR(in);
 
-#ifdef NO_PT_COMPRESSION
-    /* no point compression case */
 #ifndef BINARY_OUTPUT
     in >> g.X.a_;
     consume_OUTPUT_SEPARATOR(in);
@@ -440,8 +440,24 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
     in.read((char*) &g.Y.b_, sizeof(g.Y.b_));
 #endif
 
-#else
-    /* point compression case */
+    /* finalize */
+    if (!is_zero)
+    {
+        g.Z = bn::Fp2(bn::Fp(1), bn::Fp(0));
+    }
+    else
+    {
+        g = bn128_G2::zero();
+    }
+}
+
+void bn128_G2::read_compressed(std::istream &in, bn128_G2 &g)
+{
+    char is_zero;
+    in.read((char*)&is_zero, 1); // this reads is_zero;
+    is_zero -= '0';
+    consume_OUTPUT_SEPARATOR(in);
+
     bn::Fp2 tX;
 #ifndef BINARY_OUTPUT
     in >> tX.a_;
@@ -471,7 +487,6 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
             bn::Fp2::neg(g.Y, g.Y);
         }
     }
-#endif
 
     /* finalize */
     if (!is_zero)
@@ -482,7 +497,25 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
     {
         g = bn128_G2::zero();
     }
+}
 
+std::ostream& operator<<(std::ostream &out, const bn128_G2 &g)
+{
+#ifdef NO_PT_COMPRESSION
+    g.write_uncompressed(out);
+#else
+    g.write_compressed(out);
+#endif
+    return out;
+}
+
+std::istream& operator>>(std::istream &in, bn128_G2 &g)
+{
+#ifdef NO_PT_COMPRESSION
+    bn128_G2::read_uncompressed(in, g);
+#else
+    bn128_G2::read_compressed(in, g);
+#endif
     return in;
 }
 

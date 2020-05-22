@@ -82,8 +82,10 @@ public:
     static bigint<base_field::num_limbs> base_field_char() { return base_field::field_char(); }
     static bigint<scalar_field::num_limbs> order() { return scalar_field::field_char(); }
 
-    friend std::ostream& operator<<(std::ostream &out, const mnt6_G2 &g);
-    friend std::istream& operator>>(std::istream &in, mnt6_G2 &g);
+    void write_uncompressed(std::ostream &) const;
+    void write_compressed(std::ostream &) const;
+    static void read_uncompressed(std::istream &, mnt6_G2 &);
+    static void read_compressed(std::istream &, mnt6_G2 &);
 
     static void batch_to_special_all_non_zeros(std::vector<mnt6_G2> &vec);
 };
