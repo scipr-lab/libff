@@ -30,6 +30,15 @@ class PrimeField {
 public:
     /* Functions unique to prime fields */
 
+    /** The following parameters are used for the Tonelli-Shanks square root algorithms.
+     *  Can be set manually or calculated with init_tonelli_shanks_constants(). */
+    static bigint<T::extension_degree()*n> euler; // (modulus^deg-1)/2
+    static std::size_t s; // modulus^deg = 2^s * t + 1
+    static bigint<T::extension_degree()*n> t; // with t odd
+    static bigint<T::extension_degree()*n> t_minus_1_over_2; // (t-1)/2
+    static T nqr; // a quadratic nonresidue in field
+    static T nqr_to_t; // nqr^t
+
     /** If extension field, returns the base field's characteristic. */
     static constexpr bigint<n> field_char(); // has not been implemented in Fp or gf2^n
 
@@ -45,7 +54,6 @@ public:
     static long long sqr_cnt;
     static long long inv_cnt;
 #endif
-
 
     virtual T& operator+=(const T& other) = 0; // has not been implemented in fp2 and above
     virtual T& operator-=(const T& other) = 0; // has not been implemented in fp2 and above
