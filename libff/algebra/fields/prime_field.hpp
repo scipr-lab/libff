@@ -87,6 +87,10 @@ public:
     static constexpr std::size_t extension_degree();
     static std::size_t size_in_bits();
 
+    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    static void init_tonelli_shanks_constants();
+
     // the following should be defined as well but can't be inherited
     friend std::ostream& operator<<(std::ostream &out, const T &p); // has not been implemented in gf2^n
     friend std::istream& operator>>(std::istream &in, T &p); // has not been implemented in gf2^n

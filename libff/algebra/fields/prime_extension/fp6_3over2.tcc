@@ -251,7 +251,13 @@ Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::Frobenius_map(unsigned 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_3over2_model<n,modulus> Fp6_3over2_model<n,modulus>::sqrt() const
 {
-    return tonelli_shanks_sqrt<Fp6_3over2_model<n,modulus>, n>(*this);
+    return tonelli_shanks_sqrt(*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp6_3over2_model<n,modulus>::init_tonelli_shanks_constants()
+{
+    find_tonelli_shanks_constants<Fp6_3over2_model<n,modulus>, n>();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

@@ -44,6 +44,12 @@ public:
     static long long inv_cnt;
 #endif
 
+    static bigint<4*n> euler; // (modulus^4-1)/2
+    static std::size_t s; // modulus^4 = 2^s * t + 1
+    static bigint<4*n> t; // with t odd
+    static bigint<4*n> t_minus_1_over_2; // (t-1)/2
+    static Fp4_model<n, modulus> nqr; // a quadratic nonresidue in Fp4
+    static Fp4_model<n, modulus> nqr_to_t; // nqr^t
     static my_Fp non_residue;
     static my_Fp Frobenius_coeffs_c1[4]; // non_residue^((modulus^i-1)/4) for i=0,1,2,3
 
@@ -91,6 +97,9 @@ public:
     template<mp_size_t m>
     Fp4_model cyclotomic_exp(const bigint<m> &exponent) const;
 
+    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    static void init_tonelli_shanks_constants();
     static std::size_t size_in_bits() { return 2*my_Fp2::size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 4; }
     static constexpr bigint<n> field_char() { return modulus; }
@@ -125,6 +134,24 @@ Fp4_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp4_model
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp4_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, const Fp4_model<n, modulus> &rhs);
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<4*n> Fp4_model<n, modulus>::euler;
+
+template<mp_size_t n, const bigint<n>& modulus>
+size_t Fp4_model<n, modulus>::s;
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<4*n> Fp4_model<n, modulus>::t;
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<4*n> Fp4_model<n, modulus>::t_minus_1_over_2;
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n, modulus> Fp4_model<n, modulus>::nqr;
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp4_model<n, modulus> Fp4_model<n, modulus>::nqr_to_t;
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp4_model<n, modulus>::non_residue;

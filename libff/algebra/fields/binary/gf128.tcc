@@ -244,7 +244,7 @@ gf128 gf128::inverse() const
 
 gf128 gf128::sqrt() const
 {
-    return (*this)^bigint<2>("170141183460469231731687303715884105728");
+    return (*this)^bigint<2>("170141183460469231731687303715884105728"); // 2^127
 }
 
 void gf128::randomize()

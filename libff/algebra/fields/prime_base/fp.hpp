@@ -111,6 +111,9 @@ public:
     Fp_model Frobenius_map(unsigned long power) const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
+    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    static void init_tonelli_shanks_constants();
     static std::size_t size_in_bits() { return num_bits; }
     static std::size_t capacity() { return num_bits - 1; }
     static constexpr std::size_t extension_degree() { return 1; }

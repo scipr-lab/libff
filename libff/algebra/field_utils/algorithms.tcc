@@ -14,7 +14,8 @@
 #ifndef EXPONENTIATION_TCC_
 #define EXPONENTIATION_TCC_
 
-#include <libff/common/utils.hpp>
+#include "libff/common/utils.hpp"
+#include "libff/common/profiling.hpp"
 
 namespace libff {
 
@@ -51,11 +52,11 @@ FieldT power(const FieldT &base, const unsigned long exponent)
 }
 
 template<typename FieldT, mp_size_t n>
-FieldT tonelli_shanks_sqrt(const FieldT &value)
+void find_tonelli_shanks_constants()
 {
     // Find s and t such that p^n - 1 = t * 2^s, with t odd.
     const mp_size_t m = n * FieldT::extension_degree();
-    bigint<m> one_i = bigint<m>(1);
+    bigint<m> one_i = bigint<m>(1); // integer one
     bigint<m> p_to_n_minus_1 = FieldT::field_char().template power<m>(FieldT::extension_degree()) - one_i;
     size_t s = 0;
     bigint<m> t = p_to_n_minus_1;
@@ -76,20 +77,30 @@ FieldT tonelli_shanks_sqrt(const FieldT &value)
             break;
     }
 
-    return tonelli_shanks_sqrt(value, s, nqr^t, (t - one_i) / 2);
+    FieldT::euler = euler;
+    FieldT::s = s;
+    FieldT::t = t;
+    FieldT::t_minus_1_over_2 = (t - one_i) / 2;
+    FieldT::nqr = nqr;
+    FieldT::nqr_to_t = nqr^t;
 }
 
-template<typename FieldT, mp_size_t n>
-FieldT tonelli_shanks_sqrt(const FieldT &value, const size_t s, const FieldT &nqr_to_t, const bigint<n> &t_minus_1_over_2)
+template<typename FieldT>
+FieldT tonelli_shanks_sqrt(const FieldT &value)
 {
+    // a few assertions to make sure s, t, and nqr are initialized
+    assert(FieldT::s != 0);
+    assert(!(FieldT::t % 2).is_zero()); // check that t is odd
+    assert(!FieldT::nqr.is_zero());
+
     if (value.is_zero())
         return FieldT::zero();
 
     FieldT one = FieldT::one();
 
-    size_t v = s;
-    FieldT z = nqr_to_t;
-    FieldT w = value^t_minus_1_over_2;
+    size_t v = FieldT::s;
+    FieldT z = FieldT::nqr_to_t;
+    FieldT w = value^FieldT::t_minus_1_over_2;
     FieldT x = value * w;
     FieldT b = x * w; // b = (*this)^t
 
@@ -100,10 +111,7 @@ FieldT tonelli_shanks_sqrt(const FieldT &value, const size_t s, const FieldT &nq
     {
         check = check.squared();
     }
-    if (check != one)
-    {
-        assert(0);
-    }
+    assert(check == one);
 #endif
 
     // compute square root with Tonelli--Shanks

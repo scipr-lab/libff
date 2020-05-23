@@ -454,7 +454,13 @@ Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::sqrt() const
 {
-    return tonelli_shanks_sqrt<Fp12_2over3over2_model<n,modulus>, n>(*this);
+    return tonelli_shanks_sqrt(*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::init_tonelli_shanks_constants()
+{
+    find_tonelli_shanks_constants<Fp12_2over3over2_model<n,modulus>, n>();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

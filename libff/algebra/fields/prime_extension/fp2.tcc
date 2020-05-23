@@ -238,7 +238,13 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::Frobenius_map(unsigned long power) co
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::sqrt() const
 {
-    return tonelli_shanks_sqrt(*this, Fp2_model<n,modulus>::s, Fp2_model<n,modulus>::nqr_to_t, Fp2_model<n,modulus>::t_minus_1_over_2);
+    return tonelli_shanks_sqrt(*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::init_tonelli_shanks_constants()
+{
+    find_tonelli_shanks_constants<Fp2_model<n,modulus>, n>();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

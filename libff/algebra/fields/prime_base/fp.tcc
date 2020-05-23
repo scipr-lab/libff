@@ -746,7 +746,13 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus> Fp_model<n,modulus>::sqrt() const
 {
-    return tonelli_shanks_sqrt(*this, Fp_model<n,modulus>::s, Fp_model<n,modulus>::nqr_to_t, Fp_model<n,modulus>::t_minus_1_over_2);
+    return tonelli_shanks_sqrt(*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp_model<n,modulus>::init_tonelli_shanks_constants()
+{
+    find_tonelli_shanks_constants<Fp_model<n,modulus>, n>();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

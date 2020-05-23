@@ -46,6 +46,12 @@ public:
     static long long inv_cnt;
 #endif
 
+    static bigint<6*n> euler; // (modulus^6-1)/2
+    static std::size_t s; // modulus^6 = 2^s * t + 1
+    static bigint<6*n> t; // with t odd
+    static bigint<6*n> t_minus_1_over_2; // (t-1)/2
+    static Fp6_3over2_model<n, modulus> nqr; // a quadratic nonresidue in Fp6
+    static Fp6_3over2_model<n, modulus> nqr_to_t; // nqr^t
     static my_Fp2 non_residue;
     static my_Fp2 Frobenius_coeffs_c1[6]; // non_residue^((modulus^i-1)/3)   for i=0,1,2,3,4,5
     static my_Fp2 Frobenius_coeffs_c2[6]; // non_residue^((2*modulus^i-2)/3) for i=0,1,2,3,4,5
@@ -86,6 +92,9 @@ public:
 
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
 
+    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    static void init_tonelli_shanks_constants();
     static std::size_t size_in_bits() { return 3*my_Fp2::size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 6; }
     static constexpr bigint<n> field_char() { return modulus; }
@@ -126,6 +135,24 @@ Fp6_3over2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_3over2_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, const Fp6_3over2_model<n, modulus> &rhs);
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<6*n> Fp6_3over2_model<n, modulus>::euler;
+
+template<mp_size_t n, const bigint<n>& modulus>
+size_t Fp6_3over2_model<n, modulus>::s;
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<6*n> Fp6_3over2_model<n, modulus>::t;
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<6*n> Fp6_3over2_model<n, modulus>::t_minus_1_over_2;
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n, modulus> Fp6_3over2_model<n, modulus>::nqr;
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp6_3over2_model<n, modulus> Fp6_3over2_model<n, modulus>::nqr_to_t;
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n, modulus> Fp6_3over2_model<n, modulus>::non_residue;
