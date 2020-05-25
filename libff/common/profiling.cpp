@@ -92,8 +92,8 @@ std::list<std::pair<std::string, long long*> > op_data_points = {
 #endif
 };
 
-bool inhibit_profiling_info = false;
-bool inhibit_profiling_counters = false;
+bool inhibit_profiling_info = true;
+bool inhibit_profiling_counters = true;
 
 void clear_profiling_counters()
 {
@@ -344,6 +344,7 @@ void print_mem(const std::string &s)
         printf("* Peak vsize (physical memory+swap) in mebibytes (%s): %lu\n", s.c_str(), usage.vsize >> 20);
     }
 #else
+    UNUSED(s);
     printf("* Memory profiling not supported in NO_PROCPS mode\n");
 #endif
 }

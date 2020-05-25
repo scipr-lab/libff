@@ -1,7 +1,8 @@
 /** @file
  *****************************************************************************
 
- Implementation of interfaces for (square-and-multiply) exponentiation.
+ Declaration of interfaces for (square-and-multiply) exponentiation and
+ Tonelli-Shanks square root.
 
  See algorithms.hpp .
 
@@ -11,8 +12,8 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#ifndef EXPONENTIATION_TCC_
-#define EXPONENTIATION_TCC_
+#ifndef ALGORITHMS_TCC_
+#define ALGORITHMS_TCC_
 
 #include "libff/common/utils.hpp"
 #include "libff/common/profiling.hpp"
@@ -147,4 +148,4 @@ FieldT tonelli_shanks_sqrt(const FieldT &value)
 
 } // libff
 
-#endif // EXPONENTIATION_TCC_
+#endif // ALGORITHMS_TCC_

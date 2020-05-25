@@ -1,7 +1,8 @@
 /** @file
  *****************************************************************************
 
- Declaration of interfaces for (square-and-multiply) exponentiation.
+ Declaration of interfaces for (square-and-multiply) exponentiation and
+ Tonelli-Shanks square root.
 
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
@@ -9,8 +10,8 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#ifndef EXPONENTIATION_HPP_
-#define EXPONENTIATION_HPP_
+#ifndef ALGORITHMS_HPP_
+#define ALGORITHMS_HPP_
 
 #include <cstdint>
 
@@ -41,4 +42,4 @@ FieldT tonelli_shanks_sqrt(const FieldT &value);
 
 #include <libff/algebra/field_utils/algorithms.tcc>
 
-#endif // EXPONENTIATION_HPP_
+#endif // ALGORITHMS_HPP_
