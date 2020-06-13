@@ -234,9 +234,9 @@ mnt4_affine_ate_G1_precomputation mnt4_affine_ate_precompute_G1(const mnt4_G1& P
     Pcopy.to_affine_coordinates();
 
     mnt4_affine_ate_G1_precomputation result;
-    result.PX = Pcopy.X();
-    result.PY = Pcopy.Y();
-    result.PY_twist_squared = Pcopy.Y() * mnt4_twist.squared();
+    result.PX = Pcopy.X;
+    result.PY = Pcopy.Y;
+    result.PY_twist_squared = Pcopy.Y * mnt4_twist.squared();
 
     leave_block("Call to mnt4_affine_ate_precompute_G1");
     return result;
@@ -250,11 +250,11 @@ mnt4_affine_ate_G2_precomputation mnt4_affine_ate_precompute_G2(const mnt4_G2& Q
     Qcopy.to_affine_coordinates();
 
     mnt4_affine_ate_G2_precomputation result;
-    result.QX = Qcopy.X();
-    result.QY = Qcopy.Y();
+    result.QX = Qcopy.X;
+    result.QY = Qcopy.Y;
 
-    mnt4_Fq2 RX = Qcopy.X();
-    mnt4_Fq2 RY = Qcopy.Y();
+    mnt4_Fq2 RX = Qcopy.X;
+    mnt4_Fq2 RY = Qcopy.Y;
 
     const bigint<mnt4_Fr::num_limbs> &loop_count = mnt4_ate_loop_count;
     bool found_nonzero = false;
@@ -473,10 +473,10 @@ mnt4_ate_G1_precomp mnt4_ate_precompute_G1(const mnt4_G1& P)
     Pcopy.to_affine_coordinates();
 
     mnt4_ate_G1_precomp result;
-    result.PX = Pcopy.X();
-    result.PY = Pcopy.Y();
-    result.PX_twist = Pcopy.X() * mnt4_twist;
-    result.PY_twist = Pcopy.Y() * mnt4_twist;
+    result.PX = Pcopy.X;
+    result.PY = Pcopy.Y;
+    result.PX_twist = Pcopy.X * mnt4_twist;
+    result.PY_twist = Pcopy.Y * mnt4_twist;
 
     leave_block("Call to mnt4_ate_precompute_G1");
     return result;
@@ -490,15 +490,15 @@ mnt4_ate_G2_precomp mnt4_ate_precompute_G2(const mnt4_G2& Q)
     Qcopy.to_affine_coordinates();
 
     mnt4_ate_G2_precomp result;
-    result.QX = Qcopy.X();
-    result.QY = Qcopy.Y();
-    result.QY2 = Qcopy.Y().squared();
-    result.QX_over_twist = Qcopy.X() * mnt4_twist.inverse();
-    result.QY_over_twist = Qcopy.Y() * mnt4_twist.inverse();
+    result.QX = Qcopy.X;
+    result.QY = Qcopy.Y;
+    result.QY2 = Qcopy.Y.squared();
+    result.QX_over_twist = Qcopy.X * mnt4_twist.inverse();
+    result.QY_over_twist = Qcopy.Y * mnt4_twist.inverse();
 
     extended_mnt4_G2_projective R;
-    R.X = Qcopy.X();
-    R.Y = Qcopy.Y();
+    R.X = Qcopy.X;
+    R.Y = Qcopy.Y;
     R.Z = mnt4_Fq2::one();
     R.T = mnt4_Fq2::one();
 

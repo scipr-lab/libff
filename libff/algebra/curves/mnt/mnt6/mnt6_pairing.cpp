@@ -239,9 +239,9 @@ mnt6_affine_ate_G1_precomputation mnt6_affine_ate_precompute_G1(const mnt6_G1& P
     Pcopy.to_affine_coordinates();
 
     mnt6_affine_ate_G1_precomputation result;
-    result.PX = Pcopy.X();
-    result.PY = Pcopy.Y();
-    result.PY_twist_squared = Pcopy.Y() * mnt6_twist.squared();
+    result.PX = Pcopy.X;
+    result.PY = Pcopy.Y;
+    result.PY_twist_squared = Pcopy.Y * mnt6_twist.squared();
 
     leave_block("Call to mnt6_affine_ate_precompute_G1");
     return result;
@@ -255,11 +255,11 @@ mnt6_affine_ate_G2_precomputation mnt6_affine_ate_precompute_G2(const mnt6_G2& Q
     Qcopy.to_affine_coordinates();
 
     mnt6_affine_ate_G2_precomputation result;
-    result.QX = Qcopy.X();
-    result.QY = Qcopy.Y();
+    result.QX = Qcopy.X;
+    result.QY = Qcopy.Y;
 
-    mnt6_Fq3 RX = Qcopy.X();
-    mnt6_Fq3 RY = Qcopy.Y();
+    mnt6_Fq3 RX = Qcopy.X;
+    mnt6_Fq3 RY = Qcopy.Y;
 
     const bigint<mnt6_Fr::num_limbs> &loop_count = mnt6_ate_loop_count;
     bool found_nonzero = false;
@@ -479,10 +479,10 @@ mnt6_ate_G1_precomp mnt6_ate_precompute_G1(const mnt6_G1& P)
     Pcopy.to_affine_coordinates();
 
     mnt6_ate_G1_precomp result;
-    result.PX = Pcopy.X();
-    result.PY = Pcopy.Y();
-    result.PX_twist = Pcopy.X() * mnt6_twist;
-    result.PY_twist = Pcopy.Y() * mnt6_twist;
+    result.PX = Pcopy.X;
+    result.PY = Pcopy.Y;
+    result.PX_twist = Pcopy.X * mnt6_twist;
+    result.PY_twist = Pcopy.Y * mnt6_twist;
 
     leave_block("Call to mnt6_ate_precompute_G1");
     return result;
@@ -498,15 +498,15 @@ mnt6_ate_G2_precomp mnt6_ate_precompute_G2(const mnt6_G2& Q)
     mnt6_Fq3 mnt6_twist_inv = mnt6_twist.inverse(); // could add to global params if needed
 
     mnt6_ate_G2_precomp result;
-    result.QX = Qcopy.X();
-    result.QY = Qcopy.Y();
-    result.QY2 = Qcopy.Y().squared();
-    result.QX_over_twist = Qcopy.X() * mnt6_twist_inv;
-    result.QY_over_twist = Qcopy.Y() * mnt6_twist_inv;
+    result.QX = Qcopy.X;
+    result.QY = Qcopy.Y;
+    result.QY2 = Qcopy.Y.squared();
+    result.QX_over_twist = Qcopy.X * mnt6_twist_inv;
+    result.QY_over_twist = Qcopy.Y * mnt6_twist_inv;
 
     extended_mnt6_G2_projective R;
-    R.X = Qcopy.X();
-    R.Y = Qcopy.Y();
+    R.X = Qcopy.X;
+    R.Y = Qcopy.Y;
     R.Z = mnt6_Fq3::one();
     R.T = mnt6_Fq3::one();
 

@@ -32,11 +32,16 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static bn128_G1 G1_zero;
     static bn128_G1 G1_one;
+    static bool initialized;
 
-    bn::Fp coord[3];
-    bn128_G1();
     typedef bn128_Fq base_field;
     typedef bn128_Fr scalar_field;
+
+    bn::Fp X, Y, Z;
+    void fill_coord(bn::Fp coord[3]) const { coord[0] = this->X; coord[1] = this->Y; coord[2] = this->Z; return; };
+
+    bn128_G1();
+    bn128_G1(bn::Fp coord[3]) : X(coord[0]), Y(coord[1]), Z(coord[2]) {};
 
     void print() const;
     void print_coordinates() const;

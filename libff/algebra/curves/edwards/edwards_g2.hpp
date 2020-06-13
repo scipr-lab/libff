@@ -30,6 +30,7 @@ public:
 
     static edwards_G2 G2_zero;
     static edwards_G2 G2_one;
+    static bool initialized;
 
     edwards_Fq3 X, Y, Z;
     edwards_G2();

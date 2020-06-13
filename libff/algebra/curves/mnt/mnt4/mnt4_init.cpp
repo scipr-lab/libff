@@ -63,6 +63,7 @@ void init_mnt4_params()
     mnt4_G1::G1_one = mnt4_G1(mnt4_Fq("60760244141852568949126569781626075788424196370144486719385562369396875346601926534016838"),
                               mnt4_Fq("363732850702582978263902770815145784459747722357071843971107674179038674942891694705904306"),
                               mnt4_Fq::one());
+    mnt4_G1::initialized = true;
 
     mnt4_G1::wnaf_window_table.resize(0);
     mnt4_G1::wnaf_window_table.push_back(11);
@@ -126,6 +127,7 @@ void init_mnt4_params()
                               mnt4_Fq2(mnt4_Fq("37437409008528968268352521034936931842973546441370663118543015118291998305624025037512482"),
                                        mnt4_Fq("424621479598893882672393190337420680597584695892317197646113820787463109735345923009077489")),
                               mnt4_Fq2::one());
+    mnt4_G2::initialized = true;
 
     mnt4_G2::wnaf_window_table.resize(0);
     mnt4_G2::wnaf_window_table.push_back(5);
