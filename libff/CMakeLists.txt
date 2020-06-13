@@ -45,6 +45,13 @@ add_library(
   algebra/curves/mnt/mnt6/mnt6_init.cpp
   algebra/curves/mnt/mnt6/mnt6_pairing.cpp
   algebra/curves/mnt/mnt6/mnt6_pp.cpp
+
+  algebra/fields/binary/gf32.cpp
+  algebra/fields/binary/gf64.cpp
+  algebra/fields/binary/gf128.cpp
+  algebra/fields/binary/gf192.cpp
+  algebra/fields/binary/gf256.cpp
+
   common/double.cpp
   common/profiling.cpp
   common/utils.cpp
@@ -61,6 +68,35 @@ target_link_libraries(
 target_include_directories(
   ff
   PUBLIC ..
+)
+
+# sodium for binary fields
+find_path(
+  SODIUM_INCLUDE_DIR
+  sodium.h
+  HINTS ${LIBSODIUM_INCLUDE_DIRS}
+  /usr/local/include /opt/local/include /opt/include
+)
+find_library(
+  SODIUM_LIBRARY
+  NAMES sodium
+  HINTS ${LIBSODIUM_LIBRARY_DIRS}
+  /usr/local/lib /opt/local/lib /opt/lib
+)
+
+target_include_directories(
+  ff
+  PUBLIC
+  ${SODIUM_INCLUDE_DIR}
+)
+target_compile_options(
+  ff
+  PUBLIC
+  ${LIBSODIUM_CFLAGS} ${LIBSODIUM_CFLAGS_OTHER}
+)
+target_link_libraries(
+  ff
+  ${SODIUM_LIBRARY} ${LIBSODIUM_LDFLAGS_OTHER}
 )
 
 install(
@@ -138,21 +174,89 @@ if ("${IS_LIBFF_PARENT}")
     algebra_gf32_test
     EXCLUDE_FROM_ALL
 
-    algebra/binary_fields/tests/test_gf32.cpp
+    algebra/fields/binary/tests/test_gf32.cpp
   )
   target_link_libraries(
     algebra_gf32_test
 
     ff
+    gtest_main
+  )
+  add_executable(
+    algebra_gf64_test
+    EXCLUDE_FROM_ALL
+
+    algebra/fields/binary/tests/test_gf64.cpp
+  )
+  target_link_libraries(
+    algebra_gf64_test
+
+    ff
+    gtest_main
+  )
+  add_executable(
+    algebra_gf128_test
+    EXCLUDE_FROM_ALL
+
+    algebra/fields/binary/tests/test_gf128.cpp
+  )
+  target_link_libraries(
+    algebra_gf128_test
+
+    ff
+    gtest_main
+  )
+  add_executable(
+    algebra_gf192_test
+    EXCLUDE_FROM_ALL
+
+    algebra/fields/binary/tests/test_gf192.cpp
+  )
+  target_link_libraries(
+    algebra_gf192_test
+
+    ff
+    gtest_main
+  )
+  add_executable(
+    algebra_gf256_test
+    EXCLUDE_FROM_ALL
+
+    algebra/fields/binary/tests/test_gf256.cpp
+  )
+  target_link_libraries(
+    algebra_gf256_test
+
+    ff
+    gtest_main
   )
 
-  include(CTest)
   add_test(
     NAME algebra_gf32_test
     COMMAND algebra_gf32_test
   )
+  add_test(
+    NAME algebra_gf64_test
+    COMMAND algebra_gf32_test
+  )
+  add_test(
+    NAME algebra_gf128_test
+    COMMAND algebra_gf32_test
+  )
+  add_test(
+    NAME algebra_gf192_test
+    COMMAND algebra_gf32_test
+  )
+  add_test(
+    NAME algebra_gf256_test
+    COMMAND algebra_gf32_test
+  )
 
   add_dependencies(check algebra_gf32_test)
+  add_dependencies(check algebra_gf64_test)
+  add_dependencies(check algebra_gf128_test)
+  add_dependencies(check algebra_gf192_test)
+  add_dependencies(check algebra_gf256_test)
 
   # Profiling for prime fields
   add_executable(
