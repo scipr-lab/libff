@@ -54,6 +54,7 @@ The library has the following dependencies:
 * [CMake](http://cmake.org/)
 * [GMP](http://gmplib.org/)
 * [libprocps](http://packages.ubuntu.com/trusty/libprocps-dev)
+* [libsodium](https://libsodium.gitbook.io/doc/)
 
 The library has been tested on Linux, but it is compatible with Windows and Mac OS X.
 
@@ -64,6 +65,9 @@ On Ubuntu 14.04 LTS:
 ```
 sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libprocps3-dev pkg-config
 ```
+
+
+On Mac OS X, all of the libraries from the previous section can be installed with brew, except for `libprocps`. You will need to turn that off for Mac OS X.
 
 Fetch dependencies from their GitHub repos:
 
@@ -82,9 +86,9 @@ Optionally, you can specify the install location by providing the desired instal
 ```
 cmake .. -DCMAKE_INSTALL_PREFIX=/install/path
 ```
-You may also need to provide the path to openssl:
+On Mac OS X, you may also need to turn off `libprocps` and/or provide the path to openssl (your exact path may vary):
 ```
-cmake -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2s -DOPENSSL_LIBRARIES=/usr/local/Cellar/openssl/1.0.2s/lib ..
+cmake -DWITH_PROCPS=OFF -DOPENSSL_ROOT_DIR=/usr/local/Cellar/openssl/1.0.2s -DOPENSSL_LIBRARIES=/usr/local/Cellar/openssl/1.0.2s/lib ..
 ```
 To enable asserts, use the `-DCMAKE_BUILD_TYPE=Debug` flag.
 
@@ -98,7 +102,7 @@ This will install `libff.a` into `/install/path/lib`; so your application should
 
 ## Testing
 
-To execute the tests for this library, run:
+To build and execute the tests for this library, run:
 ```
 make check
 ```
