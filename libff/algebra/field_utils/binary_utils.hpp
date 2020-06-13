@@ -53,6 +53,7 @@ struct is_multiplicative<Fp_model<n, modulus>> {
     static const bool value = true;
 };
 
+// Represents fields from which only the additive (resp. multiplicative) group is used.
 enum field_type {
     multiplicative_field_type = 1,
     additive_field_type = 2
