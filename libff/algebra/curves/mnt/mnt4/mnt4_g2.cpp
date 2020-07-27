@@ -28,6 +28,7 @@ mnt4_Fq2 mnt4_G2::coeff_b;
 mnt4_G2 mnt4_G2::G2_zero = {};
 mnt4_G2 mnt4_G2::G2_one = {};
 bool mnt4_G2::initialized;
+bigint<mnt4_G2::h_limbs> mnt4_G2::h;
 
 mnt4_Fq2 mnt4_G2::mul_by_a(const mnt4_Fq2 &elt)
 {
@@ -370,6 +371,11 @@ mnt4_G2 mnt4_G2::mul_by_q() const
     return mnt4_G2(mnt4_twist_mul_by_q_X * (this->X).Frobenius_map(1),
                    mnt4_twist_mul_by_q_Y * (this->Y).Frobenius_map(1),
                    (this->Z).Frobenius_map(1));
+}
+
+mnt4_G2 mnt4_G2::mul_by_cofactor() const
+{
+    return mnt4_G2::h * (*this);
 }
 
 bool mnt4_G2::is_well_formed() const

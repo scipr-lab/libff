@@ -37,6 +37,11 @@ public:
     typedef bn128_Fq base_field;
     typedef bn128_Fr scalar_field;
 
+    // Cofactor
+    static const mp_size_t h_bitcount = 1;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
     bn::Fp X, Y, Z;
     void fill_coord(bn::Fp coord[3]) const { coord[0] = this->X; coord[1] = this->Y; coord[2] = this->Z; return; };
 
@@ -62,6 +67,7 @@ public:
     bn128_G1 add(const bn128_G1 &other) const;
     bn128_G1 mixed_add(const bn128_G1 &other) const;
     bn128_G1 dbl() const;
+    bn128_G1 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 

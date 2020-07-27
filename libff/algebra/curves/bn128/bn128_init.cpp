@@ -108,6 +108,9 @@ void init_bn128_params()
 
     bn128_G1::initialized = true;
 
+    // Cofactor
+    bn128_G1::h = bigint<bn128_G1::h_limbs>("1");
+
     bn128_G1::wnaf_window_table.resize(0);
     bn128_G1::wnaf_window_table.push_back(10);
     bn128_G1::wnaf_window_table.push_back(24);
@@ -172,6 +175,9 @@ void init_bn128_params()
     bn128_G2::G2_one.Z = bn::Fp2(bn::Fp(1), bn::Fp(0));
 
     bn128_G2::initialized = true;
+
+    // Cofactor
+    bn128_G2::h = bigint<bn128_G2::h_limbs>("21888242871839275222246405745257275088844257914179612981679871602714643921549");
 
     bn128_G2::wnaf_window_table.resize(0);
     bn128_G2::wnaf_window_table.push_back(7);
