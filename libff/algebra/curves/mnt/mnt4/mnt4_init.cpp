@@ -207,7 +207,7 @@ void init_mnt4_params()
     mnt4_G2::initialized = true;
 
     // Cofactor
-    mnt4_G2::h = bigint<mnt4_G2::h_limbs>("475922286169261325753349249653048451545124879932565935237842521413255878328503110407553024");
+    mnt4_G2::h = bigint<mnt4_G2::h_limbs>("475922286169261325753349249653048451545124879932565935237842521413255878328503110407553025");
 
     mnt4_G2::wnaf_window_table.resize(0);
     mnt4_G2::wnaf_window_table.push_back(5);
