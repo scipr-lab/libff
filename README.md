@@ -76,8 +76,11 @@ git submodule init && git submodule update
 To compile, starting at the project root directory, create the build directory and Makefile:
 
 ```
-mkdir build && cd build && cmake ..
+mkdir build && cd build
+cmake ..
 ```
+If you are on mac os, change the cmake command to be `cmake .. -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl`
+
 Optionally, you can specify the install location by providing the desired install path prefix:
 ```
 cmake .. -DCMAKE_INSTALL_PREFIX=/install/path
