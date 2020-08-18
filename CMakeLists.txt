@@ -56,10 +56,11 @@ option(
   OFF
 )
 
+# This option does not work on macOS, since there is no /proc
 option(
   WITH_PROCPS
   "Use procps for memory profiling"
-  ON
+  OFF
 )
 
 option(
@@ -116,6 +117,9 @@ find_package(OpenSSL REQUIRED)
 INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
 
 if("${WITH_PROCPS}")
+  if(APPLE)
+    message(WARNING "WITH_PROCPS must be set to OFF for macOS build")
+  endif()
   include(FindPkgConfig)
   pkg_check_modules(
     PROCPS
