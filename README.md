@@ -79,7 +79,7 @@ To compile, starting at the project root directory, create the build directory a
 mkdir build && cd build
 cmake ..
 ```
-If you are on mac os, change the cmake command to be `cmake .. -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl`
+If you are on macOS, change the cmake command to be `cmake .. -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)`
 
 Optionally, you can specify the install location by providing the desired install path prefix:
 ```
