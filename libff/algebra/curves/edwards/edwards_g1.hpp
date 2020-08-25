@@ -28,6 +28,7 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static edwards_G1 G1_zero;
     static edwards_G1 G1_one;
+    static bool initialized;
 
     edwards_Fq X, Y, Z;
     edwards_G1();

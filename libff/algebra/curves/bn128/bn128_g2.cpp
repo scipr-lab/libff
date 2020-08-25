@@ -17,8 +17,9 @@ long long bn128_G2::dbl_cnt = 0;
 
 std::vector<size_t> bn128_G2::wnaf_window_table;
 std::vector<size_t> bn128_G2::fixed_base_exp_window_table;
-bn128_G2 bn128_G2::G2_zero;
-bn128_G2 bn128_G2::G2_one;
+bn128_G2 bn128_G2::G2_zero = {};
+bn128_G2 bn128_G2::G2_one = {};
+bool bn128_G2::initialized = false;
 
 bn::Fp2 bn128_G2::sqrt(const bn::Fp2 &el)
 {
@@ -72,9 +73,12 @@ bn::Fp2 bn128_G2::sqrt(const bn::Fp2 &el)
 
 bn128_G2::bn128_G2()
 {
-    this->coord[0] = G2_zero.coord[0];
-    this->coord[1] = G2_zero.coord[1];
-    this->coord[2] = G2_zero.coord[2];
+    if (bn128_G2::initialized)
+    {
+        this->X = G2_zero.X;
+        this->Y = G2_zero.Y;
+        this->Z = G2_zero.Z;
+    }
 }
 
 void bn128_G2::print() const
@@ -87,7 +91,7 @@ void bn128_G2::print() const
     {
         bn128_G2 copy(*this);
         copy.to_affine_coordinates();
-        std::cout << "(" << copy.coord[0].toString(10) << " : " << copy.coord[1].toString(10) << " : " << copy.coord[2].toString(10) << ")\n";
+        std::cout << "(" << copy.X.toString(10) << " : " << copy.Y.toString(10) << " : " << copy.Z.toString(10) << ")\n";
     }
 }
 
@@ -99,7 +103,7 @@ void bn128_G2::print_coordinates() const
     }
     else
     {
-        std::cout << "(" << coord[0].toString(10) << " : " << coord[1].toString(10) << " : " << coord[2].toString(10) << ")\n";
+        std::cout << "(" << X.toString(10) << " : " << Y.toString(10) << " : " << Z.toString(10) << ")\n";
     }
 }
 
@@ -107,20 +111,20 @@ void bn128_G2::to_affine_coordinates()
 {
     if (this->is_zero())
     {
-        coord[0] = 0;
-        coord[1] = 1;
-        coord[2] = 0;
+        X = 0;
+        Y = 1;
+        Z = 0;
     }
     else
     {
         bn::Fp2 r;
-        r = coord[2];
+        r = Z;
         r.inverse();
-        bn::Fp2::square(coord[2], r);
-        coord[0] *= coord[2];
-        r *= coord[2];
-        coord[1] *= r;
-        coord[2] = 1;
+        bn::Fp2::square(Z, r);
+        X *= Z;
+        r *= Z;
+        Y *= r;
+        Z = 1;
     }
 }
 
@@ -131,12 +135,12 @@ void bn128_G2::to_special()
 
 bool bn128_G2::is_special() const
 {
-    return (this->is_zero() || this->coord[2] == 1);
+    return (this->is_zero() || this->Z == 1);
 }
 
 bool bn128_G2::is_zero() const
 {
-    return coord[2].isZero();
+    return Z.isZero();
 }
 
 bool bn128_G2::operator==(const bn128_G2 &other) const
@@ -154,10 +158,10 @@ bool bn128_G2::operator==(const bn128_G2 &other) const
     /* now neither is O */
 
     bn::Fp2 Z1sq, Z2sq, lhs, rhs;
-    bn::Fp2::square(Z1sq, this->coord[2]);
-    bn::Fp2::square(Z2sq, other.coord[2]);
-    bn::Fp2::mul(lhs, Z2sq, this->coord[0]);
-    bn::Fp2::mul(rhs, Z1sq, other.coord[0]);
+    bn::Fp2::square(Z1sq, this->Z);
+    bn::Fp2::square(Z2sq, other.Z);
+    bn::Fp2::mul(lhs, Z2sq, this->X);
+    bn::Fp2::mul(rhs, Z1sq, other.X);
 
     if (lhs != rhs)
     {
@@ -165,10 +169,10 @@ bool bn128_G2::operator==(const bn128_G2 &other) const
     }
 
     bn::Fp2 Z1cubed, Z2cubed;
-    bn::Fp2::mul(Z1cubed, Z1sq, this->coord[2]);
-    bn::Fp2::mul(Z2cubed, Z2sq, other.coord[2]);
-    bn::Fp2::mul(lhs, Z2cubed, this->coord[1]);
-    bn::Fp2::mul(rhs, Z1cubed, other.coord[1]);
+    bn::Fp2::mul(Z1cubed, Z1sq, this->Z);
+    bn::Fp2::mul(Z2cubed, Z2sq, other.Z);
+    bn::Fp2::mul(lhs, Z2cubed, this->Y);
+    bn::Fp2::mul(rhs, Z1cubed, other.Y);
 
     return (lhs == rhs);
 }
@@ -208,7 +212,7 @@ bn128_G2 bn128_G2::operator+(const bn128_G2 &other) const
 bn128_G2 bn128_G2::operator-() const
 {
     bn128_G2 result(*this);
-    bn::Fp2::neg(result.coord[1], result.coord[1]);
+    bn::Fp2::neg(result.Y, result.Y);
     return result;
 }
 
@@ -223,8 +227,12 @@ bn128_G2 bn128_G2::add(const bn128_G2 &other) const
     this->add_cnt++;
 #endif
 
-    bn128_G2 result;
-    bn::ecop::ECAdd(result.coord, this->coord, other.coord);
+    bn::Fp2 this_coord[3], other_coord[3], result_coord[3];
+    this->fill_coord(this_coord);
+    other.fill_coord(other_coord);
+    bn::ecop::ECAdd(result_coord, this_coord, other_coord);
+
+    bn128_G2 result(result_coord);
     return result;
 }
 
@@ -259,16 +267,16 @@ bn128_G2 bn128_G2::mixed_add(const bn128_G2 &other) const
     // we know that Z2 = 1
 
     bn::Fp2 Z1Z1;
-    bn::Fp2::square(Z1Z1, this->coord[2]);
-    const bn::Fp2 &U1 = this->coord[0];
+    bn::Fp2::square(Z1Z1, this->Z);
+    const bn::Fp2 &U1 = this->X;
     bn::Fp2 U2;
-    bn::Fp2::mul(U2, other.coord[0], Z1Z1);
+    bn::Fp2::mul(U2, other.X, Z1Z1);
     bn::Fp2 Z1_cubed;
-    bn::Fp2::mul(Z1_cubed, this->coord[2], Z1Z1);
+    bn::Fp2::mul(Z1_cubed, this->Z, Z1Z1);
 
-    const bn::Fp2 &S1 = this->coord[1];
+    const bn::Fp2 &S1 = this->Y;
     bn::Fp2 S2;
-    bn::Fp2::mul(S2, other.coord[1], Z1_cubed); // S2 = Y2*Z1*Z1Z1
+    bn::Fp2::mul(S2, other.Y, Z1_cubed); // S2 = Y2*Z1*Z1Z1
 
     if (U1 == U2 && S1 == S2)
     {
@@ -283,7 +291,7 @@ bn128_G2 bn128_G2::mixed_add(const bn128_G2 &other) const
     bn128_G2 result;
     bn::Fp2 H, HH, I, J, r, V, tmp;
     // H = U2-X1
-    bn::Fp2::sub(H, U2, this->coord[0]);
+    bn::Fp2::sub(H, U2, this->X);
     // HH = H^2
     bn::Fp2::square(HH, H);
     // I = 4*HH
@@ -292,26 +300,26 @@ bn128_G2 bn128_G2::mixed_add(const bn128_G2 &other) const
     // J = H*I
     bn::Fp2::mul(J, H, I);
     // r = 2*(S2-Y1)
-    bn::Fp2::sub(tmp, S2, this->coord[1]);
+    bn::Fp2::sub(tmp, S2, this->Y);
     bn::Fp2::add(r, tmp, tmp);
     // V = X1*I
-    bn::Fp2::mul(V, this->coord[0], I);
+    bn::Fp2::mul(V, this->X, I);
     // X3 = r^2-J-2*V
-    bn::Fp2::square(result.coord[0], r);
-    bn::Fp2::sub(result.coord[0], result.coord[0], J);
-    bn::Fp2::sub(result.coord[0], result.coord[0], V);
-    bn::Fp2::sub(result.coord[0], result.coord[0], V);
+    bn::Fp2::square(result.X, r);
+    bn::Fp2::sub(result.X, result.X, J);
+    bn::Fp2::sub(result.X, result.X, V);
+    bn::Fp2::sub(result.X, result.X, V);
     // Y3 = r*(V-X3)-2*Y1*J
-    bn::Fp2::sub(tmp, V, result.coord[0]);
-    bn::Fp2::mul(result.coord[1], r, tmp);
-    bn::Fp2::mul(tmp, this->coord[1], J);
-    bn::Fp2::sub(result.coord[1], result.coord[1], tmp);
-    bn::Fp2::sub(result.coord[1], result.coord[1], tmp);
+    bn::Fp2::sub(tmp, V, result.X);
+    bn::Fp2::mul(result.Y, r, tmp);
+    bn::Fp2::mul(tmp, this->Y, J);
+    bn::Fp2::sub(result.Y, result.Y, tmp);
+    bn::Fp2::sub(result.Y, result.Y, tmp);
     // Z3 = (Z1+H)^2-Z1Z1-HH
-    bn::Fp2::add(tmp, this->coord[2], H);
-    bn::Fp2::square(result.coord[2], tmp);
-    bn::Fp2::sub(result.coord[2], result.coord[2], Z1Z1);
-    bn::Fp2::sub(result.coord[2], result.coord[2], HH);
+    bn::Fp2::add(tmp, this->Z, H);
+    bn::Fp2::square(result.Z, tmp);
+    bn::Fp2::sub(result.Z, result.Z, Z1Z1);
+    bn::Fp2::sub(result.Z, result.Z, HH);
     return result;
 }
 
@@ -320,8 +328,12 @@ bn128_G2 bn128_G2::dbl() const
 #ifdef PROFILE_OP_COUNTS
     this->dbl_cnt++;
 #endif
-    bn128_G2 result;
-    bn::ecop::ECDouble(result.coord, this->coord);
+
+    bn::Fp2 this_coord[3], result_coord[3];
+    this->fill_coord(this_coord);
+    bn::ecop::ECDouble(result_coord, this_coord);
+
+    bn128_G2 result(result_coord);
     return result;
 }
 
@@ -343,13 +355,13 @@ bool bn128_G2::is_well_formed() const
           y^2 = x^3 + b z^6
         */
         bn::Fp2 X2, Y2, Z2;
-        bn::Fp2::square(X2, this->coord[0]);
-        bn::Fp2::square(Y2, this->coord[1]);
-        bn::Fp2::square(Z2, this->coord[2]);
+        bn::Fp2::square(X2, this->X);
+        bn::Fp2::square(Y2, this->Y);
+        bn::Fp2::square(Z2, this->Z);
 
         bn::Fp2 X3, Z3, Z6;
-        bn::Fp2::mul(X3, X2, this->coord[0]);
-        bn::Fp2::mul(Z3, Z2, this->coord[2]);
+        bn::Fp2::mul(X3, X2, this->X);
+        bn::Fp2::mul(Z3, Z2, this->Z);
         bn::Fp2::square(Z6, Z3);
 
         return (Y2 == X3 + bn128_twist_coeff_b * Z6);
@@ -381,24 +393,24 @@ std::ostream& operator<<(std::ostream &out, const bn128_G2 &g)
 #ifdef NO_PT_COMPRESSION
     /* no point compression case */
 #ifndef BINARY_OUTPUT
-    out << gcopy.coord[0].a_ << OUTPUT_SEPARATOR << gcopy.coord[0].b_ << OUTPUT_SEPARATOR;
-    out << gcopy.coord[1].a_ << OUTPUT_SEPARATOR << gcopy.coord[1].b_;
+    out << gcopy.X.a_ << OUTPUT_SEPARATOR << gcopy.X.b_ << OUTPUT_SEPARATOR;
+    out << gcopy.Y.a_ << OUTPUT_SEPARATOR << gcopy.Y.b_;
 #else
-    out.write((char*) &gcopy.coord[0].a_, sizeof(gcopy.coord[0].a_));
-    out.write((char*) &gcopy.coord[0].b_, sizeof(gcopy.coord[0].b_));
-    out.write((char*) &gcopy.coord[1].a_, sizeof(gcopy.coord[1].a_));
-    out.write((char*) &gcopy.coord[1].b_, sizeof(gcopy.coord[1].b_));
+    out.write((char*) &gcopy.X.a_, sizeof(gcopy.X.a_));
+    out.write((char*) &gcopy.X.b_, sizeof(gcopy.X.b_));
+    out.write((char*) &gcopy.Y.a_, sizeof(gcopy.Y.a_));
+    out.write((char*) &gcopy.Y.b_, sizeof(gcopy.Y.b_));
 #endif
 
 #else
     /* point compression case */
 #ifndef BINARY_OUTPUT
-    out << gcopy.coord[0].a_ << OUTPUT_SEPARATOR << gcopy.coord[0].b_;
+    out << gcopy.X.a_ << OUTPUT_SEPARATOR << gcopy.X.b_;
 #else
-    out.write((char*) &gcopy.coord[0].a_, sizeof(gcopy.coord[0].a_));
-    out.write((char*) &gcopy.coord[0].b_, sizeof(gcopy.coord[0].b_));
+    out.write((char*) &gcopy.X.a_, sizeof(gcopy.X.a_));
+    out.write((char*) &gcopy.X.b_, sizeof(gcopy.X.b_));
 #endif
-    out << OUTPUT_SEPARATOR << (((unsigned char*)&gcopy.coord[1].a_)[0] & 1 ? '1' : '0');
+    out << OUTPUT_SEPARATOR << (((unsigned char*)&gcopy.Y.a_)[0] & 1 ? '1' : '0');
 #endif
 
     return out;
@@ -414,18 +426,18 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
 #ifdef NO_PT_COMPRESSION
     /* no point compression case */
 #ifndef BINARY_OUTPUT
-    in >> g.coord[0].a_;
+    in >> g.X.a_;
     consume_OUTPUT_SEPARATOR(in);
-    in >> g.coord[0].b_;
+    in >> g.X.b_;
     consume_OUTPUT_SEPARATOR(in);
-    in >> g.coord[1].a_;
+    in >> g.Y.a_;
     consume_OUTPUT_SEPARATOR(in);
-    in >> g.coord[1].b_;
+    in >> g.Y.b_;
 #else
-    in.read((char*) &g.coord[0].a_, sizeof(g.coord[0].a_));
-    in.read((char*) &g.coord[0].b_, sizeof(g.coord[0].b_));
-    in.read((char*) &g.coord[1].a_, sizeof(g.coord[1].a_));
-    in.read((char*) &g.coord[1].b_, sizeof(g.coord[1].b_));
+    in.read((char*) &g.X.a_, sizeof(g.X.a_));
+    in.read((char*) &g.X.b_, sizeof(g.X.b_));
+    in.read((char*) &g.Y.a_, sizeof(g.Y.a_));
+    in.read((char*) &g.Y.b_, sizeof(g.Y.b_));
 #endif
 
 #else
@@ -447,16 +459,16 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
     // y = +/- sqrt(x^3 + b)
     if (!is_zero)
     {
-        g.coord[0] = tX;
+        g.X = tX;
         bn::Fp2 tX2, tY2;
         bn::Fp2::square(tX2, tX);
         bn::Fp2::mul(tY2, tX2, tX);
         bn::Fp2::add(tY2, tY2, bn128_twist_coeff_b);
 
-        g.coord[1] = bn128_G2::sqrt(tY2);
-        if ((((unsigned char*)&g.coord[1].a_)[0] & 1) != Y_lsb)
+        g.Y = bn128_G2::sqrt(tY2);
+        if ((((unsigned char*)&g.Y.a_)[0] & 1) != Y_lsb)
         {
-            bn::Fp2::neg(g.coord[1], g.coord[1]);
+            bn::Fp2::neg(g.Y, g.Y);
         }
     }
 #endif
@@ -464,7 +476,7 @@ std::istream& operator>>(std::istream &in, bn128_G2 &g)
     /* finalize */
     if (!is_zero)
     {
-        g.coord[2] = bn::Fp2(bn::Fp(1), bn::Fp(0));
+        g.Z = bn::Fp2(bn::Fp(1), bn::Fp(0));
     }
     else
     {
@@ -481,7 +493,7 @@ void bn128_G2::batch_to_special_all_non_zeros(std::vector<bn128_G2> &vec)
 
     for (auto &el: vec)
     {
-        Z_vec.emplace_back(el.coord[2]);
+        Z_vec.emplace_back(el.Z);
     }
     bn_batch_invert<bn::Fp2>(Z_vec);
 
@@ -493,9 +505,9 @@ void bn128_G2::batch_to_special_all_non_zeros(std::vector<bn128_G2> &vec)
         bn::Fp2::square(Z2, Z_vec[i]);
         bn::Fp2::mul(Z3, Z2, Z_vec[i]);
 
-        bn::Fp2::mul(vec[i].coord[0], vec[i].coord[0], Z2);
-        bn::Fp2::mul(vec[i].coord[1], vec[i].coord[1], Z3);
-        vec[i].coord[2] = one;
+        bn::Fp2::mul(vec[i].X, vec[i].X, Z2);
+        bn::Fp2::mul(vec[i].Y, vec[i].Y, Z3);
+        vec[i].Z = one;
     }
 }
 

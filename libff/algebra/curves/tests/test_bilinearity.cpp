@@ -15,6 +15,7 @@
 
 using namespace libff;
 
+#ifndef NDEBUG
 template<typename ppT>
 void pairing_test()
 {
@@ -139,3 +140,11 @@ int main(void)
     double_miller_loop_test<bn128_pp>();
 #endif
 }
+
+#else // NDEBUG
+
+int main()
+{
+    printf("All tests here depend on assert() which is disabled by -DNDEBUG. Please recompile and run again.\n");
+}
+#endif // NDEBUG
