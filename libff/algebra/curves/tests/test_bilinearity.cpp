@@ -53,6 +53,7 @@ void pairing_test()
     assert(ans1 != GT_one);
     assert((ans1^Fr<ppT>::field_char()) == GT_one);
     printf("\n\n");
+    UNUSED(GT_one);  // Prevent release build warnings
 }
 
 template<typename ppT>
@@ -72,6 +73,9 @@ void double_miller_loop_test()
     const Fqk<ppT> ans_2 = ppT::miller_loop(prec_P2, prec_Q2);
     const Fqk<ppT> ans_12 = ppT::double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
     assert(ans_1 * ans_2 == ans_12);
+    UNUSED(ans_1);  // Prevent release build warnings
+    UNUSED(ans_2);
+    UNUSED(ans_12);
 }
 
 template<typename ppT>
@@ -106,6 +110,7 @@ void affine_pairing_test()
     assert(ans1 != GT_one);
     assert((ans1^Fr<ppT>::field_char()) == GT_one);
     printf("\n\n");
+    UNUSED(GT_one);  // Prevent release build warnings
 }
 
 int main(void)
