@@ -90,7 +90,7 @@ bool is_little_endian()
 {
     uint64_t a = 0x12345678;
     unsigned char *c = (unsigned char*)(&a);
-    return (*c = 0x78);
+    return (*c == 0x78);
 }
 
 std::string FORMAT(const std::string &prefix, const char* format, ...)
