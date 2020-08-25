@@ -32,6 +32,7 @@ int from_twos_complement(size_t i, size_t w);
 
 size_t bitreverse(size_t n, const size_t l);
 bit_vector int_list_to_bits(const std::initializer_list<unsigned long> &l, const size_t wordsize);
+/* throws error if y = 0 */
 long long div_ceil(long long x, long long y);
 
 bool is_little_endian();
