@@ -86,6 +86,10 @@ bit_vector int_list_to_bits(const std::initializer_list<unsigned long> &l, const
 
 long long div_ceil(long long x, long long y)
 {
+    if (y == 0)
+    {
+        throw std::invalid_argument("libff::div_ceil: division by zero, second argument must be non-zero");
+    }
     return (x + (y-1)) / y;
 }
 
