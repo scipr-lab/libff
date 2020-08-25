@@ -1,6 +1,7 @@
 set(FF_EXTRASRCS)
 set(FF_EXTRALIBS)
 if(${CURVE} STREQUAL "BN128")
+  include_directories(depends)
   set(
     FF_EXTRASRCS
 
