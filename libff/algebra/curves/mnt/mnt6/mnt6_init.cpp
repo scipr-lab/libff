@@ -150,6 +150,9 @@ void init_mnt6_params()
                               mnt6_Fq::one());
     mnt6_G1::initialized = true;
 
+    // Cofactor
+    mnt6_G1::h = bigint<mnt6_G1::h_limbs>("1");
+
     mnt6_G1::wnaf_window_table.resize(0);
     mnt6_G1::wnaf_window_table.push_back(11);
     mnt6_G1::wnaf_window_table.push_back(24);
@@ -214,6 +217,9 @@ void init_mnt6_params()
                                        mnt6_Fq("123019855502969896026940545715841181300275180157288044663051565390506010149881373807142903")),
                               mnt6_Fq3::one());
     mnt6_G2::initialized = true;
+
+    // Cofactor
+    mnt6_G2::h = bigint<mnt6_G2::h_limbs>("226502022472576270196498690498308461791828762732602586162207535351960270082712694977333372361549082214519252261735048131889018501404377856786623430385820659037970876666767495659520");
 
     mnt6_G2::wnaf_window_table.resize(0);
     mnt6_G2::wnaf_window_table.push_back(5);

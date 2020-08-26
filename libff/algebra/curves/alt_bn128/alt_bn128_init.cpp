@@ -150,6 +150,9 @@ void init_alt_bn128_params()
                                     alt_bn128_Fq::one());
     alt_bn128_G1::initialized = true;
 
+    // Cofactor
+    alt_bn128_G1::h = bigint<alt_bn128_G1::h_limbs>("1");
+
     alt_bn128_G1::wnaf_window_table.resize(0);
     alt_bn128_G1::wnaf_window_table.push_back(11);
     alt_bn128_G1::wnaf_window_table.push_back(24);
@@ -214,6 +217,14 @@ void init_alt_bn128_params()
                                                 alt_bn128_Fq("4082367875863433681332203403145435568316851327593401208105741076214120093531")),
                                     alt_bn128_Fq2::one());
     alt_bn128_G2::initialized = true;
+
+    // Cofactor
+    // [Sage excerpt]
+    // See: https://eprint.iacr.org/2015/247.pdf
+    // u = 4965661367192848881
+    // h2 = (36 * u^4) + (36 * u^3) + (30 * u^2) + 6*u + 1; h2
+    // # 21888242871839275222246405745257275088844257914179612981679871602714643921549
+    alt_bn128_G2::h = bigint<alt_bn128_G2::h_limbs>("21888242871839275222246405745257275088844257914179612981679871602714643921549");
 
     alt_bn128_G2::wnaf_window_table.resize(0);
     alt_bn128_G2::wnaf_window_table.push_back(5);
