@@ -42,6 +42,11 @@ public:
     typedef mnt6_Fq3 twist_field;
     typedef mnt6_Fr scalar_field;
 
+    // Cofactor
+    static const mp_size_t h_bitcount = 596;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
     mnt6_Fq3 X, Y, Z;
 
     // using projective coordinates
@@ -71,6 +76,7 @@ public:
     mnt6_G2 mixed_add(const mnt6_G2 &other) const;
     mnt6_G2 dbl() const;
     mnt6_G2 mul_by_q() const;
+    mnt6_G2 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 

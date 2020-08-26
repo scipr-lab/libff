@@ -27,6 +27,7 @@ mnt4_G1 mnt4_G1::G1_one = {};
 bool mnt4_G1::initialized = false;
 mnt4_Fq mnt4_G1::coeff_a;
 mnt4_Fq mnt4_G1::coeff_b;
+bigint<mnt4_G1::h_limbs> mnt4_G1::h;
 
 mnt4_G1::mnt4_G1()
 {
@@ -347,6 +348,12 @@ mnt4_G1 mnt4_G1::dbl() const
 
         return mnt4_G1(X3, Y3, Z3);
     }
+}
+
+mnt4_G1 mnt4_G1::mul_by_cofactor() const
+{
+    // Cofactor = 1
+    return (*this);
 }
 
 bool mnt4_G1::is_well_formed() const

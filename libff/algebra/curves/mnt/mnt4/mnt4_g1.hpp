@@ -40,6 +40,11 @@ public:
     typedef mnt4_Fq base_field;
     typedef mnt4_Fr scalar_field;
 
+    // Cofactor
+    static const mp_size_t h_bitcount = 1;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
     mnt4_Fq X, Y, Z;
 
     // using projective coordinates
@@ -66,6 +71,7 @@ public:
     mnt4_G1 add(const mnt4_G1 &other) const;
     mnt4_G1 mixed_add(const mnt4_G1 &other) const;
     mnt4_G1 dbl() const;
+    mnt4_G1 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 
