@@ -348,7 +348,8 @@ Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic
                 res = res.cyclotomic_squared();
             }
 
-            if (exponent.data[i] & (1ul<<j))
+            static const mp_limb_t one = 1;
+            if (exponent.data[i] & (one<<j))
             {
                 found_one = true;
                 res = res * (*this);
