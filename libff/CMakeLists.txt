@@ -133,6 +133,9 @@ if ("${IS_LIBFF_PARENT}")
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_fields_test)
 
+  find_package(OpenSSL REQUIRED)
+  INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
+
   add_executable(
     multiexp_profile
     EXCLUDE_FROM_ALL
