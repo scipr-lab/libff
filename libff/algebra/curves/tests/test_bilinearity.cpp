@@ -53,7 +53,8 @@ void pairing_test()
     assert(ans1 != GT_one);
     assert((ans1^Fr<ppT>::field_char()) == GT_one);
     printf("\n\n");
-    UNUSED(GT_one);  // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(GT_one);
 }
 
 template<typename ppT>
@@ -73,7 +74,8 @@ void double_miller_loop_test()
     const Fqk<ppT> ans_2 = ppT::miller_loop(prec_P2, prec_Q2);
     const Fqk<ppT> ans_12 = ppT::double_miller_loop(prec_P1, prec_Q1, prec_P2, prec_Q2);
     assert(ans_1 * ans_2 == ans_12);
-    UNUSED(ans_1);  // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(ans_1);
     UNUSED(ans_2);
     UNUSED(ans_12);
 }
@@ -110,7 +112,8 @@ void affine_pairing_test()
     assert(ans1 != GT_one);
     assert((ans1^Fr<ppT>::field_char()) == GT_one);
     printf("\n\n");
-    UNUSED(GT_one);  // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(GT_one);
 }
 
 int main(void)
@@ -134,7 +137,8 @@ int main(void)
     pairing_test<alt_bn128_pp>();
     double_miller_loop_test<alt_bn128_pp>();
 
-#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
+// BN128 has fancy dependencies so it may be disabled
+#ifdef CURVE_BN128
     bn128_pp::init_public_params();
     pairing_test<bn128_pp>();
     double_miller_loop_test<bn128_pp>();
