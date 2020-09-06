@@ -70,7 +70,8 @@ void test_sqrt()
         FieldT a = FieldT::random_element();
         FieldT asq = a.squared();
         assert(asq.sqrt() == a || asq.sqrt() == -a);
-        UNUSED(a);    // Prevent release build warnings
+        // Prevent release build warnings
+        UNUSED(a);
         UNUSED(asq);
     }
 }
@@ -82,7 +83,8 @@ void test_two_squarings()
     assert(a.squared() == a * a);
     assert(a.squared() == a.squared_complex());
     assert(a.squared() == a.squared_karatsuba());
-    UNUSED(a);    // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(a);
 }
 
 template<typename FieldT>
@@ -95,11 +97,13 @@ void test_Frobenius()
     {
         const FieldT a_qi = a.Frobenius_map(power);
         assert(a_qi == a_q);
-        UNUSED(a_qi);    // Prevent release build warnings
+        // Prevent release build warnings
+        UNUSED(a_qi);
 
         a_q = a_q ^ FieldT::base_field_char();
     }
-    UNUSED(a);    // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(a);
 }
 
 template<typename FieldT>
@@ -109,7 +113,8 @@ void test_unitary_inverse()
     FieldT a = FieldT::random_element();
     FieldT aqcubed_minus1 = a.Frobenius_map(FieldT::extension_degree()/2) * a.inverse();
     assert(aqcubed_minus1.inverse() == aqcubed_minus1.unitary_inverse());
-    UNUSED(aqcubed_minus1);  // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(aqcubed_minus1);
 }
 
 template<typename FieldT>
@@ -125,7 +130,8 @@ void test_cyclotomic_squaring<Fqk<edwards_pp> >()
     // beta = a^((q^(k/2)-1)*(q+1))
     FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
     assert(beta.cyclotomic_squared() == beta.squared());
-    UNUSED(beta);    // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(beta);
 }
 
 template<>
@@ -138,7 +144,8 @@ void test_cyclotomic_squaring<Fqk<mnt4_pp> >()
     // beta = a^(q^(k/2)-1)
     FieldT beta = a_unitary;
     assert(beta.cyclotomic_squared() == beta.squared());
-    UNUSED(beta);    // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(beta);
 }
 
 template<>
@@ -151,7 +158,8 @@ void test_cyclotomic_squaring<Fqk<mnt6_pp> >()
     // beta = a^((q^(k/2)-1)*(q+1))
     FieldT beta = a_unitary.Frobenius_map(1) * a_unitary;
     assert(beta.cyclotomic_squared() == beta.squared());
-    UNUSED(beta);    // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(beta);
 }
 
 template<typename ppT>
@@ -218,7 +226,8 @@ void test_Fp4_tom_cook()
         c3 = FieldT(12).inverse() * (FieldT(5)*v0 - FieldT(7)*v1) - FieldT(24).inverse()*(v2 - FieldT(7)*v3 + v4 + v5) + FieldT(15)*v6;
 
         assert(res == correct_res);
-        UNUSED(correct_res);    // Prevent release build warnings
+        // Prevent release build warnings
+        UNUSED(correct_res);
 
         // {v0, v3, v4, v5}
         const FieldT u = (FieldT::one() - beta).inverse();
@@ -258,7 +267,8 @@ int main()
     test_Frobenius<alt_bn128_Fq6>();
     test_all_fields<alt_bn128_pp>();
 
-#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
+// BN128 has fancy dependencies so it may be disabled
+#ifdef CURVE_BN128
     bn128_pp::init_public_params();
     test_field<Fr<bn128_pp> >();
     test_field<Fq<bn128_pp> >();
