@@ -113,9 +113,6 @@ set_target_properties(
   INTERFACE_INCLUDE_DIRECTORIES ${GMP_INCLUDE_DIR}
 )
 
-find_package(OpenSSL REQUIRED)
-INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
-
 if("${WITH_PROCPS}")
   if(APPLE)
     message(WARNING "WITH_PROCPS must be set to OFF for macOS build")
