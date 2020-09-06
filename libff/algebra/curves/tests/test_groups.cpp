@@ -131,7 +131,8 @@ void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
     assert((GroupT::base_field_char()*a) == a.mul_by_q());
-    UNUSED(a);  // Prevent release build warnings
+    // Prevent release build warnings
+    UNUSED(a);
 }
 
 template<typename GroupT>
@@ -146,7 +147,7 @@ void test_output()
         GroupT gg;
         ss >> gg;
         assert(g == gg);
-        /* use a random point in next iteration */
+        // Use a random point in next iteration
         g = GroupT::random_element();
     }
 }
@@ -181,7 +182,8 @@ int main(void)
     test_output<G2<alt_bn128_pp> >();
     test_mul_by_q<G2<alt_bn128_pp> >();
 
-#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
+// BN128 has fancy dependencies so it may be disabled
+#ifdef CURVE_BN128
     bn128_pp::init_public_params();
     test_group<G1<bn128_pp> >();
     test_output<G1<bn128_pp> >();
