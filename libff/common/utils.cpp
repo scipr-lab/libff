@@ -16,8 +16,10 @@
 
 namespace libff {
 
-/** Round n to the next power of two.
- *  If n is a power of two, return n  */
+/**
+ * Round n to the next power of two.
+ * If n is a power of two, return n
+ */
 size_t get_power_of_two(size_t n)
 {
     n--;
