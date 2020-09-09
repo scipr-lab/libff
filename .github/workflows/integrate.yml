@@ -1,6 +1,6 @@
 name: Integrate
 
-on: [push, pull]
+on: push
 
 jobs:
   build:
