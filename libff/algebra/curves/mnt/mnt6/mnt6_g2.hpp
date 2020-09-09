@@ -24,8 +24,6 @@ std::ostream& operator<<(std::ostream &, const mnt6_G2&);
 std::istream& operator>>(std::istream &, mnt6_G2&);
 
 class mnt6_G2 {
-private:
-    mnt6_Fq3 X_, Y_, Z_;
 public:
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
@@ -44,13 +42,16 @@ public:
     typedef mnt6_Fq3 twist_field;
     typedef mnt6_Fr scalar_field;
 
+    // Cofactor
+    static const mp_size_t h_bitcount = 596;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
+    mnt6_Fq3 X, Y, Z;
+
     // using projective coordinates
     mnt6_G2();
-    mnt6_G2(const mnt6_Fq3& X, const mnt6_Fq3& Y, const mnt6_Fq3& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    mnt6_Fq3 X() const { return X_; }
-    mnt6_Fq3 Y() const { return Y_; }
-    mnt6_Fq3 Z() const { return Z_; }
+    mnt6_G2(const mnt6_Fq3& X, const mnt6_Fq3& Y, const mnt6_Fq3& Z) : X(X), Y(Y), Z(Z) {}
 
     static mnt6_Fq3 mul_by_a(const mnt6_Fq3 &elt);
     static mnt6_Fq3 mul_by_b(const mnt6_Fq3 &elt);
@@ -75,6 +76,7 @@ public:
     mnt6_G2 mixed_add(const mnt6_G2 &other) const;
     mnt6_G2 dbl() const;
     mnt6_G2 mul_by_q() const;
+    mnt6_G2 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 

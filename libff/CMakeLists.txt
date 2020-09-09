@@ -1,6 +1,7 @@
 set(FF_EXTRASRCS)
 set(FF_EXTRALIBS)
 if(${CURVE} STREQUAL "BN128")
+  include_directories(depends)
   set(
     FF_EXTRASRCS
 
@@ -131,6 +132,9 @@ if ("${IS_LIBFF_PARENT}")
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_fields_test)
+
+  find_package(OpenSSL REQUIRED)
+  INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
 
   add_executable(
     multiexp_profile

@@ -56,10 +56,11 @@ option(
   OFF
 )
 
+# This option does not work on macOS, since there is no /proc
 option(
   WITH_PROCPS
   "Use procps for memory profiling"
-  ON
+  OFF
 )
 
 option(
@@ -112,10 +113,10 @@ set_target_properties(
   INTERFACE_INCLUDE_DIRECTORIES ${GMP_INCLUDE_DIR}
 )
 
-find_package(OpenSSL REQUIRED)
-INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
-
 if("${WITH_PROCPS}")
+  if(APPLE)
+    message(WARNING "WITH_PROCPS must be set to OFF for macOS build")
+  endif()
   include(FindPkgConfig)
   pkg_check_modules(
     PROCPS
@@ -136,6 +137,7 @@ add_definitions(
 enable_testing()
 
 if(${CURVE} STREQUAL "BN128")
+  include_directories(depends)
   add_definitions(
     -DBN_SUPPORT_SNARK=1
   )

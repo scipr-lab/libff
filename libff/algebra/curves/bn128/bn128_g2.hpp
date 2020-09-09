@@ -10,7 +10,7 @@
 #include <iostream>
 #include <vector>
 
-#include "depends/ate-pairing/include/bn.h"
+#include "ate-pairing/include/bn.h"
 
 #include <libff/algebra/curves/bn128/bn128_init.hpp>
 #include <libff/algebra/curves/curve_utils.hpp>
@@ -35,10 +35,19 @@ public:
     static bn128_G2 G2_one;
     static bool initialized;
 
-    bn::Fp2 coord[3];
-    bn128_G2();
     typedef bn128_Fq base_field;
     typedef bn128_Fr scalar_field;
+
+    // Cofactor
+    static const mp_size_t h_bitcount = 256;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
+    bn::Fp2 X, Y, Z;
+    void fill_coord(bn::Fp2 coord[3]) const { coord[0] = this->X; coord[1] = this->Y; coord[2] = this->Z; };
+
+    bn128_G2();
+    bn128_G2(bn::Fp2 coord[3]) : X(coord[0]), Y(coord[1]), Z(coord[2]) {};
 
     void print() const;
     void print_coordinates() const;
@@ -59,6 +68,7 @@ public:
     bn128_G2 add(const bn128_G2 &other) const;
     bn128_G2 mixed_add(const bn128_G2 &other) const;
     bn128_G2 dbl() const;
+    bn128_G2 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 
