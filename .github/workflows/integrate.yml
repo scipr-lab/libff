@@ -35,7 +35,7 @@ jobs:
     - name: before_script
       run: |
         git submodule init && git submodule update
-        mkdir build && cd build && cmake -DWITH_PROCPS=OFF..
+        mkdir build && cd build && cmake -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1 -DOPENSSL_LIBRARIES=/usr/local/opt/openssl@1.1/lib -DWITH_PROCPS=OFF ..
     - name: tests
       run: |
         cd build
