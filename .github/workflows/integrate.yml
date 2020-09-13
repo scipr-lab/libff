@@ -41,3 +41,23 @@ jobs:
         cd build
         make
         make check
+
+  build_windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: before_install
+      run: |
+        choco install boost
+        choco install cmake
+        choco install openssl
+        choco install gmp
+    - name: before_script
+      run: |
+        git submodule init && git submodule update
+        mkdir build && cd build && cmake ..
+    - name: tests
+      run: |
+        cd build
+        make
+        make check
