@@ -21,6 +21,7 @@ jobs:
         cd build
         make
         make check
+
   build_macOS:
     runs-on: macos-latest
     steps:
@@ -34,7 +35,7 @@ jobs:
     - name: before_script
       run: |
         git submodule init && git submodule update
-        mkdir build && cd build && cmake ..
+        mkdir build && cd build && cmake -DWITH_PROCPS=OFF..
     - name: tests
       run: |
         cd build
