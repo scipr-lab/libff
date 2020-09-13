@@ -51,7 +51,7 @@ jobs:
         choco install boost
         choco install cmake
         choco install openssl
-        choco install gmp
+        pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gmp make
     - name: before_script
       run: |
         git submodule init && git submodule update
