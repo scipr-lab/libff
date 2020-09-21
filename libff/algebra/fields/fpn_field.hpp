@@ -92,26 +92,28 @@ public:
     bool is_zero() const = 0;
 
     void print() const = 0;
-    /**
-     * Returns the constituent bits in 64 bit words, in little-endian order.
-     * Only the right-most size_in_bits() bits are used; other bits are 0.
-     */
-    std::vector<uint64_t> as_words() const = 0;
 
     void randomize() = 0;
     void clear() = 0;
 
-    // the following should be defined in child classes, but are static so they can't be inherited
+    /* The static functions should be defined in field classes, but are static so they
+       can't be inherited. */
     static T zero();
     static T one();
     static T random_element();
+    /** Equals 1 for prime field Fp. */
+    static constexpr std::size_t extension_degree();
+
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const = 0;
     /**
      * Creates a field element from the given bits in 64 bit words, in little-endian order.
      * Only the right-most size_in_bits() bits are used; other bits are ignored.
      */
     static T from_words(std::vector<uint64_t> words);
-    /** Equals 1 for prime field Fp. */
-    static constexpr std::size_t extension_degree();
     static std::size_t ceil_size_in_bits();
     static std::size_t floor_size_in_bits();
 
