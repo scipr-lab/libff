@@ -18,6 +18,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<typename FieldT>
 FieldT coset_shift()
 {

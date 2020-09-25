@@ -39,14 +39,20 @@ public:
     bigint(const char* s); /// Initialize from a string containing an integer in decimal notation
     bigint(const mpz_t r); /// Initialize from MPZ element
 
+    bigint operator-(const bigint<n>& other) const;
+    bigint operator/(const mp_limb_t other) const;
+    bigint operator%(const mp_limb_t other) const;
+    template<mp_size_t m>
+    bigint<m> power(const std::size_t exp) const;
+
     void print() const;
     void print_hex() const;
     bool operator==(const bigint<n>& other) const;
     bool operator!=(const bigint<n>& other) const;
     void clear();
     bool is_zero() const;
-    size_t max_bits() const { return n * GMP_NUMB_BITS; } /// Returns the number of bits representable by this bigint type
-    size_t num_bits() const; /// Returns the number of bits in this specific bigint value, i.e., position of the most-significant 1
+    std::size_t max_bits() const { return n * GMP_NUMB_BITS; } /// Returns the number of bits representable by this bigint type
+    std::size_t num_bits() const; /// Returns the number of bits in this specific bigint value, i.e., position of the most-significant 1
 
     unsigned long as_ulong() const; /// Return the last limb of the integer
     void to_mpz(mpz_t r) const;
@@ -59,5 +65,5 @@ public:
 };
 
 } // libff
-#include <libff/algebra/fields/bigint.tcc>
+#include <libff/algebra/field_utils/bigint.tcc>
 #endif

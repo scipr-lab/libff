@@ -14,10 +14,12 @@
 #include <cstdlib>
 #include <limits>
 
-#include <libff/algebra/fields/field_utils.hpp>
-#include <libff/algebra/fields/fp_aux.tcc>
+#include <libff/algebra/field_utils/field_utils.hpp>
+#include <libff/algebra/field_utils/fp_aux.tcc>
 
 namespace libff {
+
+using std::size_t;
 
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
@@ -230,6 +232,12 @@ template<mp_size_t n, const bigint<n>& modulus>
 void Fp_model<n,modulus>::clear()
 {
     this->mont_repr.clear();
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp_model<n,modulus>::randomize()
+{
+    (*this) = Fp_model<n, modulus>::random_element();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -655,6 +663,13 @@ Fp_model<n,modulus> Fp_model<n,modulus>::squared() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus>& Fp_model<n,modulus>::square()
+{
+    (*this) = squared();
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus>& Fp_model<n,modulus>::invert()
 {
 #ifdef PROFILE_OP_COUNTS
@@ -716,6 +731,14 @@ Fp_model<n,modulus> Fp_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus> Fp_model<n,modulus>::Frobenius_map(unsigned long power) const
+{
+    UNUSED(power); // only for API consistency
+    Fp_model<n,modulus> copy = *this;
+    return copy;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random element of Fp_model
 {
     /* note that as Montgomery representation is a bijection then
@@ -748,56 +771,13 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus> Fp_model<n,modulus>::sqrt() const
 {
-    Fp_model<n,modulus> one = Fp_model<n,modulus>::one();
+    return tonelli_shanks_sqrt(*this);
+}
 
-    size_t v = Fp_model<n,modulus>::s;
-    Fp_model<n,modulus> z = Fp_model<n,modulus>::nqr_to_t;
-    Fp_model<n,modulus> w = (*this)^Fp_model<n,modulus>::t_minus_1_over_2;
-    Fp_model<n,modulus> x = (*this) * w;
-    Fp_model<n,modulus> b = x * w; // b = (*this)^t
-
-#if DEBUG
-    // check if square with euler's criterion
-    Fp_model<n,modulus> check = b;
-    for (size_t i = 0; i < v-1; ++i)
-    {
-        check = check.squared();
-    }
-    if (check != one)
-    {
-        assert(0);
-    }
-#endif
-
-    // compute square root with Tonelli--Shanks
-    // (does not terminate if not a square!)
-
-    while (b != one)
-    {
-        size_t m = 0;
-        Fp_model<n,modulus> b2m = b;
-        while (b2m != one)
-        {
-            /* invariant: b2m = b^(2^m) after entering this loop */
-            b2m = b2m.squared();
-            m += 1;
-        }
-
-        int j = v-m-1;
-        w = z;
-        while (j > 0)
-        {
-            w = w.squared();
-            --j;
-        } // w = z^2^(v-m-1)
-
-        z = w.squared();
-        b = b * z;
-        x = x * w;
-        v = m;
-    }
-
-    return x;
+template<mp_size_t n, const bigint<n>& modulus>
+void Fp_model<n,modulus>::init_tonelli_shanks_constants()
+{
+    find_tonelli_shanks_constants<Fp_model<n,modulus>, n>();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

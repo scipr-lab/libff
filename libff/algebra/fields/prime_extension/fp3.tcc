@@ -10,9 +10,11 @@
 #ifndef FP3_TCC_
 #define FP3_TCC_
 
-#include <libff/algebra/fields/field_utils.hpp>
+#include <libff/algebra/field_utils/field_utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::zero()
@@ -38,6 +40,12 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::random_element()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp3_model<n,modulus>::randomize()
+{
+    (*this) = Fp3_model<n, modulus>::random_element();
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp3_model<n,modulus>::operator==(const Fp3_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1 && this->c2 == other.c2);
@@ -52,6 +60,9 @@ bool Fp3_model<n,modulus>::operator!=(const Fp3_model<n,modulus> &other) const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::operator+(const Fp3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     return Fp3_model<n,modulus>(this->c0 + other.c0,
                                 this->c1 + other.c1,
                                 this->c2 + other.c2);
@@ -60,6 +71,9 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::operator+(const Fp3_model<n,modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::operator-(const Fp3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     return Fp3_model<n,modulus>(this->c0 - other.c0,
                                 this->c1 - other.c1,
                                 this->c2 - other.c2);
@@ -68,6 +82,9 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::operator-(const Fp3_model<n,modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp3_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp3_model<n,modulus>(lhs*rhs.c0,
                                 lhs*rhs.c1,
                                 lhs*rhs.c2);
@@ -76,6 +93,9 @@ Fp3_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp3_model
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::operator*(const Fp3_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 4 (Karatsuba) */
     const my_Fp
         &A = other.c0, &B = other.c1, &C = other.c2,
@@ -98,8 +118,60 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus> Fp3_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return power<Fp3_model<n, modulus> >(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp3_model<n,modulus> Fp3_model<n,modulus>::operator^(const bigint<m> &pow) const
+{
+    return power<Fp3_model<n, modulus> >(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator+=(const Fp3_model<n,modulus>& other)
+{
+    (*this) = *this + other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator-=(const Fp3_model<n,modulus>& other)
+{
+    (*this) = *this - other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator*=(const Fp3_model<n,modulus>& other)
+{
+    (*this) = *this * other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    (*this) = *this ^ pow;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    (*this) = *this ^ pow;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::squared() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 4 (CH-SQR2) */
     const my_Fp
         &a = this->c0, &b = this->c1, &c = this->c2;
@@ -117,8 +189,18 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::squared() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::square()
+{
+    (*this) = squared();
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+#endif
     const my_Fp
         &a = this->c0, &b = this->c1, &c = this->c2;
 
@@ -137,6 +219,13 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp3_model<n,modulus>& Fp3_model<n,modulus>::invert()
+{
+    (*this) = inverse();
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::Frobenius_map(unsigned long power) const
 {
     return Fp3_model<n,modulus>(c0,
@@ -147,63 +236,13 @@ Fp3_model<n,modulus> Fp3_model<n,modulus>::Frobenius_map(unsigned long power) co
 template<mp_size_t n, const bigint<n>& modulus>
 Fp3_model<n,modulus> Fp3_model<n,modulus>::sqrt() const
 {
-    Fp3_model<n,modulus> one = Fp3_model<n,modulus>::one();
-
-    size_t v = Fp3_model<n,modulus>::s;
-    Fp3_model<n,modulus> z = Fp3_model<n,modulus>::nqr_to_t;
-    Fp3_model<n,modulus> w = (*this)^Fp3_model<n,modulus>::t_minus_1_over_2;
-    Fp3_model<n,modulus> x = (*this) * w;
-    Fp3_model<n,modulus> b = x * w; // b = (*this)^t
-
-#if DEBUG
-    // check if square with euler's criterion
-    Fp3_model<n,modulus> check = b;
-    for (size_t i = 0; i < v-1; ++i)
-    {
-        check = check.squared();
-    }
-    if (check != one)
-    {
-        assert(0);
-    }
-#endif
-
-    // compute square root with Tonelli--Shanks
-    // (does not terminate if not a square!)
-
-    while (b != one)
-    {
-        size_t m = 0;
-        Fp3_model<n,modulus> b2m = b;
-        while (b2m != one)
-        {
-            /* invariant: b2m = b^(2^m) after entering this loop */
-            b2m = b2m.squared();
-            m += 1;
-        }
-
-        int j = v-m-1;
-        w = z;
-        while (j > 0)
-        {
-            w = w.squared();
-            --j;
-        } // w = z^2^(v-m-1)
-
-        z = w.squared();
-        b = b * z;
-        x = x * w;
-        v = m;
-    }
-
-    return x;
+    return tonelli_shanks_sqrt(*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-template<mp_size_t m>
-Fp3_model<n,modulus> Fp3_model<n,modulus>::operator^(const bigint<m> &pow) const
+void Fp3_model<n,modulus>::init_tonelli_shanks_constants()
 {
-    return power<Fp3_model<n, modulus> >(*this, pow);
+    find_tonelli_shanks_constants<Fp3_model<n,modulus>, n>();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

@@ -17,7 +17,7 @@
 #include <gmp.h>
 #include <openssl/sha.h>
 
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 #include <libff/common/rng.hpp>
 #include <libff/common/utils.hpp>
 

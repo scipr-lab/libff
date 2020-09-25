@@ -15,6 +15,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n>
 bigint<n>::bigint(const unsigned long x) /// Initalize from a small integer
 {
@@ -58,6 +60,42 @@ bigint<n>::bigint(const mpz_t r) /// Initialize from MPZ element
 
     assert(mpz_sgn(k) == 0);
     mpz_clear(k);
+}
+
+template<mp_size_t n>
+bigint<n> bigint<n>::operator-(const bigint<n> &other) const
+{
+    bigint<n> result;
+    mpn_sub_n(result.data, this->data, other.data, n);
+    return result;
+}
+
+template<mp_size_t n>
+bigint<n> bigint<n>::operator/(const mp_limb_t other) const
+{
+    bigint<n> quotient;
+    mpn_divmod_1(quotient.data, this->data, n, other);
+    return quotient;
+}
+
+template<mp_size_t n>
+bigint<n> bigint<n>::operator%(const mp_limb_t other) const
+{
+    bigint<n> quotient;
+    mp_limb_t remainder = mpn_divmod_1(quotient.data, this->data, n, other);
+    UNUSED(quotient);
+    return remainder;
+}
+
+template<mp_size_t n>
+template<mp_size_t m>
+bigint<m> bigint<n>::power(const size_t exp) const
+{
+    mpz_t value;
+    mpz_init(value);
+    this->to_mpz(value);
+    mpz_pow_ui(value, value, exp);
+    return bigint<m>(value);
 }
 
 template<mp_size_t n>

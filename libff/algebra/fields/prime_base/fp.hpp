@@ -10,8 +10,8 @@
 #ifndef FP_HPP_
 #define FP_HPP_
 
-#include <libff/algebra/exponentiation/exponentiation.hpp>
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/algorithms.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 
 namespace libff {
 
@@ -35,7 +35,7 @@ std::istream& operator>>(std::istream &, Fp_model<n, modulus> &);
  * But for the integer sizes of interest for libff (3 to 5 limbs of 64 bits each),
  * we implement performance-critical routines, like addition and multiplication,
  * using hand-optimzied assembly code.
-*/
+ */
 template<mp_size_t n, const bigint<n>& modulus>
 class Fp_model {
 public:
@@ -43,16 +43,16 @@ public:
 public:
     static const mp_size_t num_limbs = n;
     static const constexpr bigint<n>& mod = modulus;
-#ifdef PROFILE_OP_COUNTS
+#ifdef PROFILE_OP_COUNTS // NOTE: op counts are affected when you exponentiate with ^
     static long long add_cnt;
     static long long sub_cnt;
     static long long mul_cnt;
     static long long sqr_cnt;
     static long long inv_cnt;
 #endif
-    static size_t num_bits;
+    static std::size_t num_bits;
     static bigint<n> euler; // (modulus-1)/2
-    static size_t s; // modulus = 2^s * t + 1
+    static std::size_t s; // modulus = 2^s * t + 1
     static bigint<n> t; // with t odd
     static bigint<n> t_minus_1_over_2; // (t-1)/2
     static Fp_model<n, modulus> nqr; // a quadratic nonresidue
@@ -63,8 +63,6 @@ public:
     static bigint<n> Rsquared; // R^2, where R = W^k, where k = ??
     static bigint<n> Rcubed;   // R^3
 
-    static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero
-
     Fp_model() {};
     Fp_model(const bigint<n> &b);
     Fp_model(const long x, const bool is_unsigned=false);
@@ -74,6 +72,7 @@ public:
     void mul_reduce(const bigint<n> &other);
 
     void clear();
+    void randomize();
 
     /* Return the standard (not Montgomery) representation of the
        Field element's requivalence class. I.e. Fp(2).as_bigint()
@@ -94,26 +93,32 @@ public:
     Fp_model& operator-=(const Fp_model& other);
     Fp_model& operator*=(const Fp_model& other);
     Fp_model& operator^=(const unsigned long pow);
-
     template<mp_size_t m>
     Fp_model& operator^=(const bigint<m> &pow);
 
     Fp_model operator+(const Fp_model& other) const;
     Fp_model operator-(const Fp_model& other) const;
     Fp_model operator*(const Fp_model& other) const;
-    Fp_model operator-() const;
-    Fp_model squared() const;
-    Fp_model& invert();
-    Fp_model inverse() const;
-    Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
-
     Fp_model operator^(const unsigned long pow) const;
     template<mp_size_t m>
     Fp_model operator^(const bigint<m> &pow) const;
+    Fp_model operator-() const;
 
-    static size_t size_in_bits() { return num_bits; }
-    static size_t capacity() { return num_bits - 1; }
-    static bigint<n> field_char() { return modulus; }
+    Fp_model& square();
+    Fp_model squared() const;
+    Fp_model& invert();
+    Fp_model inverse() const;
+    Fp_model Frobenius_map(unsigned long power) const;
+    Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
+
+    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    static void init_tonelli_shanks_constants();
+    static std::size_t size_in_bits() { return num_bits; }
+    static std::size_t capacity() { return num_bits - 1; }
+    static constexpr std::size_t extension_degree() { return 1; }
+    static constexpr bigint<n> field_char() { return modulus; }
+    static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero
 
     static Fp_model<n, modulus> zero();
     static Fp_model<n, modulus> one();
@@ -179,6 +184,6 @@ template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n, modulus>::Rcubed;
 
 } // libff
-#include <libff/algebra/fields/fp.tcc>
+#include <libff/algebra/fields/prime_base/fp.tcc>
 
 #endif // FP_HPP_

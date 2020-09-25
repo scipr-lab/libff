@@ -13,8 +13,8 @@
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
-#include <libff/algebra/fields/fp12_2over3over2.hpp>
-#include <libff/algebra/fields/fp6_3over2.hpp>
+#include <libff/algebra/fields/prime_extension/fp12_2over3over2.hpp>
+#include <libff/algebra/fields/prime_extension/fp6_3over2.hpp>
 
 using namespace libff;
 
