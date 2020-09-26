@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <limits>
+#include <vector>
 
 #include <libff/algebra/field_utils/field_utils.hpp>
 #include <libff/algebra/field_utils/fp_aux.tcc>
@@ -243,10 +244,7 @@ void Fp_model<n,modulus>::randomize()
 template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n,modulus>::as_bigint() const
 {
-    bigint<n> one;
-    one.clear();
-    one.data[0] = 1;
-
+    bigint<n> one = bigint<n>::one();
     Fp_model<n, modulus> res(*this);
     res.mul_reduce(one);
 
@@ -739,7 +737,7 @@ Fp_model<n,modulus> Fp_model<n,modulus>::Frobenius_map(unsigned long power) cons
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random element of Fp_model
+Fp_model<n,modulus> Fp_model<n,modulus>::random_element() /// returns random element of Fp_model
 {
     /* note that as Montgomery representation is a bijection then
        selecting a random element of {xR} is the same as selecting a
@@ -781,29 +779,58 @@ void Fp_model<n,modulus>::init_tonelli_shanks_constants()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+std::vector<uint64_t> Fp_model<n,modulus>::to_words() const
+{
+    // TODO: implement for other bit architectures
+    static_assert(sizeof(mp_limb_t) == 8, "Only 64-bit architectures are currently supported");
+
+    bigint<n> repr = this->bigint_repr();
+    std::vector<uint64_t> words;
+	words.insert(words.begin(), std::begin(repr.data), std::end(repr.data));
+    return words;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus> Fp_model<n,modulus>::from_words(std::vector<uint64_t> words)
+{
+    typedef Fp_model<n, modulus> FieldT;
+    assert(words.size() * 64 >= FieldT::ceil_size_in_bits());
+
+    Fp_model<n, modulus> p;
+    std::copy(words.begin(), words.end(), p.mont_repr.data);
+#ifndef MONTGOMERY_OUTPUT
+    p.mul_reduce(Rsquared);
+#endif
+    return p;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 std::ostream& operator<<(std::ostream &out, const Fp_model<n, modulus> &p)
 {
-#ifndef MONTGOMERY_OUTPUT
-    Fp_model<n,modulus> tmp;
-    tmp.mont_repr.data[0] = 1;
-    tmp.mul_reduce(p.mont_repr);
-    out << tmp.mont_repr;
-#else
-    out << p.mont_repr;
-#endif
+    out << p.bigint_repr();
     return out;
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 std::istream& operator>>(std::istream &in, Fp_model<n, modulus> &p)
 {
+    in >> p.mont_repr;
 #ifndef MONTGOMERY_OUTPUT
-    in >> p.mont_repr;
-    p.mul_reduce(Fp_model<n, modulus>::Rsquared);
-#else
-    in >> p.mont_repr;
+    p.mul_reduce(Fp_model<n,modulus>::Rsquared);
 #endif
     return in;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<n> Fp_model<n,modulus>::bigint_repr() const
+{
+    // If the flag is defined, serialization and words output use the montgomery representation
+    // instead of the human-readable value.
+#ifdef MONTGOMERY_OUTPUT
+    return this->mont_repr;
+#else
+    return this->as_bigint();
+#endif
 }
 
 } // libff

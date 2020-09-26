@@ -69,6 +69,7 @@ public:
 
     void set_ulong(const unsigned long x);
 
+    /** Performs the operation montgomery_reduce(other * this.mont_repr). */
     void mul_reduce(const bigint<n> &other);
 
     void clear();
@@ -114,8 +115,20 @@ public:
     /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
      *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
     static void init_tonelli_shanks_constants();
-    static std::size_t size_in_bits() { return num_bits; }
-    static std::size_t capacity() { return num_bits - 1; }
+
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const;
+    /**
+     * Creates a field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     */
+    static Fp_model<n, modulus> from_words(std::vector<uint64_t> words);
+    static std::size_t ceil_size_in_bits() { return num_bits; }
+    static std::size_t floor_size_in_bits() { return num_bits - 1; }
+
     static constexpr std::size_t extension_degree() { return 1; }
     static constexpr bigint<n> field_char() { return modulus; }
     static bool modulus_is_valid() { return modulus.data[n-1] != 0; } // mpn inverse assumes that highest limb is non-zero
@@ -128,6 +141,10 @@ public:
 
     friend std::ostream& operator<< <n,modulus>(std::ostream &out, const Fp_model<n, modulus> &p);
     friend std::istream& operator>> <n,modulus>(std::istream &in, Fp_model<n, modulus> &p);
+
+private:
+    /** Returns a representation in bigint, depending on the MONTGOMERY_OUTPUT flag. */
+    bigint<n> bigint_repr() const;
 };
 
 #ifdef PROFILE_OP_COUNTS

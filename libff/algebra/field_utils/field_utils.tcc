@@ -136,7 +136,7 @@ bit_vector convert_field_element_to_bit_vector(const FieldT &el)
     bit_vector result;
 
     bigint<FieldT::num_limbs> b = el.as_bigint();
-    for (size_t i = 0; i < FieldT::size_in_bits(); ++i)
+    for (size_t i = 0; i < FieldT::ceil_size_in_bits(); ++i)
     {
         result.push_back(b.test_bit(i));
     }
@@ -156,7 +156,7 @@ bit_vector convert_field_element_to_bit_vector(const FieldT &el, const size_t bi
 template<typename FieldT>
 FieldT convert_bit_vector_to_field_element(const bit_vector &v)
 {
-    assert(v.size() <= FieldT::size_in_bits());
+    assert(v.size() <= FieldT::ceil_size_in_bits());
 
     FieldT res = FieldT::zero();
     FieldT c = FieldT::one();

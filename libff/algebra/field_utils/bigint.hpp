@@ -39,6 +39,8 @@ public:
     bigint(const char* s); /// Initialize from a string containing an integer in decimal notation
     bigint(const mpz_t r); /// Initialize from MPZ element
 
+    static bigint one();
+
     bigint operator-(const bigint<n>& other) const;
     bigint operator/(const mp_limb_t other) const;
     bigint operator%(const mp_limb_t other) const;

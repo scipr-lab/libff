@@ -108,7 +108,7 @@ public:
     /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
      *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
     static void init_tonelli_shanks_constants();
-    static std::size_t size_in_bits() { return 2*my_Fp6::size_in_bits(); }
+    static std::size_t ceil_size_in_bits() { return 2*my_Fp6::ceil_size_in_bits(); }
     static constexpr std::size_t extension_degree() { return 12; }
     static constexpr bigint<n> field_char() { return modulus; }
 

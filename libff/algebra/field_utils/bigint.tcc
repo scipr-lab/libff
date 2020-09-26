@@ -62,6 +62,15 @@ bigint<n>::bigint(const mpz_t r) /// Initialize from MPZ element
     mpz_clear(k);
 }
 
+
+template<mp_size_t n>
+bigint<n> bigint<n>::one()
+{
+    bigint<n> one;
+    one.data[0] = 1;
+    return one;
+}
+
 template<mp_size_t n>
 bigint<n> bigint<n>::operator-(const bigint<n> &other) const
 {

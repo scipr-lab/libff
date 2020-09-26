@@ -100,7 +100,7 @@ public:
     std::vector<uint64_t> to_words() const = 0;
     /**
      * Creates a field element from the given bits in 64 bit words, in little-endian order.
-     * Only the right-most size_in_bits() bits are used; other bits are ignored.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
      */
     static T from_words(std::vector<uint64_t> words);
     // Floor and ceil should return the same thing for binary fields.
