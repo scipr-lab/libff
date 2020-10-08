@@ -17,9 +17,10 @@ jobs:
         sudo apt-get -q update
         sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libsodium-dev libprocps-dev pkg-config gcc-5 g++-5
         sudo apt-get install clang-tidy
-        mkdir build && cd build
+        mkdir build
     - name: wget_clang_tidy_script
       uses: wei/wget@v1
+      working-directory: ./build
       with:
         args: -qO- https://raw.githubusercontent.com/llvm/llvm-project/master/clang-tools-extra/clang-tidy/tool/run-clang-tidy.py
     - name: before_script
