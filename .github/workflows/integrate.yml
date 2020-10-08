@@ -21,7 +21,7 @@ jobs:
     - name: wget_clang_tidy_script
       uses: wei/wget@v1
       with:
-        args: https://raw.githubusercontent.com/llvm/llvm-project/master/clang-tools-extra/clang-tidy/tool/run-clang-tidy.py
+        args: -qO- https://raw.githubusercontent.com/llvm/llvm-project/master/clang-tools-extra/clang-tidy/tool/run-clang-tidy.py
     - name: before_script
       run: |
         git submodule init && git submodule update
