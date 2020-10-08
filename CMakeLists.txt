@@ -230,5 +230,7 @@ if ("${IS_LIBFF_PARENT}")
   )
 
   add_subdirectory(depends)
+  include(clang-tidy.cmake)
+
 endif()
 add_subdirectory(libff)
