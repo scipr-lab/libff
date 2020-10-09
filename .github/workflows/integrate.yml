@@ -27,7 +27,7 @@ jobs:
         git submodule init && git submodule update
         cd build
         PATH=$PATH:${PWD} 
-        chmod 775 run-clang-tidy.py
+        sudo chmod -R a+x *dir* run-clang-tidy.py
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON ..
     - name: run_clang_tidy
       run: |
