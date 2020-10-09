@@ -3,7 +3,7 @@ name: Integrate
 on: push
 
 jobs:
-  setup:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -38,17 +38,3 @@ jobs:
         cd build
         make
         make check
-
-clang-tidy:
-  steps:
-  - name: run_clang_tidy
-    run: |
-      cd build
-      make clang-
-test:
-  steps:
-  - name: run_tests
-    run: |
-      cd build
-      make
-      make check
