@@ -72,6 +72,7 @@ public:
     Fp12_2over3over2_model cyclotomic_squared() const;
 
     Fp12_2over3over2_model mul_by_024(const my_Fp2 &ell_0, const my_Fp2 &ell_VW, const my_Fp2 &ell_VV) const;
+    Fp12_2over3over2_model mul_by_045(const my_Fp2 &ell_0, const my_Fp2 &ell_VW, const my_Fp2 &ell_VV) const;
 
     static my_Fp6 mul_by_non_residue(const my_Fp6 &elt);
 
