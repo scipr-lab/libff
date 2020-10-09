@@ -12,7 +12,7 @@ if(USE_CLANG_TIDY)
       message("Using clang-tidy. Creating target... To run, use: make clang-tidy")
       add_custom_target(
         clang-tidy
-        COMMAND run-clang-tidy.py
+        COMMAND python3 run-clang-tidy.py
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
         )
       file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/api)
