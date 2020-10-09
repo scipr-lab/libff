@@ -30,6 +30,7 @@ jobs:
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON ..
     - name: run_clang_tidy
       run: |
+        cd build
         make clang-tidy
     - name: tests
       run: |
