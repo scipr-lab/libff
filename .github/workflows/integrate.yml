@@ -25,7 +25,8 @@ jobs:
     - name: before_script
       run: |
         git submodule init && git submodule update
-        cd build  
+        cd build
+        PATH=$PATH:${PWD} 
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON ..
     - name: run_clang_tidy
       run: |
