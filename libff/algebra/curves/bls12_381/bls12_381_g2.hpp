@@ -28,6 +28,10 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static bls12_381_G2 G2_zero;
     static bls12_381_G2 G2_one;
+    // Cofactor
+    static const mp_size_t h_bitcount = 507;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
 
     typedef bls12_381_Fq base_field;
     typedef bls12_381_Fq2 twist_field;

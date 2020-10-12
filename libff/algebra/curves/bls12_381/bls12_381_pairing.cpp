@@ -153,31 +153,29 @@ bls12_381_Fq12 bls12_381_final_exponentiation_last_chunk(const bls12_381_Fq12 &e
 {
     enter_block("Call to bls12_381_final_exponentiation_last_chunk");
 
-    const bls12_381_Fq12 A = elt.cyclotomic_squared();   // elt^2
-    const bls12_381_Fq12 B = A.unitary_inverse();        // elt^(-2)
-    const bls12_381_Fq12 C = bls12_381_exp_by_z(elt);    // elt^z
-    const bls12_381_Fq12 D = C.cyclotomic_squared();     // elt^(2z)
-    const bls12_381_Fq12 E = B * C;                      // elt^(z-2)
-    const bls12_381_Fq12 F = bls12_381_exp_by_z(E);      // elt^(z^2-2z)
-    const bls12_381_Fq12 G = bls12_381_exp_by_z(F);      // elt^(z^3-2z^2)
-    const bls12_381_Fq12 H = bls12_381_exp_by_z(G);      // elt^(z^4-2z^3)
-    const bls12_381_Fq12 I = H * D;                      // elt^(z^4-2z^3+2z)
-    const bls12_381_Fq12 J = bls12_381_exp_by_z(I);      // elt^(z^5-2z^4+2z^2)
-    const bls12_381_Fq12 K = E.unitary_inverse();        // elt^(-z+2)
-    const bls12_381_Fq12 L = K * J;                      // elt^(z^5-2z^4+2z^2) * elt^(-z+2)
-    const bls12_381_Fq12 M = elt * L;                    // elt^(z^5-2z^4+2z^2) * elt^(-z+2) * elt
-    const bls12_381_Fq12 N = elt.unitary_inverse();      // elt^(-1)
-    const bls12_381_Fq12 O = F * elt;                    // elt^(z^2-2z) * elt
-    const bls12_381_Fq12 P = O.Frobenius_map(3);         // (elt^(z^2-2z) * elt)^(q^3)
-    const bls12_381_Fq12 Q = I * N;                      // elt^(z^4-2z^3+2z) * elt^(-1)
-    const bls12_381_Fq12 R = Q.Frobenius_map(1);         // (elt^(z^4-2z^3+2z) * elt^(-1))^q
-    const bls12_381_Fq12 S = C * G;                      // elt^(z^3-2z^2) * elt^z
-    const bls12_381_Fq12 T = S.Frobenius_map(2);         // (elt^(z^3-2z^2) * elt^z)^(q^2)
-    const bls12_381_Fq12 U = T * P;                      // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2)
-    const bls12_381_Fq12 V = U * R;                      // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2) * (elt^(z^4-2z^3+2z) * elt^(-1))^q
-    const bls12_381_Fq12 W = V * M;                      // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2) * (elt^(z^4-2z^3+2z) * elt^(-1))^q * elt^(z^5-2z^4+2z^2) * elt^(-z+2) * elt
-
-    const bls12_381_Fq12 result = W;
+    //  https://eprint.iacr.org/2016/130.pdf (Algorithm 1 described in Table 1)
+    const bls12_381_Fq12 A = elt.cyclotomic_squared().unitary_inverse();    // elt^(-2)
+    const bls12_381_Fq12 B = bls12_381_exp_by_z(elt);                       // elt^z
+    const bls12_381_Fq12 C = B.cyclotomic_squared();                        // elt^(2z)
+    const bls12_381_Fq12 D = A * B;                                         // elt^(z-2)
+    const bls12_381_Fq12 E = bls12_381_exp_by_z(D);                         // elt^(z^2-2z)
+    const bls12_381_Fq12 F = bls12_381_exp_by_z(E);                         // elt^(z^3-2z^2)
+    const bls12_381_Fq12 G = bls12_381_exp_by_z(F);                         // elt^(z^4-2z^3)
+    const bls12_381_Fq12 H = G * C;                                         // elt^(z^4-2z^3+2z)
+    const bls12_381_Fq12 I = bls12_381_exp_by_z(H);                         // elt^(z^5-2z^4+2z^2)
+    const bls12_381_Fq12 J = D.unitary_inverse();                           // elt^(-z+2)
+    const bls12_381_Fq12 K = J * I;                                         // elt^(z^5-2z^4+2z^2) * elt^(-z+2)
+    const bls12_381_Fq12 L = elt * K;                                       // elt^(z^5-2z^4+2z^2) * elt^(-z+2) * elt
+    const bls12_381_Fq12 M = elt.unitary_inverse();                         // elt^(-1)
+    const bls12_381_Fq12 N = E * elt;                                       // elt^(z^2-2z) * elt
+    const bls12_381_Fq12 O = N.Frobenius_map(3);                            // (elt^(z^2-2z) * elt)^(q^3)
+    const bls12_381_Fq12 P = H * M;                                         // elt^(z^4-2z^3+2z) * elt^(-1)
+    const bls12_381_Fq12 Q = P.Frobenius_map(1);                            // (elt^(z^4-2z^3+2z) * elt^(-1))^q
+    const bls12_381_Fq12 R = B * F;                                         // elt^(z^3-2z^2) * elt^z
+    const bls12_381_Fq12 S = R.Frobenius_map(2);                            // (elt^(z^3-2z^2) * elt^z)^(q^2)
+    const bls12_381_Fq12 T = S * O;                                         // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2)
+    const bls12_381_Fq12 U = T * Q;                                         // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2) * (elt^(z^4-2z^3+2z) * elt^(-1))^q
+    const bls12_381_Fq12 result = U * L;                                         // (elt^(z^2-2z) * elt)^(q^3) * (elt^(z^3-2z^2) * elt^z)^(q^2) * (elt^(z^4-2z^3+2z) * elt^(-1))^q * elt^(z^5-2z^4+2z^2) * elt^(-z+2) * elt
 
     leave_block("Call to bls12_381_final_exponentiation_last_chunk");
 

@@ -21,6 +21,10 @@ public:
     static std::vector<size_t> fixed_base_exp_window_table;
     static bls12_381_G1 G1_zero;
     static bls12_381_G1 G1_one;
+    // Cofactor
+    static const mp_size_t h_bitcount = 126;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
 
     typedef bls12_381_Fq base_field;
     typedef bls12_381_Fr scalar_field;
@@ -50,6 +54,7 @@ public:
     bls12_381_G1 add(const bls12_381_G1 &other) const;
     bls12_381_G1 mixed_add(const bls12_381_G1 &other) const;
     bls12_381_G1 dbl() const;
+    bls12_381_G1 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 

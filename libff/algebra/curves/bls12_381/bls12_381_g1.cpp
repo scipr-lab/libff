@@ -11,6 +11,7 @@ std::vector<size_t> bls12_381_G1::wnaf_window_table;
 std::vector<size_t> bls12_381_G1::fixed_base_exp_window_table;
 bls12_381_G1 bls12_381_G1::G1_zero;
 bls12_381_G1 bls12_381_G1::G1_one;
+bigint<bls12_381_G1::h_limbs> bls12_381_G1::h;
 
 bls12_381_G1::bls12_381_G1()
 {
@@ -200,50 +201,7 @@ bls12_381_G1 bls12_381_G1::operator-(const bls12_381_G1 &other) const
 
 bls12_381_G1 bls12_381_G1::add(const bls12_381_G1 &other) const
 {
-    // handle special cases having to do with O
-    if (this->is_zero())
-    {
-        return other;
-    }
-
-    if (other.is_zero())
-    {
-        return *this;
-    }
-
-    // no need to handle points of order 2,4
-    // (they cannot exist in a prime-order subgroup)
-
-    // handle double case
-    if (this->operator==(other))
-    {
-        return this->dbl();
-    }
-
-#ifdef PROFILE_OP_COUNTS
-    this->add_cnt++;
-#endif
-    // NOTE: does not handle O and pts of order 2,4
-    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#addition-add-2007-bl
-
-    bls12_381_Fq Z1Z1 = (this->Z).squared();             // Z1Z1 = Z1^2
-    bls12_381_Fq Z2Z2 = (other.Z).squared();             // Z2Z2 = Z2^2
-    bls12_381_Fq U1 = (this->X) * Z2Z2;                  // U1 = X1 * Z2Z2
-    bls12_381_Fq U2 = (other.X) * Z1Z1;                  // U2 = X2 * Z1Z1
-    bls12_381_Fq S1 = (this->Y) * (other.Z) * Z2Z2;      // S1 = Y1 * Z2 * Z2Z2
-    bls12_381_Fq S2 = (other.Y) * (this->Z) * Z1Z1;      // S2 = Y2 * Z1 * Z1Z1
-    bls12_381_Fq H = U2 - U1;                            // H = U2-U1
-    bls12_381_Fq S2_minus_S1 = S2-S1;
-    bls12_381_Fq I = (H+H).squared();                    // I = (2 * H)^2
-    bls12_381_Fq J = H * I;                              // J = H * I
-    bls12_381_Fq r = S2_minus_S1 + S2_minus_S1;          // r = 2 * (S2-S1)
-    bls12_381_Fq V = U1 * I;                             // V = U1 * I
-    bls12_381_Fq X3 = r.squared() - J - (V+V);           // X3 = r^2 - J - 2 * V
-    bls12_381_Fq S1_J = S1 * J;
-    bls12_381_Fq Y3 = r * (V-X3) - (S1_J+S1_J);          // Y3 = r * (V-X3)-2 S1 J
-    bls12_381_Fq Z3 = ((this->Z+other.Z).squared()-Z1Z1-Z2Z2) * H; // Z3 = ((Z1+Z2)^2-Z1Z1-Z2Z2) * H
-
-    return bls12_381_G1(X3, Y3, Z3);
+  return (*this) + other;
 }
 
 bls12_381_G1 bls12_381_G1::mixed_add(const bls12_381_G1 &other) const
@@ -300,7 +258,7 @@ bls12_381_G1 bls12_381_G1::mixed_add(const bls12_381_G1 &other) const
     // NOTE: does not handle O and pts of order 2,4
     // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#addition-madd-2007-bl
     bls12_381_Fq H = U2-(this->X);                         // H = U2-X1
-    bls12_381_Fq HH = H.squared() ;                        // HH = H&2
+    bls12_381_Fq HH = H.squared() ;                        // HH = H^2
     bls12_381_Fq I = HH+HH;                                // I = 4*HH
     I = I + I;
     bls12_381_Fq J = H*I;                                  // J = H*I
@@ -350,6 +308,11 @@ bls12_381_G1 bls12_381_G1::dbl() const
     return bls12_381_G1(X3, Y3, Z3);
 }
 
+bls12_381_G1 bls12_381_G1::mul_by_cofactor() const
+{
+    return bls12_381_G1::h * (*this);
+}
+
 bool bls12_381_G1::is_well_formed() const
 {
     if (this->is_zero())
@@ -358,15 +321,11 @@ bool bls12_381_G1::is_well_formed() const
     }
     else
     {
-        /*
-          y^2 = x^3 + b
-
-          We are using Jacobian coordinates, so equation we need to check is actually
-
-          (y/z^3)^2 = (x/z^2)^3 + b
-          y^2 / z^6 = x^3 / z^6 + b
-          y^2 = x^3 + b z^6
-        */
+        // y^2 = x^3 + b
+        // We are using Jacobian coordinates, so equation we need to check is actually
+        // (y/z^3)^2 = (x/z^2)^3 + b
+        // y^2 / z^6 = x^3 / z^6 + b
+        // y^2 = x^3 + b z^6
         bls12_381_Fq X2 = this->X.squared();
         bls12_381_Fq Y2 = this->Y.squared();
         bls12_381_Fq Z2 = this->Z.squared();
