@@ -153,6 +153,7 @@ bls12_381_G2 bls12_381_G2::operator+(const bls12_381_G2 &other) const
         return *this;
     }
 
+    // https://www.hyperelliptic.org/EFD/g1p/data/shortw/jacobian-0/addition/add-2007-bl
     // no need to handle points of order 2,4
     // (they cannot exist in a prime-order subgroup)
 
@@ -295,7 +296,7 @@ bls12_381_G2 bls12_381_G2::dbl() const
     }
 
     // NOTE: does not handle O and pts of order 2,4
-    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
+    // https://www.hyperelliptic.org/EFD/g1p/data/shortw/jacobian-0/doubling/dbl-2009-l
 
     bls12_381_Fq2 A = (this->X).squared();         // A = X1^2
     bls12_381_Fq2 B = (this->Y).squared();        // B = Y1^2

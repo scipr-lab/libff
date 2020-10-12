@@ -143,6 +143,7 @@ bls12_381_G1 bls12_381_G1::operator+(const bls12_381_G1 &other) const
         return *this;
     }
 
+    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian-0.html#addition-add-2007-bl
     // no need to handle points of order 2,4
     // (they cannot exist in a prime-order subgroup)
 
