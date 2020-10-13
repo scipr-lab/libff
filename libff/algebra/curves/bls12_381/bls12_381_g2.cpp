@@ -323,6 +323,11 @@ bls12_381_G2 bls12_381_G2::mul_by_q() const
                       (this->Z).Frobenius_map(1));
 }
 
+bls12_381_G2 bls12_381_G2::mul_by_cofactor() const
+{
+    return bls12_381_G2::h * (*this);
+}
+
 bool bls12_381_G2::is_well_formed() const
 {
     if (this->is_zero())
