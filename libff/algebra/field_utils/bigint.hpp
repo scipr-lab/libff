@@ -51,6 +51,7 @@ public:
     void print_hex() const;
     bool operator==(const bigint<n>& other) const;
     bool operator!=(const bigint<n>& other) const;
+    bool operator<(const bigint<n>& other) const;
     void clear();
     bool is_zero() const;
     std::size_t max_bits() const { return n * GMP_NUMB_BITS; } /// Returns the number of bits representable by this bigint type

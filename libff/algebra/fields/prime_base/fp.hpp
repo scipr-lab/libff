@@ -89,6 +89,17 @@ public:
     bool is_zero() const;
 
     void print() const;
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const;
+    /**
+     * Sets the field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     * Returns true when the right-most bits represent a value less than the modulus.
+     */
+    bool from_words(std::vector<uint64_t> words);
 
     Fp_model& operator+=(const Fp_model& other);
     Fp_model& operator-=(const Fp_model& other);
@@ -116,16 +127,6 @@ public:
      *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
     static void init_tonelli_shanks_constants();
 
-    /**
-     * Returns the constituent bits in 64 bit words, in little-endian order.
-     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
-     */
-    std::vector<uint64_t> to_words() const;
-    /**
-     * Creates a field element from the given bits in 64 bit words, in little-endian order.
-     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
-     */
-    static Fp_model<n, modulus> from_words(std::vector<uint64_t> words);
     static std::size_t ceil_size_in_bits() { return num_bits; }
     static std::size_t floor_size_in_bits() { return num_bits - 1; }
 

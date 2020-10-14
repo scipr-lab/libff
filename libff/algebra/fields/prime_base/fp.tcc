@@ -791,17 +791,25 @@ std::vector<uint64_t> Fp_model<n,modulus>::to_words() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-Fp_model<n,modulus> Fp_model<n,modulus>::from_words(std::vector<uint64_t> words)
+bool Fp_model<n,modulus>::from_words(std::vector<uint64_t> words)
 {
-    typedef Fp_model<n, modulus> FieldT;
-    assert(words.size() * 64 >= FieldT::ceil_size_in_bits());
+    // TODO: implement for other bit architectures
+    static_assert(sizeof(mp_limb_t) == 8, "Only 64-bit architectures are currently supported");
 
-    Fp_model<n, modulus> p;
-    std::copy(words.begin(), words.end(), p.mont_repr.data);
+    typedef Fp_model<n, modulus> FieldT; // Without the typedef C++ doesn't compile.
+    long start_bit = words.size() * 64 - FieldT::ceil_size_in_bits();
+    assert(start_bit >= 0); // Check the vector is big enough.
+    long start_word = start_bit / 64;
+    long bit_offset = start_bit % 64;
+
+    // Assumes mont_repr.data is just the right size to fit ceil_size_in_bits().
+    std::copy(words.begin() + start_word, words.end(), this->mont_repr.data);
+    // Zero out the left-most bit_offset bits.
+    this->mont_repr.data[n - 1] = (mp_limb_t) ((((uint64_t) this->mont_repr.data[n - 1]) << bit_offset) >> bit_offset);
 #ifndef MONTGOMERY_OUTPUT
-    p.mul_reduce(Rsquared);
+    this->mul_reduce(Rsquared);
 #endif
-    return p;
+    return this->mont_repr < modulus;
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
