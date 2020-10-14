@@ -354,6 +354,27 @@ void Fp6_2over3_model<n,modulus>::init_tonelli_shanks_constants()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+std::vector<uint64_t> Fp6_2over3_model<n,modulus>::to_words() const
+{
+    std::vector<uint64_t> words = c0.to_words();
+    std::vector<uint64_t> words1 = c1.to_words();
+    words.insert(words.end(), words1.begin(), words1.end());
+    return words;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+bool Fp6_2over3_model<n,modulus>::from_words(std::vector<uint64_t> words)
+{
+    std::vector<uint64_t>::const_iterator vec_start = words.begin();
+    std::vector<uint64_t>::const_iterator vec_center = words.begin() + words.size() / 2;
+    std::vector<uint64_t>::const_iterator vec_end = words.end();
+    std::vector<uint64_t> words0(vec_start, vec_center);
+    std::vector<uint64_t> words1(vec_center, vec_end);
+    // Fp_model's from_words() takes care of asserts about vector length.
+    return c0.from_words(words0) && c1.from_words(words1);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 std::ostream& operator<<(std::ostream &out, const Fp6_2over3_model<n, modulus> &el)
 {
     out << el.c0 << OUTPUT_SEPARATOR << el.c1;

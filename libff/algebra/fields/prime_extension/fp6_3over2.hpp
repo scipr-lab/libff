@@ -64,6 +64,18 @@ public:
     void print() const { printf("c0/c1/c2:\n"); c0.print(); c1.print(); c2.print(); }
     void randomize();
 
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const;
+    /**
+     * Sets the field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     * Returns true when the right-most bits of each element represent a value less than the modulus.
+     */
+    bool from_words(std::vector<uint64_t> words);
+
     bool is_zero() const { return c0.is_zero() && c1.is_zero() && c2.is_zero(); }
     bool operator==(const Fp6_3over2_model &other) const;
     bool operator!=(const Fp6_3over2_model &other) const;
@@ -92,10 +104,15 @@ public:
 
     static my_Fp2 mul_by_non_residue(const my_Fp2 &elt);
 
-    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
-     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    /**
+     * Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     * Must be called before sqrt(). Alternatively, these constants can be set manually.
+     */
     static void init_tonelli_shanks_constants();
-    static std::size_t ceil_size_in_bits() { return 3*my_Fp2::ceil_size_in_bits(); }
+
+    static std::size_t ceil_size_in_bits() { return 3 * my_Fp2::ceil_size_in_bits(); }
+    static std::size_t floor_size_in_bits() { return 3 * my_Fp2::floor_size_in_bits(); }
+
     static constexpr std::size_t extension_degree() { return 6; }
     static constexpr bigint<n> field_char() { return modulus; }
 

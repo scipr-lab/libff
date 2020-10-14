@@ -100,7 +100,7 @@ public:
     /**
      * Sets the field element from the given bits in 64 bit words, in little-endian order.
      * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
-     * Returns true when the right-most bits represent a value less than the modulus.
+     * Returns true when the right-most bits of each element represent a value less than the modulus.
      */
     bool from_words(std::vector<uint64_t> words) = 0;
 

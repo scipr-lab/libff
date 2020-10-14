@@ -73,7 +73,22 @@ public:
     void mul_reduce(const bigint<n> &other);
 
     void clear();
+    void print() const;
     void randomize();
+
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const;
+    /**
+     * Sets the field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     * Returns true when the right-most bits represent a value less than the modulus.
+     *
+     * Precondition: the vector is large enough to contain ceil_size_in_bits() bits.
+     */
+    bool from_words(std::vector<uint64_t> words);
 
     /* Return the standard (not Montgomery) representation of the
        Field element's requivalence class. I.e. Fp(2).as_bigint()
@@ -87,19 +102,6 @@ public:
     bool operator==(const Fp_model& other) const;
     bool operator!=(const Fp_model& other) const;
     bool is_zero() const;
-
-    void print() const;
-    /**
-     * Returns the constituent bits in 64 bit words, in little-endian order.
-     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
-     */
-    std::vector<uint64_t> to_words() const;
-    /**
-     * Sets the field element from the given bits in 64 bit words, in little-endian order.
-     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
-     * Returns true when the right-most bits represent a value less than the modulus.
-     */
-    bool from_words(std::vector<uint64_t> words);
 
     Fp_model& operator+=(const Fp_model& other);
     Fp_model& operator-=(const Fp_model& other);
@@ -123,8 +125,10 @@ public:
     Fp_model Frobenius_map(unsigned long power) const;
     Fp_model sqrt() const; // HAS TO BE A SQUARE (else does not terminate)
 
-    /** Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
-     *  Must be called before sqrt(). Alternatively, these constants can be set manually. */
+    /**
+     * Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
+     * Must be called before sqrt(). Alternatively, these constants can be set manually.
+     */
     static void init_tonelli_shanks_constants();
 
     static std::size_t ceil_size_in_bits() { return num_bits; }
