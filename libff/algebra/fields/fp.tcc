@@ -159,34 +159,61 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
     else
 #endif
     {
-        mp_limb_t res[2*n];
-        mpn_mul_n(res, this->mont_repr.data, other.data, n);
+//         mp_limb_t res[2*n];
+//         mpn_mul_n(res, this->mont_repr.data, other.data, n);
 
-        /*
-          The Montgomery reduction here is based on Algorithm 14.32 in
-          Handbook of Applied Cryptography
-          <http://cacr.uwaterloo.ca/hac/about/chap14.pdf>.
-         */
-        for (size_t i = 0; i < n; ++i)
-        {
-            mp_limb_t k = inv * res[i];
-            /* calculate res = res + k * mod * b^i */
-            mp_limb_t carryout = mpn_addmul_1(res+i, modulus.data, n, k);
-            carryout = mpn_add_1(res+n+i, res+n+i, n-i, carryout);
-            assert(carryout == 0);
+//         /*
+//           The Montgomery reduction here is based on Algorithm 14.32 in
+//           Handbook of Applied Cryptography
+//           <http://cacr.uwaterloo.ca/hac/about/chap14.pdf>.
+//          */
+//         for (size_t i = 0; i < n; ++i)
+//         {
+//             mp_limb_t k = inv * res[i];
+//             /* calculate res = res + k * mod * b^i */
+//             mp_limb_t carryout = mpn_addmul_1(res+i, modulus.data, n, k);
+//             carryout = mpn_add_1(res+n+i, res+n+i, n-i, carryout);
+//             assert(carryout == 0);
+//         }
+
+//         if (mpn_cmp(res+n, modulus.data, n) >= 0)
+//         {
+//             const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus.data, n);
+// #ifndef NDEBUG
+//             assert(borrow == 0);
+// #else
+//             UNUSED(borrow);
+// #endif
+//       }
+
+//         mpn_copyi(this->mont_repr.data, res+n, n);
+//     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    mp_limb_t t[n+2];
+    mp_limb_t A, m, C;
+    for (size_t i = 0; i < n; i++) {
+        mp_limb_t old_t = t[0];
+        A = mpn_addmul_1(t, this->mont_repr.data, 1, other.data);
+        mpn_mul_1(&m, t, 1, inv);
+        mp_limb_t carry[2];
+        mpn_mul_n(carry, modulus.data, &m, 2);
+        mpn_add(carry, carry, 2, t, 1);
+        C = carry[1];
+        for (size_t j = 0; j < n; j++) {
+            mp_limb_t interm[2];
+            mp_limb_t carryout = mpn_add_n(interm, A, t+j, 1);
+            interm[1] = carryout;
+            mpn_addmul_1(interm, this->mont_repr.data + j, 2, other.data + j);
+            A = interm[1];
+            t[j] = interm[0];
+
+            carryout = mpn_add_n(interm , C, t+j, 1);
+            interm[1] = carryout;
+            mpn_addmul_1(interm, m, 2, modulus.data + j);
+            C = interm[1];
+            t[j]-1 = interm[0];
         }
-
-        if (mpn_cmp(res+n, modulus.data, n) >= 0)
-        {
-            const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus.data, n);
-#ifndef NDEBUG
-            assert(borrow == 0);
-#else
-            UNUSED(borrow);
-#endif
-        }
-
-        mpn_copyi(this->mont_repr.data, res+n, n);
+        t[n-1] = C+A;
     }
 }
 
