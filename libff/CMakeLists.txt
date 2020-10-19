@@ -25,6 +25,11 @@ add_library(
   ff
   STATIC
 
+  algebra/curves/bls12_381/bls12_381_g1.cpp
+  algebra/curves/bls12_381/bls12_381_g2.cpp
+  algebra/curves/bls12_381/bls12_381_init.cpp
+  algebra/curves/bls12_381/bls12_381_pairing.cpp
+  algebra/curves/bls12_381/bls12_381_pp.cpp
   algebra/curves/alt_bn128/alt_bn128_g1.cpp
   algebra/curves/alt_bn128/alt_bn128_g2.cpp
   algebra/curves/alt_bn128/alt_bn128_init.cpp
