@@ -12,6 +12,7 @@
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #include <libff/algebra/fields/fp12_2over3over2.hpp>
 #include <libff/algebra/fields/fp6_3over2.hpp>
 
@@ -266,6 +267,11 @@ int main()
     test_field<alt_bn128_Fq6>();
     test_Frobenius<alt_bn128_Fq6>();
     test_all_fields<alt_bn128_pp>();
+
+    bls12_381_pp::init_public_params();
+    test_field<bls12_381_Fq6>();
+    test_Frobenius<bls12_381_Fq6>();
+    test_all_fields<bls12_381_pp>();
 
 // BN128 has fancy dependencies so it may be disabled
 #ifdef CURVE_BN128
