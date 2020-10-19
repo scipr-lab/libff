@@ -28,8 +28,6 @@ template<typename FieldT>
 typename std::enable_if<std::is_same<FieldT, Double>::value, FieldT>::type
 get_root_of_unity(const size_t n)
 {
-    const double PI = 3.141592653589793238460264338328L;
-
     return FieldT(cos(2 * PI / n), sin(2 * PI / n));
 }
 
