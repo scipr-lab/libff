@@ -57,7 +57,8 @@ FieldT SHA512_rng(const uint64_t idx)
             const std::size_t part = bitno/GMP_NUMB_BITS;
             const std::size_t bit = bitno - (GMP_NUMB_BITS*part);
 
-            rval.data[part] &= ~(1ul<<bit);
+            static const mp_limb_t one = 1;
+            rval.data[part] &= ~(one<<bit);
 
             bitno--;
         }
