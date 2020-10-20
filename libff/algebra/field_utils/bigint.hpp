@@ -41,12 +41,6 @@ public:
 
     static bigint one();
 
-    bigint operator-(const bigint<n>& other) const;
-    bigint operator/(const mp_limb_t other) const;
-    bigint operator%(const mp_limb_t other) const;
-    template<mp_size_t m>
-    bigint<m> power(const std::size_t exp) const;
-
     void print() const;
     void print_hex() const;
     bool operator==(const bigint<n>& other) const;

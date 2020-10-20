@@ -773,12 +773,6 @@ Fp_model<n,modulus> Fp_model<n,modulus>::sqrt() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp_model<n,modulus>::init_tonelli_shanks_constants()
-{
-    find_tonelli_shanks_constants<Fp_model<n,modulus>, n>();
-}
-
-template<mp_size_t n, const bigint<n>& modulus>
 std::vector<uint64_t> Fp_model<n,modulus>::to_words() const
 {
     // TODO: implement for other bit architectures

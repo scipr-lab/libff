@@ -52,40 +52,6 @@ FieldT power(const FieldT &base, const unsigned long exponent)
     return power<FieldT>(base, bigint<1>(exponent));
 }
 
-template<typename FieldT, mp_size_t n>
-void find_tonelli_shanks_constants()
-{
-    // Find s and t such that p^n - 1 = t * 2^s, with t odd.
-    const mp_size_t m = n * FieldT::extension_degree();
-    bigint<m> one_i = bigint<m>(1); // integer one
-    bigint<m> p_to_n_minus_1 = FieldT::field_char().template power<m>(FieldT::extension_degree()) - one_i;
-    size_t s = 0;
-    bigint<m> t = p_to_n_minus_1;
-    while ((t % 2).is_zero())
-    {
-        s++;
-        t = t / 2;
-    }
-
-    // Find a quadratic non-residue by generating random elements and testing with Euler's criterion.
-    FieldT neg_one = -FieldT::one();
-    bigint<m> euler = p_to_n_minus_1 / 2;
-    FieldT nqr;
-    while (true)
-    {
-        nqr.randomize();
-        if ((nqr^euler) == neg_one)
-            break;
-    }
-
-    FieldT::euler = euler;
-    FieldT::s = s;
-    FieldT::t = t;
-    FieldT::t_minus_1_over_2 = (t - one_i) / 2;
-    FieldT::nqr = nqr;
-    FieldT::nqr_to_t = nqr^t;
-}
-
 template<typename FieldT>
 FieldT tonelli_shanks_sqrt(const FieldT &value)
 {

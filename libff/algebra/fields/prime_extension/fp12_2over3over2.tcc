@@ -499,12 +499,6 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::sqrt() cons
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp12_2over3over2_model<n,modulus>::init_tonelli_shanks_constants()
-{
-    find_tonelli_shanks_constants<Fp12_2over3over2_model<n,modulus>, n>();
-}
-
-template<mp_size_t n, const bigint<n>& modulus>
 std::vector<uint64_t> Fp12_2over3over2_model<n,modulus>::to_words() const
 {
     std::vector<uint64_t> words = c0.to_words();

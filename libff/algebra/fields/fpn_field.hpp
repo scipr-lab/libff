@@ -45,12 +45,6 @@ public:
     /** If extension field, returns the base field's characteristic. */
     static constexpr bigint<n> field_char();
 
-    /**
-     * Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t. These constants
-     * must be set before calling sqrt(), either with this function or manually.
-     */
-    static void init_tonelli_shanks_constants();
-
     /** If base field, is the identity. */
     T Frobenius_map(unsigned long power) const;
 

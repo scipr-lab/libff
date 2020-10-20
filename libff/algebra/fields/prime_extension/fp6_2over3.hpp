@@ -112,12 +112,6 @@ public:
     template<mp_size_t m>
     Fp6_2over3_model cyclotomic_exp(const bigint<m> &exponent) const;
 
-    /**
-     * Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t.
-     * Must be called before sqrt(). Alternatively, these constants can be set manually.
-     */
-    static void init_tonelli_shanks_constants();
-
     static std::size_t ceil_size_in_bits() { return 2 * my_Fp3::ceil_size_in_bits(); }
     static std::size_t floor_size_in_bits() { return 2 * my_Fp3::floor_size_in_bits(); }
 

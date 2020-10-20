@@ -348,12 +348,6 @@ Fp6_2over3_model<n,modulus> Fp6_2over3_model<n,modulus>::sqrt() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-void Fp6_2over3_model<n,modulus>::init_tonelli_shanks_constants()
-{
-    find_tonelli_shanks_constants<Fp6_2over3_model<n,modulus>, n>();
-}
-
-template<mp_size_t n, const bigint<n>& modulus>
 std::vector<uint64_t> Fp6_2over3_model<n,modulus>::to_words() const
 {
     std::vector<uint64_t> words = c0.to_words();
