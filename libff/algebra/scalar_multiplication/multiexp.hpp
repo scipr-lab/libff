@@ -117,6 +117,13 @@ std::vector<T> batch_exp(const size_t scalar_size,
                          const std::vector<FieldT> &v);
 
 template<typename T, typename FieldT>
+std::vector<T> batch_exp(const size_t scalar_size,
+                         const size_t window,
+                         const window_table<T> &table,
+                         const std::vector<FieldT> &v,
+                         size_t num_entries);
+
+template<typename T, typename FieldT>
 std::vector<T> batch_exp_with_coeff(const size_t scalar_size,
                                     const size_t window,
                                     const window_table<T> &table,
