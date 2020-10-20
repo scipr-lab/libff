@@ -87,6 +87,12 @@ option(
   ON
 )
 
+option(
+  MPIR_INSTEAD_OF_GMP
+  "Use MPIR instead of GMP"
+  OFF
+)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # Common compilation flags and warning configuration
   set(
@@ -99,7 +105,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 find_path(GMP_INCLUDE_DIR NAMES gmp.h)
-find_library(GMP_LIBRARY gmp)
+if(MPIR_INSTEAD_OF_GMP)
+  find_library(GMP_LIBRARY mpir)
+else()
+  find_library(GMP_LIBRARY gmp)
+endif()
 if(GMP_LIBRARY MATCHES ${CMAKE_SHARED_LIBRARY_SUFFIX})
   set(gmp_library_type SHARED)
 else()
