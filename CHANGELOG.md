@@ -6,6 +6,7 @@
 
 ### Bug fixes
 - #75 get rid of warning for unused constant PI, in complex field
+- #78 Reduce prints when inhibit_profiling_info is set.
 
 ## v1.1.0
 
