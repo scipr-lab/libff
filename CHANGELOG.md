@@ -1,3 +1,12 @@
+## Pending
+
+### Features
+- #58 Add a defined API for every field type, and ensure all fields implement it (Thanks @alexander-zw)
+- #71 Add BLS12-381 (Thanks @yelhousni)
+
+### Bug fixes
+- #75 get rid of warning for unused constant PI, in complex field
+
 ## v1.1.0
 
 _Special thanks to all downstream projects upstreaming their patches!_
