@@ -45,12 +45,6 @@ public:
     /** If extension field, returns the base field's characteristic. */
     static constexpr bigint<n> field_char();
 
-    /**
-     * Initializes euler, s, t, t_minus_1_over_2, nqr, and nqr_to_t. These constants
-     * must be set before calling sqrt(), either with this function or manually.
-     */
-    static void init_tonelli_shanks_constants();
-
     /** If base field, is the identity. */
     T Frobenius_map(unsigned long power) const;
 
@@ -92,6 +86,17 @@ public:
     bool is_zero() const = 0;
 
     void print() const = 0;
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const = 0;
+    /**
+     * Sets the field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     * Returns true when the right-most bits of each element represent a value less than the modulus.
+     */
+    bool from_words(std::vector<uint64_t> words) = 0;
 
     void randomize() = 0;
     void clear() = 0;
@@ -103,17 +108,6 @@ public:
     static T random_element();
     /** Equals 1 for prime field Fp. */
     static constexpr std::size_t extension_degree();
-
-    /**
-     * Returns the constituent bits in 64 bit words, in little-endian order.
-     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
-     */
-    std::vector<uint64_t> to_words() const = 0;
-    /**
-     * Creates a field element from the given bits in 64 bit words, in little-endian order.
-     * Only the right-most size_in_bits() bits are used; other bits are ignored.
-     */
-    static T from_words(std::vector<uint64_t> words);
     static std::size_t ceil_size_in_bits();
     static std::size_t floor_size_in_bits();
 

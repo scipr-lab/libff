@@ -12,6 +12,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n, const bigint<n>& modulus>
 Fp6_3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::mul_by_non_residue(const Fp6_3over2_model<n, modulus> &elt)
 {
@@ -41,6 +43,12 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::random_elem
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp12_2over3over2_model<n,modulus>::randomize()
+{
+    (*this) = Fp12_2over3over2_model<n, modulus>::random_element();
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp12_2over3over2_model<n,modulus>::operator==(const Fp12_2over3over2_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1);
@@ -55,6 +63,9 @@ bool Fp12_2over3over2_model<n,modulus>::operator!=(const Fp12_2over3over2_model<
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator+(const Fp12_2over3over2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(this->c0 + other.c0,
                                              this->c1 + other.c1);
 }
@@ -62,6 +73,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator+(c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-(const Fp12_2over3over2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(this->c0 - other.c0,
                                              this->c1 - other.c1);
 }
@@ -69,6 +83,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-(c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(lhs*rhs.c0,
                                              lhs*rhs.c1);
 }
@@ -76,6 +93,9 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, co
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(lhs*rhs.c0,
                                              lhs*rhs.c1);
 }
@@ -83,6 +103,9 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp2_model<n, modulus> &lhs, c
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n, modulus> operator*(const Fp6_3over2_model<n, modulus> &lhs, const Fp12_2over3over2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp12_2over3over2_model<n,modulus>(lhs*rhs.c0,
                                              lhs*rhs.c1);
 }
@@ -90,6 +113,9 @@ Fp12_2over3over2_model<n, modulus> operator*(const Fp6_3over2_model<n, modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator*(const Fp12_2over3over2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba) */
 
     const my_Fp6 &A = other.c0, &B = other.c1,
@@ -109,14 +135,80 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator-()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return power<Fp12_2over3over2_model<n, modulus> >(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::operator^(const bigint<m> &exponent) const
+{
+    return power<Fp12_2over3over2_model<n, modulus> >(*this, exponent);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m, const bigint<m>& exp_modulus>
+Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::operator^(const Fp_model<m, exp_modulus> &exponent) const
+{
+    return (*this)^(exponent.as_bigint());
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator+=(const Fp12_2over3over2_model<n,modulus>& other)
+{
+    (*this) = *this + other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator-=(const Fp12_2over3over2_model<n,modulus>& other)
+{
+    (*this) = *this - other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator*=(const Fp12_2over3over2_model<n,modulus>& other)
+{
+    (*this) = *this * other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    (*this) = *this ^ pow;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    (*this) = *this ^ pow;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared() const
 {
     return squared_complex();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::square()
+{
+    (*this) = squared();
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_karatsuba() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba squaring) */
 
     const my_Fp6 &a = this->c0, &b = this->c1;
@@ -130,6 +222,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_kar
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_complex() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Complex squaring) */
 
     const my_Fp6 &a = this->c0, &b = this->c1;
@@ -142,6 +237,9 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::squared_com
 template<mp_size_t n, const bigint<n>& modulus>
 Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+#endif
     /* From "High-Speed Software Implementation of the Optimal Ate Pairing over Barreto-Naehrig Curves"; Algorithm 8 */
 
     const my_Fp6 &a = this->c0, &b = this->c1;
@@ -153,6 +251,13 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::inverse() c
     const my_Fp6 c1 = - (b * t3);
 
     return Fp12_2over3over2_model<n,modulus>(c0, c1);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus>& Fp12_2over3over2_model<n,modulus>::invert()
+{
+    (*this) = inverse();
+    return (*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
@@ -359,19 +464,6 @@ Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::mul_by_024(
 
 }
 
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m>
-Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const bigint<m> &exponent)
-{
-    return power<Fp12_2over3over2_model<n, modulus> >(self, exponent);
-}
-
-template<mp_size_t n, const bigint<n>& modulus, mp_size_t m, const bigint<m>& exp_modulus>
-Fp12_2over3over2_model<n, modulus> operator^(const Fp12_2over3over2_model<n, modulus> &self, const Fp_model<m, exp_modulus> &exponent)
-{
-    return self^(exponent.as_bigint());
-}
-
-
 template<mp_size_t n, const bigint<n>& modulus>
 template<mp_size_t m>
 Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic_exp(const bigint<m> &exponent) const
@@ -398,6 +490,33 @@ Fp12_2over3over2_model<n, modulus> Fp12_2over3over2_model<n,modulus>::cyclotomic
     }
 
     return res;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp12_2over3over2_model<n,modulus> Fp12_2over3over2_model<n,modulus>::sqrt() const
+{
+    return tonelli_shanks_sqrt(*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+std::vector<uint64_t> Fp12_2over3over2_model<n,modulus>::to_words() const
+{
+    std::vector<uint64_t> words = c0.to_words();
+    std::vector<uint64_t> words1 = c1.to_words();
+    words.insert(words.end(), words1.begin(), words1.end());
+    return words;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+bool Fp12_2over3over2_model<n,modulus>::from_words(std::vector<uint64_t> words)
+{
+    std::vector<uint64_t>::const_iterator vec_start = words.begin();
+    std::vector<uint64_t>::const_iterator vec_center = words.begin() + words.size() / 2;
+    std::vector<uint64_t>::const_iterator vec_end = words.end();
+    std::vector<uint64_t> words0(vec_start, vec_center);
+    std::vector<uint64_t> words1(vec_center, vec_end);
+    // Fp_model's from_words() takes care of asserts about vector length.
+    return c0.from_words(words0) && c1.from_words(words1);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>

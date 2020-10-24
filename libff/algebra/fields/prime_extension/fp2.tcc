@@ -10,9 +10,11 @@
 #ifndef FP2_TCC_
 #define FP2_TCC_
 
-#include <libff/algebra/fields/field_utils.hpp>
+#include <libff/algebra/field_utils/field_utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::zero()
@@ -37,6 +39,12 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::random_element()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp2_model<n,modulus>::randomize()
+{
+    (*this) = Fp2_model<n, modulus>::random_element();
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bool Fp2_model<n,modulus>::operator==(const Fp2_model<n,modulus> &other) const
 {
     return (this->c0 == other.c0 && this->c1 == other.c1);
@@ -51,6 +59,9 @@ bool Fp2_model<n,modulus>::operator!=(const Fp2_model<n,modulus> &other) const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::operator+(const Fp2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->add_cnt++;
+#endif
     return Fp2_model<n,modulus>(this->c0 + other.c0,
                                 this->c1 + other.c1);
 }
@@ -58,6 +69,9 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::operator+(const Fp2_model<n,modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::operator-(const Fp2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sub_cnt++;
+#endif
     return Fp2_model<n,modulus>(this->c0 - other.c0,
                                 this->c1 - other.c1);
 }
@@ -65,6 +79,9 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::operator-(const Fp2_model<n,modulus> 
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp2_model<n, modulus> &rhs)
 {
+#ifdef PROFILE_OP_COUNTS
+    rhs.mul_cnt++;
+#endif
     return Fp2_model<n,modulus>(lhs*rhs.c0,
                                 lhs*rhs.c1);
 }
@@ -72,6 +89,9 @@ Fp2_model<n, modulus> operator*(const Fp_model<n, modulus> &lhs, const Fp2_model
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::operator*(const Fp2_model<n,modulus> &other) const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->mul_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba) */
     const my_Fp
         &A = other.c0, &B = other.c1,
@@ -91,14 +111,74 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::operator-() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus> Fp2_model<n,modulus>::operator^(const unsigned long pow) const
+{
+    return power<Fp2_model<n, modulus>>(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp2_model<n,modulus> Fp2_model<n,modulus>::operator^(const bigint<m> &pow) const
+{
+    return power<Fp2_model<n, modulus>, m>(*this, pow);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator+=(const Fp2_model<n,modulus>& other)
+{
+    (*this) = *this + other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator-=(const Fp2_model<n,modulus>& other)
+{
+    (*this) = *this - other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator*=(const Fp2_model<n,modulus>& other)
+{
+    (*this) = *this * other;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator^=(const unsigned long pow)
+{
+    (*this) = *this ^ pow;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+template<mp_size_t m>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::operator^=(const bigint<m> &pow)
+{
+    (*this) = *this ^ pow;
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::squared() const
 {
     return squared_complex();
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::square()
+{
+    (*this) = squared();
+    return (*this);
+}
+
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::squared_karatsuba() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Karatsuba squaring) */
     const my_Fp &a = this->c0, &b = this->c1;
     const my_Fp asq = a.squared();
@@ -111,6 +191,9 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::squared_karatsuba() const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::squared_complex() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->sqr_cnt++;
+#endif
     /* Devegili OhEig Scott Dahab --- Multiplication and Squaring on Pairing-Friendly Fields.pdf; Section 3 (Complex squaring) */
     const my_Fp &a = this->c0, &b = this->c1;
     const my_Fp ab = a * b;
@@ -122,6 +205,9 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::squared_complex() const
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::inverse() const
 {
+#ifdef PROFILE_OP_COUNTS
+    this->inv_cnt++;
+#endif
     const my_Fp &a = this->c0, &b = this->c1;
 
     /* From "High-Speed Software Implementation of the Optimal Ate Pairing over Barreto-Naehrig Curves"; Algorithm 8 */
@@ -136,6 +222,13 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp2_model<n,modulus>& Fp2_model<n,modulus>::invert()
+{
+    (*this) = inverse();
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::Frobenius_map(unsigned long power) const
 {
     return Fp2_model<n,modulus>(c0,
@@ -145,63 +238,28 @@ Fp2_model<n,modulus> Fp2_model<n,modulus>::Frobenius_map(unsigned long power) co
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n,modulus> Fp2_model<n,modulus>::sqrt() const
 {
-    Fp2_model<n,modulus> one = Fp2_model<n,modulus>::one();
-
-    size_t v = Fp2_model<n,modulus>::s;
-    Fp2_model<n,modulus> z = Fp2_model<n,modulus>::nqr_to_t;
-    Fp2_model<n,modulus> w = (*this)^Fp2_model<n,modulus>::t_minus_1_over_2;
-    Fp2_model<n,modulus> x = (*this) * w;
-    Fp2_model<n,modulus> b = x * w; // b = (*this)^t
-
-#if DEBUG
-    // check if square with euler's criterion
-    Fp2_model<n,modulus> check = b;
-    for (size_t i = 0; i < v-1; ++i)
-    {
-        check = check.squared();
-    }
-    if (check != one)
-    {
-        assert(0);
-    }
-#endif
-
-    // compute square root with Tonelli--Shanks
-    // (does not terminate if not a square!)
-
-    while (b != one)
-    {
-        size_t m = 0;
-        Fp2_model<n,modulus> b2m = b;
-        while (b2m != one)
-        {
-            /* invariant: b2m = b^(2^m) after entering this loop */
-            b2m = b2m.squared();
-            m += 1;
-        }
-
-        int j = v-m-1;
-        w = z;
-        while (j > 0)
-        {
-            w = w.squared();
-            --j;
-        } // w = z^2^(v-m-1)
-
-        z = w.squared();
-        b = b * z;
-        x = x * w;
-        v = m;
-    }
-
-    return x;
+    return tonelli_shanks_sqrt(*this);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-template<mp_size_t m>
-Fp2_model<n,modulus> Fp2_model<n,modulus>::operator^(const bigint<m> &pow) const
+std::vector<uint64_t> Fp2_model<n,modulus>::to_words() const
 {
-    return power<Fp2_model<n, modulus>, m>(*this, pow);
+    std::vector<uint64_t> words = c0.to_words();
+    std::vector<uint64_t> words1 = c1.to_words();
+    words.insert(words.end(), words1.begin(), words1.end());
+    return words;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+bool Fp2_model<n,modulus>::from_words(std::vector<uint64_t> words)
+{
+    std::vector<uint64_t>::const_iterator vec_start = words.begin();
+    std::vector<uint64_t>::const_iterator vec_center = words.begin() + words.size() / 2;
+    std::vector<uint64_t>::const_iterator vec_end = words.end();
+    std::vector<uint64_t> words0(vec_start, vec_center);
+    std::vector<uint64_t> words1(vec_center, vec_end);
+    // Fp_model's from_words() takes care of asserts about vector length.
+    return c0.from_words(words0) && c1.from_words(words1);
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
