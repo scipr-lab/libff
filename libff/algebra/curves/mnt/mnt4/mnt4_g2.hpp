@@ -84,7 +84,7 @@ public:
     static mnt4_G2 one();
     static mnt4_G2 random_element();
 
-    static size_t size_in_bits() { return mnt4_Fq2::size_in_bits() + 1; }
+    static size_t size_in_bits() { return mnt4_Fq2::ceil_size_in_bits() + 1; }
     static bigint<mnt4_Fq::num_limbs> base_field_char() { return mnt4_Fq::field_char(); }
     static bigint<mnt4_Fr::num_limbs> order() { return mnt4_Fr::field_char(); }
 

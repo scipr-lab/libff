@@ -15,6 +15,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 template<mp_size_t n>
 bigint<n>::bigint(const unsigned long x) /// Initalize from a small integer
 {
@@ -60,6 +62,15 @@ bigint<n>::bigint(const mpz_t r) /// Initialize from MPZ element
     mpz_clear(k);
 }
 
+
+template<mp_size_t n>
+bigint<n> bigint<n>::one()
+{
+    bigint<n> one;
+    one.data[0] = 1;
+    return one;
+}
+
 template<mp_size_t n>
 void bigint<n>::print() const
 {
@@ -82,6 +93,12 @@ template<mp_size_t n>
 bool bigint<n>::operator!=(const bigint<n>& other) const
 {
     return !(operator==(other));
+}
+
+template<mp_size_t n>
+bool bigint<n>::operator<(const bigint<n>& other) const
+{
+    return (mpn_cmp(this->data, other.data, n) < 0);
 }
 
 template<mp_size_t n>

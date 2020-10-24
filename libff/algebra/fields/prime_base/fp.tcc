@@ -13,11 +13,14 @@
 #include <cmath>
 #include <cstdlib>
 #include <limits>
+#include <vector>
 
-#include <libff/algebra/fields/field_utils.hpp>
-#include <libff/algebra/fields/fp_aux.tcc>
+#include <libff/algebra/field_utils/field_utils.hpp>
+#include <libff/algebra/field_utils/fp_aux.tcc>
 
 namespace libff {
+
+using std::size_t;
 
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
@@ -233,12 +236,15 @@ void Fp_model<n,modulus>::clear()
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+void Fp_model<n,modulus>::randomize()
+{
+    (*this) = Fp_model<n, modulus>::random_element();
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 bigint<n> Fp_model<n,modulus>::as_bigint() const
 {
-    bigint<n> one;
-    one.clear();
-    one.data[0] = 1;
-
+    bigint<n> one = bigint<n>::one();
     Fp_model<n, modulus> res(*this);
     res.mul_reduce(one);
 
@@ -655,6 +661,13 @@ Fp_model<n,modulus> Fp_model<n,modulus>::squared() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus>& Fp_model<n,modulus>::square()
+{
+    (*this) = squared();
+    return (*this);
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus>& Fp_model<n,modulus>::invert()
 {
 #ifdef PROFILE_OP_COUNTS
@@ -716,7 +729,15 @@ Fp_model<n,modulus> Fp_model<n,modulus>::inverse() const
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
-Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random element of Fp_model
+Fp_model<n,modulus> Fp_model<n,modulus>::Frobenius_map(unsigned long power) const
+{
+    UNUSED(power); // only for API consistency
+    Fp_model<n,modulus> copy = *this;
+    return copy;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+Fp_model<n,modulus> Fp_model<n,modulus>::random_element() /// returns random element of Fp_model
 {
     /* note that as Montgomery representation is a bijection then
        selecting a random element of {xR} is the same as selecting a
@@ -748,82 +769,70 @@ Fp_model<n, modulus> Fp_model<n,modulus>::random_element() /// returns random el
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n,modulus> Fp_model<n,modulus>::sqrt() const
 {
-    Fp_model<n,modulus> one = Fp_model<n,modulus>::one();
+    return tonelli_shanks_sqrt(*this);
+}
 
-    size_t v = Fp_model<n,modulus>::s;
-    Fp_model<n,modulus> z = Fp_model<n,modulus>::nqr_to_t;
-    Fp_model<n,modulus> w = (*this)^Fp_model<n,modulus>::t_minus_1_over_2;
-    Fp_model<n,modulus> x = (*this) * w;
-    Fp_model<n,modulus> b = x * w; // b = (*this)^t
+template<mp_size_t n, const bigint<n>& modulus>
+std::vector<uint64_t> Fp_model<n,modulus>::to_words() const
+{
+    // TODO: implement for other bit architectures
+    static_assert(sizeof(mp_limb_t) == 8, "Only 64-bit architectures are currently supported");
 
-#if DEBUG
-    // check if square with euler's criterion
-    Fp_model<n,modulus> check = b;
-    for (size_t i = 0; i < v-1; ++i)
-    {
-        check = check.squared();
-    }
-    if (check != one)
-    {
-        assert(0);
-    }
+    bigint<n> repr = this->bigint_repr();
+    std::vector<uint64_t> words;
+	words.insert(words.begin(), std::begin(repr.data), std::end(repr.data));
+    return words;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+bool Fp_model<n,modulus>::from_words(std::vector<uint64_t> words)
+{
+    // TODO: implement for other bit architectures
+    static_assert(sizeof(mp_limb_t) == 8, "Only 64-bit architectures are currently supported");
+
+    typedef Fp_model<n, modulus> FieldT; // Without the typedef C++ doesn't compile.
+    long start_bit = words.size() * 64 - FieldT::ceil_size_in_bits();
+    assert(start_bit >= 0); // Check the vector is big enough.
+    long start_word = start_bit / 64;
+    long bit_offset = start_bit % 64;
+
+    // Assumes mont_repr.data is just the right size to fit ceil_size_in_bits().
+    std::copy(words.begin() + start_word, words.end(), this->mont_repr.data);
+    // Zero out the left-most bit_offset bits.
+    this->mont_repr.data[n - 1] = (mp_limb_t) ((((uint64_t) this->mont_repr.data[n - 1]) << bit_offset) >> bit_offset);
+#ifndef MONTGOMERY_OUTPUT
+    this->mul_reduce(Rsquared);
 #endif
-
-    // compute square root with Tonelli--Shanks
-    // (does not terminate if not a square!)
-
-    while (b != one)
-    {
-        size_t m = 0;
-        Fp_model<n,modulus> b2m = b;
-        while (b2m != one)
-        {
-            /* invariant: b2m = b^(2^m) after entering this loop */
-            b2m = b2m.squared();
-            m += 1;
-        }
-
-        int j = v-m-1;
-        w = z;
-        while (j > 0)
-        {
-            w = w.squared();
-            --j;
-        } // w = z^2^(v-m-1)
-
-        z = w.squared();
-        b = b * z;
-        x = x * w;
-        v = m;
-    }
-
-    return x;
+    return this->mont_repr < modulus;
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 std::ostream& operator<<(std::ostream &out, const Fp_model<n, modulus> &p)
 {
-#ifndef MONTGOMERY_OUTPUT
-    Fp_model<n,modulus> tmp;
-    tmp.mont_repr.data[0] = 1;
-    tmp.mul_reduce(p.mont_repr);
-    out << tmp.mont_repr;
-#else
-    out << p.mont_repr;
-#endif
+    out << p.bigint_repr();
     return out;
 }
 
 template<mp_size_t n, const bigint<n>& modulus>
 std::istream& operator>>(std::istream &in, Fp_model<n, modulus> &p)
 {
+    in >> p.mont_repr;
 #ifndef MONTGOMERY_OUTPUT
-    in >> p.mont_repr;
-    p.mul_reduce(Fp_model<n, modulus>::Rsquared);
-#else
-    in >> p.mont_repr;
+    p.mul_reduce(Fp_model<n,modulus>::Rsquared);
 #endif
     return in;
+}
+
+template<mp_size_t n, const bigint<n>& modulus>
+bigint<n> Fp_model<n,modulus>::bigint_repr() const
+{
+    // If the flag is defined, serialization and words output use the montgomery representation
+    // instead of the human-readable value.
+#ifdef MONTGOMERY_OUTPUT
+    return this->mont_repr;
+#else
+    return this->as_bigint();
+#endif
 }
 
 } // libff

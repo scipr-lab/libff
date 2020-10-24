@@ -37,7 +37,7 @@ option(
 )
 option(
   MONTGOMERY_OUTPUT
-  "Serialize Fp elements as their Montgomery representations (faster but not human-readable)"
+  "Use Montgomery representations for serialization and words representation of Fp elements (faster but not human-readable)"
   ON
 )
 option(
