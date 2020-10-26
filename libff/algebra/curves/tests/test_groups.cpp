@@ -18,6 +18,8 @@
 
 using namespace libff;
 
+using std::size_t;
+
 #ifndef NDEBUG
 template<typename GroupT>
 void test_mixed_add()
