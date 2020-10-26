@@ -122,6 +122,12 @@ bool bigint<n>::is_zero() const
 }
 
 template<mp_size_t n>
+bool bigint<n>::is_even() const
+{
+    return (data[0] & 1) == 0;
+}
+
+template<mp_size_t n>
 size_t bigint<n>::num_bits() const
 {
 /*

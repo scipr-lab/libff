@@ -53,7 +53,7 @@ void serialize_bit_vector(std::ostream &out, const bit_vector &v);
 void deserialize_bit_vector(std::istream &in, bit_vector &v);
 
 template<typename T>
-size_t size_in_bits(const std::vector<T> &v);
+size_t ceil_size_in_bits(const std::vector<T> &v);
 
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
 

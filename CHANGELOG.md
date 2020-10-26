@@ -3,10 +3,12 @@
 ### Features
 - #58 Add a defined API for every field type, and ensure all fields implement it (Thanks @alexander-zw)
 - #71 Add BLS12-381 (Thanks @yelhousni)
+- #79 Separate field initialization from curves (Thanks @alexander-zw)
 
 ### Bug fixes
-- #75 get rid of warning for unused constant PI, in complex field
-- #78 Reduce prints when inhibit_profiling_info is set.
+- #75 Get rid of warning for unused constant PI, in complex field
+- #78 Reduce prints when inhibit_profiling_info is set
+- #79 Use std::size_t for all curves, fix bugs introduced by #58
 
 ## v1.1.0
 

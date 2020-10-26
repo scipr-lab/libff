@@ -29,8 +29,8 @@ public:
     static long long add_cnt;
     static long long dbl_cnt;
 #endif
-    static std::vector<size_t> wnaf_window_table;
-    static std::vector<size_t> fixed_base_exp_window_table;
+    static std::vector<std::size_t> wnaf_window_table;
+    static std::vector<std::size_t> fixed_base_exp_window_table;
     static mnt6_G1 G1_zero;
     static mnt6_G1 G1_one;
     static bool initialized;
@@ -79,7 +79,7 @@ public:
     static mnt6_G1 one();
     static mnt6_G1 random_element();
 
-    static size_t size_in_bits() { return base_field::ceil_size_in_bits() + 1; }
+    static std::size_t size_in_bits() { return base_field::ceil_size_in_bits() + 1; }
     static bigint<base_field::num_limbs> base_field_char() { return base_field::field_char(); }
     static bigint<scalar_field::num_limbs> order() { return scalar_field::field_char(); }
 

@@ -15,6 +15,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 bool edwards_Fq_conic_coefficients::operator==(const edwards_Fq_conic_coefficients &other) const
 {
     return (this->c_ZZ == other.c_ZZ &&
