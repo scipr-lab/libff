@@ -1,6 +1,10 @@
 /** @file
  *****************************************************************************
  Declaration of bigint wrapper class around GMP's MPZ long integers.
+
+ Notice that this class has no arithmetic operators. This is deliberate. All
+ bigints should either be hardcoded or operated on the bit level to ensure
+ high performance.
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
@@ -48,6 +52,7 @@ public:
     bool operator<(const bigint<n>& other) const;
     void clear();
     bool is_zero() const;
+    bool is_even() const;
     std::size_t max_bits() const { return n * GMP_NUMB_BITS; } /// Returns the number of bits representable by this bigint type
     std::size_t num_bits() const; /// Returns the number of bits in this specific bigint value, i.e., position of the most-significant 1
 

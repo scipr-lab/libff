@@ -55,9 +55,9 @@ FieldT power(const FieldT &base, const unsigned long exponent)
 template<typename FieldT>
 FieldT tonelli_shanks_sqrt(const FieldT &value)
 {
-    // a few assertions to make sure s, t, and nqr are initialized
+    // A few assertions to make sure s, t, and nqr are initialized.
     assert(FieldT::s != 0);
-    assert(!(FieldT::t % 2).is_zero()); // check that t is odd
+    assert(!FieldT::t.is_even()); // Check that t is odd.
     assert(!FieldT::nqr.is_zero());
 
     if (value.is_zero())

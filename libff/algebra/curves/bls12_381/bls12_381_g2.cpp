@@ -2,6 +2,8 @@
 
 namespace libff {
 
+using std::size_t;
+
 #ifdef PROFILE_OP_COUNTS
 long long bls12_381_G2::add_cnt = 0;
 long long bls12_381_G2::dbl_cnt = 0;
