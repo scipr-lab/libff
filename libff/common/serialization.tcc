@@ -94,7 +94,6 @@ T reserialize(const T &obj)
     ss << obj;
     T tmp;
     ss >> tmp;
-    assert(obj == tmp);
     return tmp;
 }
 

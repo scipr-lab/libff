@@ -144,13 +144,14 @@ void test_output()
 {
     GroupT g = GroupT::zero();
 
-    for (size_t i = 0; i < 1000; ++i)
+    /* ate-pairing contained optimizations specific to the original curve that were breaking
+       point addition with extremely small probability, so this code was run for 1000 times
+       in case there was a missing carry. Since no problems were found, this is now reduced
+       to only 10 times for quick testing. */
+    for (size_t i = 0; i < 10; ++i)
     {
-        std::stringstream ss;
-        ss << g;
-        GroupT gg;
-        ss >> gg;
-        EXPECT_EQ(g, gg);
+        GroupT g_ser = reserialize(g);
+        EXPECT_EQ(g, g_ser);
         // Use a random point in next iteration
         g = GroupT::random_element();
     }
