@@ -55,6 +55,14 @@ void deserialize_bit_vector(std::istream &in, bit_vector &v);
 template<typename T>
 size_t ceil_size_in_bits(const std::vector<T> &v);
 
+/**
+ * Returns a random element of T that is not zero or one.
+ * T can be a field or elliptic curve group.
+ * Used for testing to generate a test example that doesn't error.
+ */
+template<typename T>
+T random_element_non_zero_one();
+
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
 
 } // libff
