@@ -9,7 +9,7 @@ if(USE_CLANG_TIDY)
   if(CLANG_TIDY)
     file(DOWNLOAD
       https://raw.githubusercontent.com/llvm-mirror/clang-tools-extra/master/clang-tidy/tool/run-clang-tidy.py
-      run-clang-tidy.py
+      ${PROJECT_BINARY_DIR}/run-clang-tidy.py
     )
     find_program(RUN_CLANG_TIDY run-clang-tidy.py)
     if(RUN_CLANG_TIDY)
