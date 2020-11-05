@@ -1,3 +1,8 @@
+file(DOWNLOAD
+  https://raw.githubusercontent.com/llvm-mirror/clang-tools-extra/master/clang-tidy/tool/run-clang-tidy.py
+  run-clang-tidy.py
+)
+
 option(
   USE_CLANG_TIDY
   "Use clang-tidy if the program is found."
