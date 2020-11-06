@@ -1,0 +1,7 @@
+Checks:
+    '*'
+
+WarningsAsErrors:
+    ''
+
+HeaderFilterRegex: 'libff/*.(hpp|tcc|cpp)'
