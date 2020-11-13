@@ -101,6 +101,16 @@ To execute the tests for this library, run:
 make check
 ```
 
+## Testing
+
+To run clang-tidy on this library, specify the variable USE_CLANG_TIDY (eg. `cmake .. -D USE_CLANG_TIDY=ON`).
+Then, run:
+```
+make clang-tidy
+```
+
+One can specify which clang-tidy checks to run and which files to run clang-tidy on using the .clang-tidy file in the root directory of the project.
+
 ## Profile
 
 To compile the multi-exponentiation profiler in this library, run:
