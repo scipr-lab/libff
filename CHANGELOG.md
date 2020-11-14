@@ -5,6 +5,7 @@
 - #71 Add BLS12-381 (Thanks @yelhousni)
 - #79 Separate field initialization from curves (Thanks @alexander-zw)
 - #80 Add clang-tidy checks to library and CI
+- #82 Convert tests to use Google test (Thanks @alexander-zw)
 ### Bug fixes
 - #75 Get rid of warning for unused constant PI, in complex field
 - #78 Reduce prints when inhibit_profiling_info is set
@@ -15,7 +16,12 @@
 _Special thanks to all downstream projects upstreaming their patches!_
 
 ### Breaking Changes
-- None!
+- File structure changed: All field utils are now in `libff/algebra/field_utils/`, `Fp_model` is
+  now in `libff/algebra/fields/prime_base/`, and all other F_p^n fields in
+  `libff/algebra/fields/prime_extension/`.
+- The function `base_field_char()` of all fields and curves have been renamed to `field_char()`.
+- The provided fields used in curves have been moved to separate files so that they can be imported
+  separately from `[field name]_fields.hpp`. However they are still accessible from the init file.
 
 ### Features
 - #20 Improve operator+ speed for alt_bn, correct the corresponding docs, and reduce code duplication.
