@@ -1,5 +1,11 @@
 /**
  *****************************************************************************
+ Some tests that should apply to all finite fields in this directory. Mainly
+ API tests that enforce classes to have certain functions. Includes tests for
+ just F_p, tests for F_p^n, tests for binary fields, and tests for all finite
+ fields. The API tests should be comprehensive and test ALL public functions
+ and members.
+ *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)

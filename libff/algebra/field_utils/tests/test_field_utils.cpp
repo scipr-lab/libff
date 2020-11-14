@@ -1,5 +1,7 @@
 /**
  *****************************************************************************
+ Basic tests for some of the field utils in this directory, mainly bigint.
+ *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)

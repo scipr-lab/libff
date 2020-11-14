@@ -1,5 +1,11 @@
 /**
  *****************************************************************************
+ Tests for all F_p^n fields, especially functions that are not part of the
+ standard field API and therefore not tested in test_all_fields.cpp. Unlike
+ that test, this one is run for all fields defined in curves/, so it also
+ makes sure the hardcoded parameters there are correct. Note that it only
+ tests the fields in the curves, not the curves themselves.
+ *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
@@ -267,7 +273,7 @@ TEST_F(FpnFieldsTest, SquareTest)
     test_cyclotomic_squaring<Fqk<mnt4_pp> >();
 }
 
-TEST_F(FpnFieldsTest, TomCookTest)
+TEST_F(FpnFieldsTest, ToomCookTest)
 {
     test_Fp4_toom_cook<mnt4_Fq4>();
 }
