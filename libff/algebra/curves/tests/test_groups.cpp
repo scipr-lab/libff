@@ -4,10 +4,13 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+#include <gtest/gtest.h>
+
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 #include <libff/common/profiling.hpp>
+#include <libff/common/utils.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
@@ -20,7 +23,21 @@ using namespace libff;
 
 using std::size_t;
 
-#ifndef NDEBUG
+class CurveGroupsTest: public ::testing::Test {
+public:
+    CurveGroupsTest()
+    {
+        edwards_pp::init_public_params();
+        mnt4_pp::init_public_params();
+        mnt6_pp::init_public_params();
+        alt_bn128_pp::init_public_params();
+        bls12_381_pp::init_public_params();
+#ifdef CURVE_BN128 // BN128 has fancy dependencies so it may be disabled
+        bn128_pp::init_public_params();
+#endif
+    }
+};
+
 template<typename GroupT>
 void test_mixed_add()
 {
@@ -30,31 +47,31 @@ void test_mixed_add()
     el = GroupT::zero();
     el.to_special();
     result = base.mixed_add(el);
-    assert(result == base + el);
+    EXPECT_EQ(result, base + el);
 
     base = GroupT::zero();
     el = GroupT::random_element();
     el.to_special();
     result = base.mixed_add(el);
-    assert(result == base + el);
+    EXPECT_EQ(result, base + el);
 
     base = GroupT::random_element();
     el = GroupT::zero();
     el.to_special();
     result = base.mixed_add(el);
-    assert(result == base + el);
+    EXPECT_EQ(result, base + el);
 
     base = GroupT::random_element();
     el = GroupT::random_element();
     el.to_special();
     result = base.mixed_add(el);
-    assert(result == base + el);
+    EXPECT_EQ(result, base + el);
 
     base = GroupT::random_element();
     el = base;
     el.to_special();
     result = base.mixed_add(el);
-    assert(result == base.dbl());
+    EXPECT_EQ(result, base.dbl());
 }
 
 template<typename GroupT>
@@ -65,77 +82,61 @@ void test_group()
     bigint<1> randsum = bigint<1>("121160274");
 
     GroupT zero = GroupT::zero();
-    assert(zero == zero);
+    EXPECT_EQ(zero, zero);
     GroupT one = GroupT::one();
-    assert(one == one);
+    EXPECT_EQ(one, one);
     GroupT two = bigint<1>(2l) * GroupT::one();
-    assert(two == two);
+    EXPECT_EQ(two, two);
     GroupT five = bigint<1>(5l) * GroupT::one();
 
     GroupT three = bigint<1>(3l) * GroupT::one();
     GroupT four = bigint<1>(4l) * GroupT::one();
 
-    assert(two+five == three+four);
+    EXPECT_EQ(two+five, three+four);
 
-    GroupT a = GroupT::random_element();
-    GroupT b = GroupT::random_element();
+    GroupT a = random_element_non_zero_one<GroupT>();
+    GroupT b = random_element_non_zero_one<GroupT>();
 
-    assert(one != zero);
-    assert(a != zero);
-    assert(a != one);
+    EXPECT_NE(one, zero);
+    ASSERT_NE(a, zero);
+    ASSERT_NE(a, one);
+    ASSERT_NE(b, zero);
+    ASSERT_NE(b, one);
 
-    assert(b != zero);
-    assert(b != one);
-
-    assert(a.dbl() == a + a);
-    assert(b.dbl() == b + b);
-    assert(one.add(two) == three);
-    assert(two.add(one) == three);
-    assert(a + b == b + a);
-    assert(a - a == zero);
-    assert(a - b == a + (-b));
-    assert(a - b == (-b) + a);
+    EXPECT_EQ(a.dbl(), a + a);
+    EXPECT_EQ(b.dbl(), b + b);
+    EXPECT_EQ(one.add(two), three);
+    EXPECT_EQ(two.add(one), three);
+    EXPECT_EQ(a + b, b + a);
+    EXPECT_EQ(a - a, zero);
+    EXPECT_EQ(a - b, a + (-b));
+    EXPECT_EQ(a - b, (-b) + a);
 
     // handle special cases
-    assert(zero + (-a) == -a);
-    assert(zero - a == -a);
-    assert(a - zero == a);
-    assert(a + zero == a);
-    assert(zero + a == a);
+    EXPECT_EQ(zero + (-a), -a);
+    EXPECT_EQ(zero - a, -a);
+    EXPECT_EQ(a - zero, a);
+    EXPECT_EQ(a + zero, a);
+    EXPECT_EQ(zero + a, a);
 
-    assert((a + b).dbl() == (a + b) + (b + a));
-    assert(bigint<1>("2") * (a + b) == (a + b) + (b + a));
+    EXPECT_EQ((a + b).dbl(), (a + b) + (b + a));
+    EXPECT_EQ(bigint<1>("2") * (a + b), (a + b) + (b + a));
 
-    assert((rand1 * a) + (rand2 * a) == (randsum * a));
+    EXPECT_EQ(rand1 * a + rand2 * a, randsum * a);
 
-    assert(GroupT::order() * a == zero);
-    assert(GroupT::order() * one == zero);
-    assert((GroupT::order() * a) - a != zero);
-    assert((GroupT::order() * one) - one != zero);
+    EXPECT_EQ(GroupT::order() * a, zero);
+    EXPECT_EQ(GroupT::order() * one, zero);
+    EXPECT_NE(GroupT::order() * a - a, zero);
+    EXPECT_NE(GroupT::order() * one - one, zero);
 
     test_mixed_add<GroupT>();
-
-    // Prevent release build warnings
-    UNUSED(rand1);
-    UNUSED(rand2);
-    UNUSED(randsum);
-    UNUSED(zero);
-    UNUSED(one);
-    UNUSED(two);
-    UNUSED(three);
-    UNUSED(four);
-    UNUSED(five);
-    UNUSED(a);
-    UNUSED(b);
 }
 
 template<typename GroupT>
 void test_mul_by_q()
 {
     GroupT a = GroupT::random_element();
-    assert((GroupT::base_field_char()*a) == a.mul_by_q());
-    // Prevent release build warnings
-    UNUSED(a);
+    EXPECT_EQ(GroupT::field_char() * a, a.mul_by_q());
 }
 
 template<typename GroupT>
@@ -143,69 +144,70 @@ void test_output()
 {
     GroupT g = GroupT::zero();
 
-    for (size_t i = 0; i < 1000; ++i)
+    /* ate-pairing contained optimizations specific to the original curve that were breaking
+       point addition with extremely small probability, so this code was run for 1000 times
+       in case there was a missing carry. Since no problems were found, this is now reduced
+       to only 10 times for quick testing. */
+    for (size_t i = 0; i < 10; ++i)
     {
-        std::stringstream ss;
-        ss << g;
-        GroupT gg;
-        ss >> gg;
-        assert(g == gg);
+        GroupT g_ser = reserialize(g);
+        EXPECT_EQ(g, g_ser);
         // Use a random point in next iteration
         g = GroupT::random_element();
     }
 }
 
-int main(void)
+TEST_F(CurveGroupsTest, GroupTest)
 {
-    edwards_pp::init_public_params();
     test_group<G1<edwards_pp> >();
-    test_output<G1<edwards_pp> >();
     test_group<G2<edwards_pp> >();
-    test_output<G2<edwards_pp> >();
-    test_mul_by_q<G2<edwards_pp> >();
 
-    mnt4_pp::init_public_params();
     test_group<G1<mnt4_pp> >();
-    test_output<G1<mnt4_pp> >();
     test_group<G2<mnt4_pp> >();
-    test_output<G2<mnt4_pp> >();
-    test_mul_by_q<G2<mnt4_pp> >();
 
-    mnt6_pp::init_public_params();
     test_group<G1<mnt6_pp> >();
-    test_output<G1<mnt6_pp> >();
     test_group<G2<mnt6_pp> >();
-    test_output<G2<mnt6_pp> >();
-    test_mul_by_q<G2<mnt6_pp> >();
 
-    alt_bn128_pp::init_public_params();
     test_group<G1<alt_bn128_pp> >();
-    test_output<G1<alt_bn128_pp> >();
     test_group<G2<alt_bn128_pp> >();
-    test_output<G2<alt_bn128_pp> >();
-    test_mul_by_q<G2<alt_bn128_pp> >();
 
-    bls12_381_pp::init_public_params();
     test_group<G1<bls12_381_pp> >();
-    test_output<G1<bls12_381_pp> >();
     test_group<G2<bls12_381_pp> >();
-    test_output<G2<bls12_381_pp> >();
-    test_mul_by_q<G2<bls12_381_pp> >();
 
-// BN128 has fancy dependencies so it may be disabled
-#ifdef CURVE_BN128
-    bn128_pp::init_public_params();
+#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
     test_group<G1<bn128_pp> >();
-    test_output<G1<bn128_pp> >();
     test_group<G2<bn128_pp> >();
+#endif
+}
+
+TEST_F(CurveGroupsTest, OutputTest)
+{
+    test_output<G1<edwards_pp> >();
+    test_output<G2<edwards_pp> >();
+
+    test_output<G1<mnt4_pp> >();
+    test_output<G2<mnt4_pp> >();
+
+    test_output<G1<mnt6_pp> >();
+    test_output<G2<mnt6_pp> >();
+
+    test_output<G1<alt_bn128_pp> >();
+    test_output<G2<alt_bn128_pp> >();
+
+    test_output<G1<bls12_381_pp> >();
+    test_output<G2<bls12_381_pp> >();
+
+#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
+    test_output<G1<bn128_pp> >();
     test_output<G2<bn128_pp> >();
 #endif
 }
 
-#else // NDEBUG
-
-int main()
+TEST_F(CurveGroupsTest, MulByQTest)
 {
-    printf("All tests here depend on assert() which is disabled by -DNDEBUG. Please recompile and run again.\n");
+    test_mul_by_q<G2<edwards_pp> >();
+    test_mul_by_q<G2<mnt4_pp> >();
+    test_mul_by_q<G2<mnt6_pp> >();
+    test_mul_by_q<G2<alt_bn128_pp> >();
+    test_mul_by_q<G2<bls12_381_pp> >();
 }
-#endif // NDEBUG
