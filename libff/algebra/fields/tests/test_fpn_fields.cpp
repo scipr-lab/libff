@@ -9,15 +9,13 @@
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
-#include <libff/common/profiling.hpp>
-#include <libff/common/utils.hpp>
+#include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
+#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
-#include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
-#include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
-#include <libff/algebra/fields/prime_extension/fp12_2over3over2.hpp>
-#include <libff/algebra/fields/prime_extension/fp6_3over2.hpp>
+#include <libff/common/profiling.hpp>
+#include <libff/common/utils.hpp>
 
 using namespace libff;
 
@@ -30,7 +28,7 @@ public:
         init_mnt6_fields();
         init_alt_bn128_fields();
         init_bls12_381_fields();
-#ifdef CURVE_BN128 // BN128 has fancy dependencies so it may be disabled
+#ifdef CURVE_BN128 // BN128 has fancy dependencies so it may be disabled.
         init_bn128_fields();
 #endif
     }
@@ -42,7 +40,7 @@ void test_Frobenius()
     FieldT a = FieldT::random_element();
     EXPECT_EQ(a.Frobenius_map(0), a);
     FieldT a_q = a ^ FieldT::field_char();
-    for (size_t power = 1; power < 10; ++power)
+    for (size_t power = 1; power < 10; power++)
     {
         const FieldT a_qi = a.Frobenius_map(power);
         EXPECT_EQ(a_qi, a_q);
@@ -182,7 +180,7 @@ template<typename Fp4T>
 void test_Fp4_toom_cook()
 {
     typedef typename Fp4T::my_Fp FieldT;
-    for (size_t i = 0; i < 100; ++i)
+    for (size_t i = 0; i < 100; i++)
     {
         const Fp4T a = Fp4T::random_element();
         const Fp4T b = Fp4T::random_element();
@@ -251,11 +249,11 @@ TEST_F(FpnFieldsTest, GeneralTest)
     test_all_fields<mnt6_pp>();
 
     test_all_fields<alt_bn128_pp>();
-    test_field<alt_bn128_Fq6>(); // alt_bn128_Fq6 is not included in test_all_fields.
+    test_field<alt_bn128_Fq6>(); // alt_bn128_Fq6 is not included in test_all_fields().
 
     test_all_fields<bls12_381_pp>();
-    test_field<bls12_381_Fq6>(); // bls12_381_Fq6 is not included in test_all_fields.
-#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled
+    test_field<bls12_381_Fq6>(); // bls12_381_Fq6 is not included in test_all_fields().
+#ifdef CURVE_BN128       // BN128 has fancy dependencies so it may be disabled.
     test_field<Fr<bn128_pp> >();
     test_field<Fq<bn128_pp> >();
 #endif
