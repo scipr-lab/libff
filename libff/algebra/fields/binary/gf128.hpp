@@ -35,8 +35,6 @@ public:
        be able to do gf128(0) and gf128(1). */
     explicit gf128(const uint64_t value_low);
     explicit gf128(const uint64_t value_high, const uint64_t value_low);
-    /** Returns the constituent bits in 64 bit words, in little-endian order */
-    std::vector<uint64_t> as_words() const;
 
     gf128& operator+=(const gf128 &other);
     gf128& operator-=(const gf128 &other);
@@ -58,7 +56,6 @@ public:
 
     gf128 squared() const;
     gf128 inverse() const;
-    /** HAS TO BE A SQUARE (else does not terminate). */
     gf128 sqrt() const;
 
     void randomize();
@@ -70,6 +67,17 @@ public:
     bool is_zero() const;
 
     void print() const;
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const;
+    /**
+     * Sets the field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     * Should always return true since the right-most bits are always valid.
+     */
+    bool from_words(std::vector<uint64_t> words);
 
     static gf128 random_element();
 
@@ -77,7 +85,8 @@ public:
     static gf128 one();
     static gf128 multiplicative_generator; // generator of gf128^*
 
-    static std::size_t size_in_bits() { return num_bits; }
+    static std::size_t ceil_size_in_bits() { return num_bits; }
+    static std::size_t floor_size_in_bits() { return num_bits; }
     static constexpr std::size_t extension_degree() { return 128; }
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); }

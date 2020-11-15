@@ -35,9 +35,18 @@ gf256::gf256(const uint64_t value_high, const uint64_t value_midh,
 {
 }
 
-std::vector<uint64_t> gf256::as_words() const
+std::vector<uint64_t> gf256::to_words() const
 {
     return std::vector<uint64_t>({this->value_[0], this->value_[1], this->value_[2], this->value_[3]});
+}
+
+bool gf256::from_words(std::vector<uint64_t> words)
+{
+    this->value_[0] = words[0];
+    this->value_[1] = words[1];
+    this->value_[2] = words[2];
+    this->value_[3] = words[3];
+    return true;
 }
 
 gf256& gf256::operator+=(const gf256 &other)

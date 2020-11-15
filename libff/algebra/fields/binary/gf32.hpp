@@ -32,7 +32,6 @@ public:
 
     explicit gf32();
     explicit gf32(const uint32_t value);
-    std::vector<uint64_t> as_words() const;
 
     gf32& operator+=(const gf32 &other);
     gf32& operator-=(const gf32 &other);
@@ -54,7 +53,6 @@ public:
 
     gf32 squared() const;
     gf32 inverse() const;
-    /** HAS TO BE A SQUARE (else does not terminate). */
     gf32 sqrt() const;
 
     void randomize();
@@ -66,6 +64,17 @@ public:
     bool is_zero() const;
 
     void print() const;
+    /**
+     * Returns the constituent bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are 0.
+     */
+    std::vector<uint64_t> to_words() const;
+    /**
+     * Sets the field element from the given bits in 64 bit words, in little-endian order.
+     * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
+     * Should always return true since the right-most bits are always valid.
+     */
+    bool from_words(std::vector<uint64_t> words);
 
     static gf32 random_element();
 
@@ -73,7 +82,8 @@ public:
     static gf32 one();
     static gf32 multiplicative_generator; // generator of gf32^*
 
-    static std::size_t size_in_bits() { return num_bits; }
+    static std::size_t ceil_size_in_bits() { return num_bits; }
+    static std::size_t floor_size_in_bits() { return num_bits; }
     static constexpr std::size_t extension_degree() { return 32; }
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); }

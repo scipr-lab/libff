@@ -69,7 +69,7 @@ void test_field()
     FieldT x = FieldT::random_element();
     FieldT y = FieldT::random_element();
     FieldT z = FieldT::random_element();
-    FieldT w = random_element_exclude(zero);
+    FieldT w = random_element_non_zero<FieldT>();
     
     EXPECT_EQ(x + y, y + x); // commutative law of addition
     EXPECT_EQ((x + y) + z, x + (y + z)); // associative law of addition
@@ -111,8 +111,8 @@ void test_field()
     EXPECT_NE(zero, one);
     EXPECT_NE(one, two);
     EXPECT_NE(x + one, x);
-    x = random_element_exclude(zero);
-    y = random_element_exclude(zero);
+    x = random_element_non_zero<FieldT>();
+    y = random_element_non_zero<FieldT>();
     z = random_element_exclude(one);
     if (two == zero)
         EXPECT_EQ(x, -x);
@@ -155,8 +155,8 @@ void test_field()
     expect_equal_or_negative((two + two).sqrt(), two);
     expect_equal_or_negative(zero.sqrt(), zero);
 
-    x = random_element_exclude(zero);
-    y = random_element_exclude(zero);
+    x = random_element_non_zero<FieldT>();
+    y = random_element_non_zero<FieldT>();
     EXPECT_EQ(x.squared().inverse(), x.inverse().squared());
     EXPECT_EQ((x * y).inverse(), x.inverse() * y.inverse());
     EXPECT_EQ((x * y.inverse()).inverse(), x.inverse() * y);
@@ -175,7 +175,7 @@ void test_field()
     EXPECT_EQ((x^pow1) * (x^pow2), x^sum);
     EXPECT_EQ((x * y)^pow1, (x^pow1) * (y^pow1));
 
-    x = random_element_exclude(zero);
+    x = random_element_non_zero<FieldT>();
     EXPECT_EQ(x.inverse()^pow1, (x^pow1).inverse());
     EXPECT_EQ((x^pow1) * (x.inverse()^pow2), x^diff);
 
@@ -199,7 +199,7 @@ void test_field()
     z = x.squared();
     x.square();
     EXPECT_EQ(x, z);
-    x = random_element_exclude(zero);
+    x = random_element_non_zero<FieldT>();
     z = x.inverse();
     x.invert();
     EXPECT_EQ(x, z);
@@ -216,7 +216,7 @@ void test_field()
 
     EXPECT_TRUE(zero.is_zero());
     EXPECT_FALSE(one.is_zero());
-    EXPECT_FALSE(random_element_exclude(zero).is_zero());
+    EXPECT_FALSE(random_element_non_zero<FieldT>().is_zero());
 
     EXPECT_NO_THROW(x.print());
 
@@ -231,8 +231,21 @@ void test_field()
     EXPECT_TRUE(y.from_words(words));
     EXPECT_EQ(x, y);
 
-    words[words.size() - 1] ^= 0x9f63595384150dfb; // Try completely changing the leading word.
+    // Try completely changing the first and last words.
+    words[words.size() - 1] ^= 0x9f63595384150dfb;
+    words[0] ^= 0xd3aa398d181580e8;
     y.from_words(words); // This should not error, though it may return false.
+
+    y = random_element_exclude(x);
+    z = x;
+    EXPECT_NE(x.to_words(), y.to_words());
+    EXPECT_EQ(x.to_words(), z.to_words());
+
+    std::vector<uint64_t> zero_words = zero.to_words();
+    for (uint64_t word : zero_words)
+        EXPECT_EQ(word, 0);
+    EXPECT_TRUE(y.from_words(zero_words));
+    EXPECT_TRUE(y.is_zero());
 
     /****************** Test extension_degree() and ceil/floor_size_in_bits(). ******************/
 
@@ -260,7 +273,7 @@ void test_op_profiling()
     y = x * y + one.inverse() - (x * one);
     y.square();
     x -= y.squared();
-    x = random_element_exclude(zero);
+    x = random_element_non_zero<FieldT>();
     x.invert();
     x = x - one;
     x *= x * x.squared();
@@ -321,18 +334,6 @@ void test_binary_field()
 {
     FieldT zero = FieldT::zero();
     FieldT one = FieldT::one();
-    FieldT x = FieldT::random_element();
-    FieldT y = random_element_exclude(x);
-    FieldT z = x;
-
-    std::vector<uint64_t> x_words = x.as_words();
-    std::vector<uint64_t> y_words = y.as_words();
-    std::vector<uint64_t> z_words = z.as_words();
-    std::vector<uint64_t> zero_words = zero.as_words();
-    EXPECT_NE(x_words, y_words);
-    EXPECT_EQ(x_words, z_words);
-    for (uint64_t word : zero_words)
-        EXPECT_EQ(word, 0);
 
     EXPECT_GE(FieldT::modulus_, 1);
     const uint64_t bits = FieldT::num_bits;
@@ -341,7 +342,7 @@ void test_binary_field()
     EXPECT_EQ(characteristic, bigint<1>(2));
 
     FieldT generator = FieldT::multiplicative_generator;
-    x = generator;
+    FieldT x = generator;
     EXPECT_NE(generator, zero);
     EXPECT_NE(generator, one);
     std::set<std::vector<uint64_t> > values;
@@ -349,8 +350,8 @@ void test_binary_field()
     {
         if (x == one)
             break;
-        EXPECT_EQ(values.find(x.as_words()), values.end()); // generator^n never repeats.
-        values.insert(x.as_words());
+        EXPECT_EQ(values.find(x.to_words()), values.end()); // generator^n never repeats.
+        values.insert(x.to_words());
         x *= generator;
     }
 }

@@ -34,9 +34,17 @@ gf192::gf192(const uint64_t value_high, const uint64_t value_mid, const uint64_t
 {
 }
 
-std::vector<uint64_t> gf192::as_words() const
+std::vector<uint64_t> gf192::to_words() const
 {
     return std::vector<uint64_t>({this->value_[0], this->value_[1], this->value_[2]});
+}
+
+bool gf192::from_words(std::vector<uint64_t> words)
+{
+    this->value_[0] = words[0];
+    this->value_[1] = words[1];
+    this->value_[2] = words[2];
+    return true;
 }
 
 gf192& gf192::operator+=(const gf192 &other)

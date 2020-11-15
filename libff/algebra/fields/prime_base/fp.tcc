@@ -799,7 +799,7 @@ bool Fp_model<n,modulus>::from_words(std::vector<uint64_t> words)
     // Assumes mont_repr.data is just the right size to fit ceil_size_in_bits().
     std::copy(words.begin() + start_word, words.end(), this->mont_repr.data);
     // Zero out the left-most bit_offset bits.
-    this->mont_repr.data[n - 1] = (mp_limb_t) ((((uint64_t) this->mont_repr.data[n - 1]) << bit_offset) >> bit_offset);
+    this->mont_repr.data[n - 1] = mp_limb_t((uint64_t(this->mont_repr.data[n - 1]) << bit_offset) >> bit_offset);
 #ifndef MONTGOMERY_OUTPUT
     this->mul_reduce(Rsquared);
 #endif

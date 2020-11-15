@@ -22,7 +22,7 @@ template<typename T>
 T random_element_non_zero_one()
 {
     T x = T::random_element();
-    while (x == T::zero() || x == T::one())
+    while (x.is_zero() || x == T::one())
         x = T::random_element();
     return x;
 }

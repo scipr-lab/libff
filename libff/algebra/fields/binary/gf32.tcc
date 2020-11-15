@@ -29,9 +29,15 @@ gf32::gf32(const uint32_t value) : value_(value)
 {
 }
 
-std::vector<uint64_t> gf32::as_words() const
+std::vector<uint64_t> gf32::to_words() const
 {
     return std::vector<uint64_t>({uint64_t(this->value_)});
+}
+
+bool gf32::from_words(std::vector<uint64_t> words)
+{
+    this->value_ = uint32_t(words[0]);
+    return true;
 }
 
 gf32& gf32::operator+=(const gf32 &other)

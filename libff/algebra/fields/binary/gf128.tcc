@@ -34,9 +34,16 @@ gf128::gf128(const uint64_t value_high, const uint64_t value_low) :
 {
 }
 
-std::vector<uint64_t> gf128::as_words() const
+std::vector<uint64_t> gf128::to_words() const
 {
     return std::vector<uint64_t>({this->value_[0], this->value_[1]});
+}
+
+bool gf128::from_words(std::vector<uint64_t> words)
+{
+    this->value_[0] = words[0];
+    this->value_[1] = words[1];
+    return true;
 }
 
 gf128& gf128::operator+=(const gf128 &other)

@@ -29,9 +29,15 @@ gf64::gf64(const uint64_t value) : value_(value)
 {
 }
 
-std::vector<uint64_t> gf64::as_words() const
+std::vector<uint64_t> gf64::to_words() const
 {
     return std::vector<uint64_t>({this->value_});
+}
+
+bool gf64::from_words(std::vector<uint64_t> words)
+{
+    this->value_ = words[0];
+    return true;
 }
 
 gf64& gf64::operator+=(const gf64 &other)
