@@ -16,7 +16,12 @@
 #include "libff/algebra/curves/mnt/mnt4/mnt4_fields.hpp"
 #include "libff/algebra/curves/mnt/mnt6/mnt6_fields.hpp"
 #include "libff/algebra/curves/alt_bn128/alt_bn128_fields.hpp"
-#include <libff/common/utils.hpp>
+#include "libff/algebra/fields/binary/gf32.hpp"
+#include "libff/algebra/fields/binary/gf64.hpp"
+#include "libff/algebra/fields/binary/gf128.hpp"
+#include "libff/algebra/fields/binary/gf192.hpp"
+#include "libff/algebra/fields/binary/gf256.hpp"
+#include "libff/common/utils.hpp"
 
 using namespace libff;
 
@@ -361,6 +366,12 @@ TEST_F(AllFieldsTest, AllFieldsApiTest)
 
     test_field<AllFieldsTest::Fr3>();
     test_field<AllFieldsTest::Fr6_2_3>();
+
+    test_field<gf32>();
+    test_field<gf64>();
+    test_field<gf128>();
+    test_field<gf192>();
+    test_field<gf256>();
 }
 
 #ifdef PROFILE_OP_COUNTS
@@ -375,6 +386,12 @@ TEST_F(AllFieldsTest, AllFieldsOpCountTest)
 
     test_op_profiling<AllFieldsTest::Fr3>();
     test_op_profiling<AllFieldsTest::Fr6_2_3>();
+
+    test_op_profiling<gf32>();
+    test_op_profiling<gf64>();
+    test_op_profiling<gf128>();
+    test_op_profiling<gf192>();
+    test_op_profiling<gf256>();
 }
 #endif
 
@@ -390,4 +407,13 @@ TEST_F(AllFieldsTest, FpnFieldsApiTest)
 
     test_fpn_field<AllFieldsTest::Fr3>();
     test_fpn_field<AllFieldsTest::Fr6_2_3>();
+}
+
+TEST_F(AllFieldsTest, BinaryFieldsApiTest)
+{
+    test_binary_field<gf32>();
+    test_binary_field<gf64>();
+    test_binary_field<gf128>();
+    test_binary_field<gf192>();
+    test_binary_field<gf256>();
 }
