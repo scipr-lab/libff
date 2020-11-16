@@ -1,3 +1,14 @@
+/**
+ *****************************************************************************
+ Tests for all binary fields. This test was copied from libiop. It mainly
+ makes sure the arithmetic is correct, which can be done with exact test cases
+ since unlike F_p^n classes these are fixed fields. More thorough tests are
+ in test_all_fields.
+ *****************************************************************************
+ * @author     This file is part of libff, developed by SCIPR Lab
+ *             and contributors (see AUTHORS).
+ * @copyright  MIT license (see LICENSE file)
+ *****************************************************************************/
 #include <gtest/gtest.h>
 
 #include "libff/algebra/fields/binary/gf32.hpp"

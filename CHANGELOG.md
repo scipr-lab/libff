@@ -7,6 +7,8 @@
 - #80 Add clang-tidy checks to library and CI
 - #82 Convert tests to use Google test (Thanks @alexander-zw)
 - #85 Add more unit tests for fields (Thanks @alexander-zw)
+- #86 Add binary fields from [libiop](https://github.com/scipr-lab/libiop) (Thanks @alexander-zw)
+
 ### Bug fixes
 - #75 Get rid of warning for unused constant PI, in complex field
 - #78 Reduce prints when inhibit_profiling_info is set
