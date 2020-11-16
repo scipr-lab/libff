@@ -1,16 +1,13 @@
 /** @file
  *****************************************************************************
-
  Implementation of interfaces for multi-exponentiation routines.
 
  See multiexp.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef MULTIEXP_TCC_
 #define MULTIEXP_TCC_
 
@@ -26,6 +23,8 @@
 #include <libff/common/utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 template<mp_size_t n>
 class ordered_exponent {
