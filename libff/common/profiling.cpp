@@ -1,16 +1,13 @@
 /** @file
  *****************************************************************************
-
  Implementation of functions for profiling code blocks.
 
  See profiling.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #include <cassert>
 #include <chrono>
 #include <cstdio>
@@ -28,6 +25,8 @@
 #endif
 
 namespace libff {
+
+using std::size_t;
 
 long long get_nsec_time()
 {

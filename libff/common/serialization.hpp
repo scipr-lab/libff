@@ -1,14 +1,11 @@
 /** @file
  *****************************************************************************
-
  Declaration of serialization routines and constants.
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef SERIALIZATION_HPP_
 #define SERIALIZATION_HPP_
 
