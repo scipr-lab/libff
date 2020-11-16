@@ -27,12 +27,21 @@ T random_element_non_zero_one()
     return x;
 }
 
-template<typename FieldT>
-FieldT random_element_non_zero()
+template<typename T>
+T random_element_non_zero()
 {
-    FieldT x = FieldT::random_element();
+    T x = T::random_element();
     while (x.is_zero())
-        x = FieldT::random_element();
+        x = T::random_element();
+    return x;
+}
+
+template<typename T>
+T random_element_exclude(T y)
+{
+    T x = T::random_element();
+    while (x == y)
+        x = T::random_element();
     return x;
 }
 

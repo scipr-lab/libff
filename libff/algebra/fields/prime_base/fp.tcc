@@ -776,7 +776,7 @@ template<mp_size_t n, const bigint<n>& modulus>
 std::vector<uint64_t> Fp_model<n,modulus>::to_words() const
 {
     // TODO: implement for other bit architectures
-    static_assert(sizeof(mp_limb_t) == 8, "Only 64-bit architectures are currently supported");
+    static_assert(GMP_NUMB_BITS == 64, "Only 64-bit architectures are currently supported");
 
     bigint<n> repr = this->bigint_repr();
     std::vector<uint64_t> words;
@@ -788,7 +788,7 @@ template<mp_size_t n, const bigint<n>& modulus>
 bool Fp_model<n,modulus>::from_words(std::vector<uint64_t> words)
 {
     // TODO: implement for other bit architectures
-    static_assert(sizeof(mp_limb_t) == 8, "Only 64-bit architectures are currently supported");
+    static_assert(GMP_NUMB_BITS == 64, "Only 64-bit architectures are currently supported");
 
     typedef Fp_model<n, modulus> FieldT; // Without the typedef C++ doesn't compile.
     long start_bit = words.size() * 64 - FieldT::ceil_size_in_bits();
