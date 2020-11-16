@@ -118,13 +118,39 @@ if ("${IS_LIBFF_PARENT}")
   )
 
   add_executable(
-    algebra_fields_test
+    algebra_field_utils_test
     EXCLUDE_FROM_ALL
 
-    algebra/fields/tests/test_fields.cpp
+    algebra/field_utils/tests/test_field_utils.cpp
   )
   target_link_libraries(
-    algebra_fields_test
+    algebra_field_utils_test
+
+    ff
+    gtest_main
+  )
+
+  add_executable(
+    algebra_all_fields_test
+    EXCLUDE_FROM_ALL
+
+    algebra/fields/tests/test_all_fields.cpp
+  )
+  target_link_libraries(
+    algebra_all_fields_test
+
+    ff
+    gtest_main
+  )
+
+  add_executable(
+    algebra_fpn_fields_test
+    EXCLUDE_FROM_ALL
+
+    algebra/fields/tests/test_fpn_fields.cpp
+  )
+  target_link_libraries(
+    algebra_fpn_fields_test
 
     ff
     gtest_main
@@ -140,13 +166,23 @@ if ("${IS_LIBFF_PARENT}")
     COMMAND algebra_groups_test
   )
   add_test(
-    NAME algebra_fields_test
-    COMMAND algebra_fields_test
+    NAME algebra_field_utils_test
+    COMMAND algebra_field_utils_test
+  )
+  add_test(
+    NAME algebra_all_fields_test
+    COMMAND algebra_all_fields_test
+  )
+  add_test(
+    NAME algebra_fpn_fields_test
+    COMMAND algebra_fpn_fields_test
   )
 
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
-  add_dependencies(check algebra_fields_test)
+  add_dependencies(check algebra_field_utils_test)
+  add_dependencies(check algebra_all_fields_test)
+  add_dependencies(check algebra_fpn_fields_test)
 
   find_package(OpenSSL REQUIRED)
   INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})

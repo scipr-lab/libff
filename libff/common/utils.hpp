@@ -67,8 +67,15 @@ T random_element_non_zero_one();
  * T can be a field or elliptic curve group.
  * Used for testing to generate a test example that doesn't error.
  */
-template<typename FieldT>
-FieldT random_element_non_zero();
+template<typename T>
+T random_element_non_zero();
+/**
+ * Returns a random element of T that is not equal to y.
+ * T can be a field or elliptic curve group.
+ * Used for testing to generate a test example that doesn't error.
+ */
+template<typename T>
+T random_element_exclude(T y);
 
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
 

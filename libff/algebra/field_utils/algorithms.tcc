@@ -1,11 +1,7 @@
 /** @file
  *****************************************************************************
-
  Declaration of interfaces for (square-and-multiply) exponentiation and
  Tonelli-Shanks square root.
-
- See algorithms.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
