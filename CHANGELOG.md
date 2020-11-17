@@ -10,7 +10,7 @@
 ### Bug fixes
 - #75 Get rid of warning for unused constant PI, in complex field
 - #78 Reduce prints when inhibit_profiling_info is set
-- #79 Use std::size_t for all curves, fix bugs introduced by #58
+- #79 & #87 Use std::size_t for all code, fix bugs introduced by #58
 
 ## v1.1.0
 

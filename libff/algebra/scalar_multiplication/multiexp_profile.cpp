@@ -1,3 +1,13 @@
+/**
+ *****************************************************************************
+ Implementation of interfaces for multi-exponentiation routines.
+
+ See multiexp.hpp .
+ *****************************************************************************
+ * @author     This file is part of libff, developed by SCIPR Lab
+ *             and contributors (see AUTHORS).
+ * @copyright  MIT license (see LICENSE file)
+ *****************************************************************************/
 #include <cstdio>
 #include <vector>
 
@@ -7,6 +17,8 @@
 #include <libff/common/rng.hpp>
 
 using namespace libff;
+
+using std::size_t;
 
 template <typename GroupT>
 using run_result_t = std::pair<long long, std::vector<GroupT> >;

@@ -1,15 +1,12 @@
 /** @file
  *****************************************************************************
-
  This file defines default_ec_pp based on the CURVE=... make flag, which selects
  which elliptic curve is used to implement group arithmetic and pairings.
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef EC_PP_HPP_
 #define EC_PP_HPP_
 

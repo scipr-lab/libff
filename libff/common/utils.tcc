@@ -1,16 +1,17 @@
 /** @file
  *****************************************************************************
- Implementation of templatized utility functions
+ Implementation of templatized utility functions.
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef UTILS_TCC_
 #define UTILS_TCC_
 
 namespace libff {
+
+using std::size_t;
 
 template<typename T>
 size_t ceil_size_in_bits(const std::vector<T> &v)
