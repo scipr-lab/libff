@@ -1,16 +1,13 @@
 /** @file
  *****************************************************************************
-
  Implementation of functions for generating randomness.
 
  See rng.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef RNG_TCC_
 #define RNG_TCC_
 
@@ -22,6 +19,8 @@
 #include <libff/common/utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 template<typename FieldT>
 FieldT SHA512_rng(const uint64_t idx)

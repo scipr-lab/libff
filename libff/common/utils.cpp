@@ -1,12 +1,11 @@
 /** @file
  *****************************************************************************
- Implementation of misc math and serialization utility functions
+ Implementation of misc math and serialization utility functions.
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #include <algorithm>
 #include <cassert>
 #include <cstdarg>
@@ -15,6 +14,8 @@
 #include <libff/common/utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 /**
  * Round n to the next power of two.
@@ -135,4 +136,5 @@ void deserialize_bit_vector(std::istream &in, bit_vector &v)
         v[i] = b;
     }
 }
+
 } // libff

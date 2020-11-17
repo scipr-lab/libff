@@ -1,12 +1,11 @@
 /** @file
  *****************************************************************************
- Declaration of misc math and serialization utility functions
+ Declaration of misc math and serialization utility functions.
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef UTILS_HPP_
 #define UTILS_HPP_
 
@@ -20,18 +19,18 @@ namespace libff {
 
 typedef std::vector<bool> bit_vector;
 
-size_t get_power_of_two(size_t n);
+std::size_t get_power_of_two(std::size_t n);
 
 /// returns ceil(log2(n)), so 1ul<<log2(n) is the smallest power of 2, that is not less than n
-size_t log2(size_t n);
+std::size_t log2(std::size_t n);
 
-inline size_t exp2(size_t k) { return size_t(1) << k; }
+inline std::size_t exp2(std::size_t k) { return std::size_t(1) << k; }
 
-size_t to_twos_complement(int i, size_t w);
-int from_twos_complement(size_t i, size_t w);
+std::size_t to_twos_complement(int i, std::size_t w);
+int from_twos_complement(std::size_t i, std::size_t w);
 
-size_t bitreverse(size_t n, const size_t l);
-bit_vector int_list_to_bits(const std::initializer_list<unsigned long> &l, const size_t wordsize);
+std::size_t bitreverse(std::size_t n, const std::size_t l);
+bit_vector int_list_to_bits(const std::initializer_list<unsigned long> &l, const std::size_t wordsize);
 /* throws error if y = 0 */
 long long div_ceil(long long x, long long y);
 
@@ -53,7 +52,7 @@ void serialize_bit_vector(std::ostream &out, const bit_vector &v);
 void deserialize_bit_vector(std::istream &in, bit_vector &v);
 
 template<typename T>
-size_t ceil_size_in_bits(const std::vector<T> &v);
+std::size_t ceil_size_in_bits(const std::vector<T> &v);
 
 /**
  * Returns a random element of T that is not zero or one.
