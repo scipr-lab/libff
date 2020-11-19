@@ -1,29 +1,7 @@
 Checks:
     -*,
-    bugprone-*,
-    llvm-*,
-    misc-*,
-    modernize-*,
-    performance-*,
-    portability-*,
-    readability-*,
-    -modernize-avoid-c-arrays,
-    -modernize-use-bool-literals,
-    -modernize-use-auto,
-    -modernize-use-trailing-return-type,
-    -readability-magic-numbers,
-    -readability-implicit-bool-conversion,
-    -modernize-return-braced-init-list,
-    -readability-named-parameter,
-    -modernize-pass-by-value,
-    -modernize-use-default-member-init,
-    -bugprone-exception-escape,
-    -misc-non-private-member-variables-in-classes,
-    -readability-redundant-member-init,
-    -modernize-deprecated-headers,
-    -readability-identifier-naming,
-
+    bugprone-*
 WarningsAsErrors:
-    ''
+    '*'
 
 HeaderFilterRegex: 'libff/*.(hpp|tcc|cpp)'
