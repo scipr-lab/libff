@@ -75,6 +75,35 @@ target_include_directories(
   PUBLIC ..
 )
 
+# Sodium for binary fields.
+ find_path(
+   SODIUM_INCLUDE_DIR
+   sodium.h
+   HINTS ${LIBSODIUM_INCLUDE_DIRS}
+   /usr/local/include /opt/local/include /opt/include
+ )
+ find_library(
+   SODIUM_LIBRARY
+   NAMES sodium
+   HINTS ${LIBSODIUM_LIBRARY_DIRS}
+   /usr/local/lib /opt/local/lib /opt/lib
+ )
+
+ target_include_directories(
+   ff
+   PUBLIC
+   ${SODIUM_INCLUDE_DIR}
+ )
+ target_compile_options(
+   ff
+   PUBLIC
+   ${LIBSODIUM_CFLAGS} ${LIBSODIUM_CFLAGS_OTHER}
+ )
+ target_link_libraries(
+   ff
+   ${SODIUM_LIBRARY} ${LIBSODIUM_LDFLAGS_OTHER}
+ )
+
 install(
   DIRECTORY "" DESTINATION "include/libff"
   FILES_MATCHING
@@ -156,6 +185,19 @@ if ("${IS_LIBFF_PARENT}")
     gtest_main
   )
 
+  add_executable(
+     algebra_binary_fields_test
+     EXCLUDE_FROM_ALL
+
+     algebra/fields/tests/test_binary_fields.cpp
+   )
+   target_link_libraries(
+     algebra_binary_fields_test
+
+     ff
+     gtest_main
+   )
+
   include(CTest)
   add_test(
     NAME algebra_bilinearity_test
@@ -177,12 +219,17 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_fpn_fields_test
     COMMAND algebra_fpn_fields_test
   )
+   add_test(
+     NAME algebra_binary_fields_test
+     COMMAND algebra_binary_fields_test
+   )
 
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_field_utils_test)
   add_dependencies(check algebra_all_fields_test)
   add_dependencies(check algebra_fpn_fields_test)
+  add_dependencies(check algebra_binary_fields_test)
 
   find_package(OpenSSL REQUIRED)
   INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})

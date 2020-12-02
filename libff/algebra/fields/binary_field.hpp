@@ -73,7 +73,7 @@ public:
 
     virtual T squared() const;
     virtual T inverse() const;
-    /** HAS TO BE A SQUARE (else does not terminate). */
+    /** Always works. */
     virtual T sqrt() const = 0;
 
     bool operator==(const T& other) const = 0;
@@ -89,7 +89,7 @@ public:
     /**
      * Sets the field element from the given bits in 64 bit words, in little-endian order.
      * Only the right-most ceil_size_in_bits() bits are used; other bits are ignored.
-     * Returns true when the right-most bits represent a value less than the modulus.
+     * Should always return true since the right-most bits are always valid.
      */
     bool from_words(std::vector<uint64_t> words) = 0;
 
