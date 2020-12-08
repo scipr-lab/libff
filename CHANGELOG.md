@@ -1,13 +1,15 @@
 ## Pending
 
-### Features
-- #58 Add a defined API for every field type, and ensure all fields implement it (Thanks @alexander-zw)
-- #71 Add BLS12-381 (Thanks @yelhousni)
+### Breaking Changes
+- #23 Remove unused exponent param of curves
+- #58 Add a defined API for every field type, and have minor tweaks to all fields to implement it (Thanks @alexander-zw)
 - #79 Separate field initialization from curves (Thanks @alexander-zw)
+### Features
+- #71 Add BLS12-381 (Thanks @yelhousni)
 - #80 Add clang-tidy checks to library and CI
 - #82 Convert tests to use Google test (Thanks @alexander-zw)
 - #85 Add more unit tests for fields (Thanks @alexander-zw)
-- #86 Add binary fields from [libiop](https://github.com/scipr-lab/libiop) (Thanks @alexander-zw)
+- #86 Add binary fields from [libiop](https://github.com/scipr-lab/libiop)
 
 ### Bug fixes
 - #75 Get rid of warning for unused constant PI, in complex field
