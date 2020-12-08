@@ -1,16 +1,13 @@
 /** @file
  *****************************************************************************
-
  Implementation of interfaces for multi-exponentiation routines.
 
  See multiexp.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef MULTIEXP_TCC_
 #define MULTIEXP_TCC_
 
@@ -18,14 +15,16 @@
 #include <cassert>
 #include <type_traits>
 
-#include <libff/algebra/fields/bigint.hpp>
-#include <libff/algebra/fields/fp_aux.tcc>
+#include <libff/algebra/field_utils/bigint.hpp>
+#include <libff/algebra/fields/prime_extension/fp_aux.tcc>
 #include <libff/algebra/scalar_multiplication/multiexp.hpp>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 #include <libff/common/profiling.hpp>
 #include <libff/common/utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 template<mp_size_t n>
 class ordered_exponent {
@@ -447,7 +446,11 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
                                 typename std::vector<FieldT>::const_iterator scalar_end,
                                 const size_t chunks)
 {
+#ifndef NDEBUG
     assert(std::distance(vec_start, vec_end) == std::distance(scalar_start, scalar_end));
+#else
+    libff::UNUSED(vec_end);
+#endif
     enter_block("Process scalar vector");
     auto value_it = vec_start;
     auto scalar_it = scalar_start;
@@ -486,9 +489,13 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
             ++num_other;
         }
     }
+    
+    if (!inhibit_profiling_info)
+    {
     print_indent(); printf("* Elements of w skipped: %zu (%0.2f%%)\n", num_skip, 100.*num_skip/(num_skip+num_add+num_other));
     print_indent(); printf("* Elements of w processed with special addition: %zu (%0.2f%%)\n", num_add, 100.*num_add/(num_skip+num_add+num_other));
     print_indent(); printf("* Elements of w remaining: %zu (%0.2f%%)\n", num_other, 100.*num_other/(num_skip+num_add+num_other));
+    }
 
     leave_block("Process scalar vector");
 

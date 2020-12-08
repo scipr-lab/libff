@@ -1,14 +1,11 @@
 /** @file
  *****************************************************************************
-
  Declaration of interfaces for multi-exponentiation routines.
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef MULTIEXP_HPP_
 #define MULTIEXP_HPP_
 
@@ -58,7 +55,7 @@ T multi_exp(typename std::vector<T>::const_iterator vec_start,
             typename std::vector<T>::const_iterator vec_end,
             typename std::vector<FieldT>::const_iterator scalar_start,
             typename std::vector<FieldT>::const_iterator scalar_end,
-            const size_t chunks);
+            const std::size_t chunks);
 
 
 /**
@@ -72,7 +69,7 @@ T multi_exp_with_mixed_addition(typename std::vector<T>::const_iterator vec_star
                                 typename std::vector<T>::const_iterator vec_end,
                                 typename std::vector<FieldT>::const_iterator scalar_start,
                                 typename std::vector<FieldT>::const_iterator scalar_end,
-                                const size_t chunks);
+                                const std::size_t chunks);
 
 /**
  * A convenience function for calculating a pure inner product, where the
@@ -94,31 +91,31 @@ using window_table = std::vector<std::vector<T> >;
  * Compute window size for the given number of scalars.
  */
 template<typename T>
-size_t get_exp_window_size(const size_t num_scalars);
+std::size_t get_exp_window_size(const std::size_t num_scalars);
 
 /**
  * Compute table of window sizes.
  */
 template<typename T>
-window_table<T> get_window_table(const size_t scalar_size,
-                                 const size_t window,
+window_table<T> get_window_table(const std::size_t scalar_size,
+                                 const std::size_t window,
                                  const T &g);
 
 template<typename T, typename FieldT>
-T windowed_exp(const size_t scalar_size,
-               const size_t window,
+T windowed_exp(const std::size_t scalar_size,
+               const std::size_t window,
                const window_table<T> &powers_of_g,
                const FieldT &pow);
 
 template<typename T, typename FieldT>
-std::vector<T> batch_exp(const size_t scalar_size,
-                         const size_t window,
+std::vector<T> batch_exp(const std::size_t scalar_size,
+                         const std::size_t window,
                          const window_table<T> &table,
                          const std::vector<FieldT> &v);
 
 template<typename T, typename FieldT>
-std::vector<T> batch_exp_with_coeff(const size_t scalar_size,
-                                    const size_t window,
+std::vector<T> batch_exp_with_coeff(const std::size_t scalar_size,
+                                    const std::size_t window,
                                     const window_table<T> &table,
                                     const FieldT &coeff,
                                     const std::vector<FieldT> &v);

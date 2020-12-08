@@ -1,16 +1,13 @@
 /** @file
  *****************************************************************************
-
  Implementation of serialization routines.
 
  See serialization.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef SERIALIZATION_TCC_
 #define SERIALIZATION_TCC_
 
@@ -20,6 +17,8 @@
 #include <libff/common/utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 inline void consume_newline(std::istream &in)
 {
@@ -94,7 +93,6 @@ T reserialize(const T &obj)
     ss << obj;
     T tmp;
     ss >> tmp;
-    assert(obj == tmp);
     return tmp;
 }
 

@@ -12,7 +12,7 @@ set(
   "BN128"
   CACHE
   STRING
-  "Default curve: one of ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
+  "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
 )
 
 option(
@@ -37,7 +37,7 @@ option(
 )
 option(
   MONTGOMERY_OUTPUT
-  "Serialize Fp elements as their Montgomery representations (faster but not human-readable)"
+  "Use Montgomery representations for serialization and words representation of Fp elements (faster but not human-readable)"
   ON
 )
 option(
@@ -56,10 +56,11 @@ option(
   OFF
 )
 
+# This option does not work on macOS, since there is no /proc
 option(
   WITH_PROCPS
   "Use procps for memory profiling"
-  ON
+  OFF
 )
 
 option(
@@ -112,10 +113,10 @@ set_target_properties(
   INTERFACE_INCLUDE_DIRECTORIES ${GMP_INCLUDE_DIR}
 )
 
-find_package(OpenSSL REQUIRED)
-INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
-
 if("${WITH_PROCPS}")
+  if(APPLE)
+    message(WARNING "WITH_PROCPS must be set to OFF for macOS build")
+  endif()
   include(FindPkgConfig)
   pkg_check_modules(
     PROCPS
@@ -136,6 +137,7 @@ add_definitions(
 enable_testing()
 
 if(${CURVE} STREQUAL "BN128")
+  include_directories(depends)
   add_definitions(
     -DBN_SUPPORT_SNARK=1
   )
@@ -191,6 +193,7 @@ endif()
 
 if("${USE_ASM}")
   add_definitions(-DUSE_ASM)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mpclmul -msse4.1") # Used for binary fields.
 endif()
 
 # Configure CCache if available
@@ -228,5 +231,7 @@ if ("${IS_LIBFF_PARENT}")
   )
 
   add_subdirectory(depends)
+  # Add a 'make clang-tidy' target that runs clang-tidy using checks specified in .clang-tidy
+  include(clang-tidy.cmake)
 endif()
 add_subdirectory(libff)

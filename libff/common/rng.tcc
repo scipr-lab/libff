@@ -1,27 +1,26 @@
 /** @file
  *****************************************************************************
-
  Implementation of functions for generating randomness.
 
  See rng.hpp .
-
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-
 #ifndef RNG_TCC_
 #define RNG_TCC_
 
 #include <gmp.h>
 #include <openssl/sha.h>
 
-#include <libff/algebra/fields/bigint.hpp>
+#include <libff/algebra/field_utils/bigint.hpp>
 #include <libff/common/rng.hpp>
 #include <libff/common/utils.hpp>
 
 namespace libff {
+
+using std::size_t;
 
 template<typename FieldT>
 FieldT SHA512_rng(const uint64_t idx)
@@ -29,7 +28,7 @@ FieldT SHA512_rng(const uint64_t idx)
     assert(GMP_NUMB_BITS == 64); // current Python code cannot handle larger values, so testing here for some assumptions.
     assert(is_little_endian());
 
-    assert(FieldT::size_in_bits() <= SHA512_DIGEST_LENGTH * 8);
+    assert(FieldT::ceil_size_in_bits() <= SHA512_DIGEST_LENGTH * 8);
 
     bigint<FieldT::num_limbs> rval;
     uint64_t iter = 0;
@@ -57,7 +56,8 @@ FieldT SHA512_rng(const uint64_t idx)
             const std::size_t part = bitno/GMP_NUMB_BITS;
             const std::size_t bit = bitno - (GMP_NUMB_BITS*part);
 
-            rval.data[part] &= ~(1ul<<bit);
+            static const mp_limb_t one = 1;
+            rval.data[part] &= ~(one<<bit);
 
             bitno--;
         }

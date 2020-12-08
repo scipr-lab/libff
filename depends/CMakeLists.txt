@@ -1,3 +1,5 @@
+add_subdirectory(gtest EXCLUDE_FROM_ALL)
+
 if(${CURVE} STREQUAL "BN128")
   include_directories(ate-pairing/include)
   include_directories(xbyak)

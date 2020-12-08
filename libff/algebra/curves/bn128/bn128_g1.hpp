@@ -9,7 +9,7 @@
 #define BN128_G1_HPP_
 #include <vector>
 
-#include "depends/ate-pairing/include/bn.h"
+#include "ate-pairing/include/bn.h"
 
 #include <libff/algebra/curves/bn128/bn128_init.hpp>
 #include <libff/algebra/curves/curve_utils.hpp>
@@ -28,15 +28,25 @@ public:
     static long long add_cnt;
     static long long dbl_cnt;
 #endif
-    static std::vector<size_t> wnaf_window_table;
-    static std::vector<size_t> fixed_base_exp_window_table;
+    static std::vector<std::size_t> wnaf_window_table;
+    static std::vector<std::size_t> fixed_base_exp_window_table;
     static bn128_G1 G1_zero;
     static bn128_G1 G1_one;
+    static bool initialized;
 
-    bn::Fp coord[3];
-    bn128_G1();
     typedef bn128_Fq base_field;
     typedef bn128_Fr scalar_field;
+
+    // Cofactor
+    static const mp_size_t h_bitcount = 1;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
+    bn::Fp X, Y, Z;
+    void fill_coord(bn::Fp coord[3]) const { coord[0] = this->X; coord[1] = this->Y; coord[2] = this->Z; return; };
+
+    bn128_G1();
+    bn128_G1(bn::Fp coord[3]) : X(coord[0]), Y(coord[1]), Z(coord[2]) {};
 
     void print() const;
     void print_coordinates() const;
@@ -57,6 +67,7 @@ public:
     bn128_G1 add(const bn128_G1 &other) const;
     bn128_G1 mixed_add(const bn128_G1 &other) const;
     bn128_G1 dbl() const;
+    bn128_G1 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 
@@ -64,8 +75,8 @@ public:
     static bn128_G1 one();
     static bn128_G1 random_element();
 
-    static size_t size_in_bits() { return bn128_Fq::size_in_bits() + 1; }
-    static bigint<base_field::num_limbs> base_field_char() { return base_field::field_char(); }
+    static std::size_t size_in_bits() { return bn128_Fq::ceil_size_in_bits() + 1; }
+    static bigint<base_field::num_limbs> field_char() { return base_field::field_char(); }
     static bigint<scalar_field::num_limbs> order() { return scalar_field::field_char(); }
 
     friend std::ostream& operator<<(std::ostream &out, const bn128_G1 &g);

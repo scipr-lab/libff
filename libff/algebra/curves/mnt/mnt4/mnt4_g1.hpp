@@ -24,31 +24,33 @@ std::ostream& operator<<(std::ostream &, const mnt4_G1&);
 std::istream& operator>>(std::istream &, mnt4_G1&);
 
 class mnt4_G1 {
-private:
-    mnt4_Fq X_, Y_, Z_;
 public:
 #ifdef PROFILE_OP_COUNTS
     static long long add_cnt;
     static long long dbl_cnt;
 #endif
-    static std::vector<size_t> wnaf_window_table;
-    static std::vector<size_t> fixed_base_exp_window_table;
+    static std::vector<std::size_t> wnaf_window_table;
+    static std::vector<std::size_t> fixed_base_exp_window_table;
     static mnt4_G1 G1_zero;
     static mnt4_G1 G1_one;
+    static bool initialized;
     static mnt4_Fq coeff_a;
     static mnt4_Fq coeff_b;
 
     typedef mnt4_Fq base_field;
     typedef mnt4_Fr scalar_field;
 
+    // Cofactor
+    static const mp_size_t h_bitcount = 1;
+    static const mp_size_t h_limbs = (h_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS;
+    static bigint<h_limbs> h;
+
+    mnt4_Fq X, Y, Z;
+
     // using projective coordinates
     mnt4_G1();
-    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y) : X_(X), Y_(Y), Z_(base_field::one()) {}
-    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y, const mnt4_Fq& Z) : X_(X), Y_(Y), Z_(Z) {}
-
-    mnt4_Fq X() const { return X_; }
-    mnt4_Fq Y() const { return Y_; }
-    mnt4_Fq Z() const { return Z_; }
+    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y) : X(X), Y(Y), Z(base_field::one()) {}
+    mnt4_G1(const mnt4_Fq& X, const mnt4_Fq& Y, const mnt4_Fq& Z) : X(X), Y(Y), Z(Z) {}
 
     void print() const;
     void print_coordinates() const;
@@ -69,6 +71,7 @@ public:
     mnt4_G1 add(const mnt4_G1 &other) const;
     mnt4_G1 mixed_add(const mnt4_G1 &other) const;
     mnt4_G1 dbl() const;
+    mnt4_G1 mul_by_cofactor() const;
 
     bool is_well_formed() const;
 
@@ -76,8 +79,8 @@ public:
     static mnt4_G1 one();
     static mnt4_G1 random_element();
 
-    static size_t size_in_bits() { return mnt4_Fq::size_in_bits() + 1; }
-    static bigint<mnt4_Fq::num_limbs> base_field_char() { return mnt4_Fq::field_char(); }
+    static std::size_t size_in_bits() { return mnt4_Fq::ceil_size_in_bits() + 1; }
+    static bigint<mnt4_Fq::num_limbs> field_char() { return mnt4_Fq::field_char(); }
     static bigint<mnt4_Fr::num_limbs> order() { return mnt4_Fr::field_char(); }
 
     friend std::ostream& operator<<(std::ostream &out, const mnt4_G1 &g);

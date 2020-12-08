@@ -76,8 +76,11 @@ git submodule init && git submodule update
 To compile, starting at the project root directory, create the build directory and Makefile:
 
 ```
-mkdir build && cd build && cmake ..
+mkdir build && cd build
+cmake ..
 ```
+If you are on macOS, change the cmake command to be `cmake .. -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)`
+
 Optionally, you can specify the install location by providing the desired install path prefix:
 ```
 cmake .. -DCMAKE_INSTALL_PREFIX=/install/path
@@ -97,6 +100,16 @@ To execute the tests for this library, run:
 ```
 make check
 ```
+
+## Testing
+
+To run clang-tidy on this library, specify the variable USE_CLANG_TIDY (eg. `cmake .. -D USE_CLANG_TIDY=ON`).
+Then, run:
+```
+make clang-tidy
+```
+
+One can specify which clang-tidy checks to run and which files to run clang-tidy on using the .clang-tidy file in the root directory of the project.
 
 ## Profile
 
