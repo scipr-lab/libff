@@ -188,12 +188,11 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
 
 //         mpn_copyi(this->mont_repr.data, res+n, n);
 //     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     mp_limb_t t[n+2];
     mp_limb_t A, m, C;
     for (size_t i = 0; i < n; i++) {
-        mp_limb_t old_t = t[0];
-        A = mpn_addmul_1(t, this->mont_repr.data, 1, other.data);
+        A = mpn_addmul_1(t, this->mont_repr.data, 1, *other.data);
         mpn_mul_1(&m, t, 1, inv);
         mp_limb_t carry[2];
         mpn_mul_n(carry, modulus.data, &m, 2);
@@ -201,19 +200,20 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
         C = carry[1];
         for (size_t j = 0; j < n; j++) {
             mp_limb_t interm[2];
-            mp_limb_t carryout = mpn_add_n(interm, A, t+j, 1);
+            mp_limb_t carryout = mpn_add_n(interm, &A, t+j, 1);
             interm[1] = carryout;
-            mpn_addmul_1(interm, this->mont_repr.data + j, 2, other.data + j);
+            mpn_addmul_1(interm, this->mont_repr.data + j, 2, *(other.data + j));
             A = interm[1];
             t[j] = interm[0];
 
-            carryout = mpn_add_n(interm , C, t+j, 1);
+            carryout = mpn_add_n(interm , &C, t+j, 1);
             interm[1] = carryout;
-            mpn_addmul_1(interm, m, 2, modulus.data + j);
+            mpn_addmul_1(interm, &m, 2, *(modulus.data + j));
             C = interm[1];
-            t[j]-1 = interm[0];
+            t[j-1] = interm[0];
         }
         t[n-1] = C+A;
+    }
     }
 }
 
