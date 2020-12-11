@@ -33,3 +33,4 @@ CheckOptions:
     message(FATAL_ERROR "clang-tidy not found. Aborting...")
   endif()
 endif()
+
