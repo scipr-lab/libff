@@ -7,7 +7,11 @@ option(
 if(USE_CLANG_TIDY)
   find_program(CLANG_TIDY clang-tidy)
   if(CLANG_TIDY)
-    find_program(RUN_CLANG_TIDY run-clang-tidy.py)
+    file(DOWNLOAD
+      https://raw.githubusercontent.com/llvm-mirror/clang-tools-extra/master/clang-tidy/tool/run-clang-tidy.py
+      ${PROJECT_BINARY_DIR}/run-clang-tidy.py
+    )
+    find_program(RUN_CLANG_TIDY ${PROJECT_BINARY_DIR}/run-clang-tidy.py)
     if(RUN_CLANG_TIDY)
       message("Using clang-tidy. Creating target... To run, use: make clang-tidy")
       add_custom_target(
