@@ -175,8 +175,6 @@ void init_edwards_params()
 
     /* pairing parameters */
 
-    edwards_ate_loop_count = bigint_q("4492509698523932320491110403");
-    edwards_final_exponent_last_chunk_abs_of_w0 = bigint_q("17970038794095729281964441603");
     edwards_ate_loop_count = bigint<edwards_q_limbs>("4492509698523932320491110403");
     edwards_final_exponent_last_chunk_abs_of_w0 = bigint<edwards_q_limbs>("17970038794095729281964441603");
     edwards_final_exponent_last_chunk_is_w0_neg = true;
