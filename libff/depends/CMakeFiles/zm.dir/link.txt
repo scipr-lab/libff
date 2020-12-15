@@ -1,2 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libzm.a  CMakeFiles/zm.dir/ate-pairing/src/zm.cpp.o CMakeFiles/zm.dir/ate-pairing/src/zm2.cpp.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib libzm.a

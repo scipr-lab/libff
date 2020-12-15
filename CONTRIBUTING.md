@@ -27,22 +27,32 @@ Libff has its default branch as `develop`, which is where PRs are merged into. T
 All downstream users should be using tagged versions of the library.
 
 ## How to work on a fork
-Please skip this section if you're familiar with contributing to opensource github projects.
 
-First fork the repo from the github UI, and clone it locally.
-Then in the repo, you want to add the repo you forked from as a new remote. You do this as:
+Please skip this section if you're familiar with contributing to open-source github projects.
+
+First, fork the repo from the github UI, and clone your fork locally (we denote
+by `<path-to-libff>` the path to your `libff` fork on your machine).
+After cloning your fork on your machine, it may be useful to add the upstream
+project as a git remote (to periodically update your fork for instance).
+You can do so by running the following command:
 ```bash
-git remote add upstream git@github.com:scipr-lab/libiop.git
+# Go to your fork cloned repository (replacing <path-to-libff> by the appropriate path)
+cd <path-to-libff>
+# Add the upstream project to your remotes
+git remote add upstream git@github.com:scipr-lab/libff.git
+# (Optional) Check the addition by inspecting your remotes
+git remote -vv
 ```
 
 Then the way you make code contributions is to first think of a branch name that describes your change.
 Then do the following:
 ```bash
-git checkout master
-git pull upstream master
-git checkout -b $BRANCH_NAME
+# Make sure your "develop" branch is up to date with the upstream repository
+git pull upstream develop
+# Create a branch for your contribution (replacing <your-branch-name> by the appropriate value)
+git checkout -b <your-branch-name>
 ```
-and then work as normal on that branch, and PR'ing to upstream master when you're done =)
+and then work as normal on that branch, and PR'ing to upstream `develop` when you're done =)
 
 ## Updating documentation
 
