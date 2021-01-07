@@ -199,14 +199,14 @@ if ("${IS_LIBFF_PARENT}")
    )
 
   include(CTest)
-  add_test(
-    NAME algebra_bilinearity_test
-    COMMAND algebra_bilinearity_test
-  )
-  add_test(
-    NAME algebra_groups_test
-    COMMAND algebra_groups_test
-  )
+  # add_test(
+  #   NAME algebra_bilinearity_test
+  #   COMMAND algebra_bilinearity_test
+  # )
+  # add_test(
+  #   NAME algebra_groups_test
+  #   COMMAND algebra_groups_test
+  # )
   add_test(
     NAME algebra_field_utils_test
     COMMAND algebra_field_utils_test
@@ -215,21 +215,21 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_all_fields_test
     COMMAND algebra_all_fields_test
   )
-  add_test(
-    NAME algebra_fpn_fields_test
-    COMMAND algebra_fpn_fields_test
-  )
-   add_test(
-     NAME algebra_binary_fields_test
-     COMMAND algebra_binary_fields_test
-   )
+  # add_test(
+  #   NAME algebra_fpn_fields_test
+  #   COMMAND algebra_fpn_fields_test
+  # )
+  #  add_test(
+  #    NAME algebra_binary_fields_test
+  #    COMMAND algebra_binary_fields_test
+  #  )
 
-  add_dependencies(check algebra_bilinearity_test)
-  add_dependencies(check algebra_groups_test)
+  # add_dependencies(check algebra_bilinearity_test)
+  # add_dependencies(check algebra_groups_test)
   add_dependencies(check algebra_field_utils_test)
   add_dependencies(check algebra_all_fields_test)
-  add_dependencies(check algebra_fpn_fields_test)
-  add_dependencies(check algebra_binary_fields_test)
+  # add_dependencies(check algebra_fpn_fields_test)
+  # add_dependencies(check algebra_binary_fields_test)
 
   find_package(OpenSSL REQUIRED)
   INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
