@@ -218,7 +218,7 @@ void test_field()
     EXPECT_FALSE(one.is_zero());
     EXPECT_FALSE(random_element_non_zero<FieldT>().is_zero());
 
-    EXPECT_NO_THROW(x.print());
+    // EXPECT_NO_THROW(x.print());
 
     x.clear();
     EXPECT_EQ(x, zero);

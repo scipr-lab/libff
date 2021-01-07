@@ -161,7 +161,7 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
 //     }
 //     else
 // #endif
-    assert(false && "hello");
+    // assert(false && "hello");
     {
         mp_limb_t res[2*n];
         mpn_mul_n(res, this->mont_repr.data, other.data, n);
