@@ -25,171 +25,206 @@ using std::size_t;
 template<mp_size_t n, const bigint<n>& modulus>
 void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
 {
-    /* stupid pre-processor tricks; beware */
-#if defined(__x86_64__) && defined(USE_ASM)
-    if (n == 3)
-    { // Use asm-optimized Comba multiplication and reduction
-        mp_limb_t res[2*n];
-        mp_limb_t c0, c1, c2;
-        COMBA_3_BY_3_MUL(c0, c1, c2, res, this->mont_repr.data, other.data);
+//     /* stupid pre-processor tricks; beware */
+// #if defined(__x86_64__) && defined(USE_ASM)
+//     if (n == 3)
+//     { // Use asm-optimized Comba multiplication and reduction
+//         mp_limb_t res[2*n];
+//         mp_limb_t c0, c1, c2;
+//         COMBA_3_BY_3_MUL(c0, c1, c2, res, this->mont_repr.data, other.data);
 
-        mp_limb_t k;
-        mp_limb_t tmp1, tmp2, tmp3;
-        REDUCE_6_LIMB_PRODUCT(k, tmp1, tmp2, tmp3, inv, res, modulus.data);
+//         mp_limb_t k;
+//         mp_limb_t tmp1, tmp2, tmp3;
+//         REDUCE_6_LIMB_PRODUCT(k, tmp1, tmp2, tmp3, inv, res, modulus.data);
 
-        /* subtract t > mod */
-        __asm__
-            ("/* check for overflow */        \n\t"
-             MONT_CMP(16)
-             MONT_CMP(8)
-             MONT_CMP(0)
+//         /* subtract t > mod */
+//         __asm__
+//             ("/* check for overflow */        \n\t"
+//              MONT_CMP(16)
+//              MONT_CMP(8)
+//              MONT_CMP(0)
 
-             "/* subtract mod if overflow */  \n\t"
-             "subtract%=:                     \n\t"
-             MONT_FIRSTSUB
-             MONT_NEXTSUB(8)
-             MONT_NEXTSUB(16)
-             "done%=:                         \n\t"
-             :
-             : [tmp] "r" (res+n), [M] "r" (modulus.data)
-             : "cc", "memory", "%rax");
-        mpn_copyi(this->mont_repr.data, res+n, n);
-    }
-    else if (n == 4)
-    { // use asm-optimized "CIOS method"
+//              "/* subtract mod if overflow */  \n\t"
+//              "subtract%=:                     \n\t"
+//              MONT_FIRSTSUB
+//              MONT_NEXTSUB(8)
+//              MONT_NEXTSUB(16)
+//              "done%=:                         \n\t"
+//              :
+//              : [tmp] "r" (res+n), [M] "r" (modulus.data)
+//              : "cc", "memory", "%rax");
+//         mpn_copyi(this->mont_repr.data, res+n, n);
+//     }
+//     else if (n == 4)
+//     { // use asm-optimized "CIOS method"
 
-        mp_limb_t tmp[n+1];
-        mp_limb_t T0=0, T1=1, cy=2, u=3; // TODO: fix this
+//         mp_limb_t tmp[n+1];
+//         mp_limb_t T0=0, T1=1, cy=2, u=3; // TODO: fix this
 
-        __asm__ (MONT_PRECOMPUTE
-                 MONT_FIRSTITER(1)
-                 MONT_FIRSTITER(2)
-                 MONT_FIRSTITER(3)
-                 MONT_FINALIZE(3)
-                 MONT_ITERFIRST(1)
-                 MONT_ITERITER(1, 1)
-                 MONT_ITERITER(1, 2)
-                 MONT_ITERITER(1, 3)
-                 MONT_FINALIZE(3)
-                 MONT_ITERFIRST(2)
-                 MONT_ITERITER(2, 1)
-                 MONT_ITERITER(2, 2)
-                 MONT_ITERITER(2, 3)
-                 MONT_FINALIZE(3)
-                 MONT_ITERFIRST(3)
-                 MONT_ITERITER(3, 1)
-                 MONT_ITERITER(3, 2)
-                 MONT_ITERITER(3, 3)
-                 MONT_FINALIZE(3)
-                 "/* check for overflow */        \n\t"
-                 MONT_CMP(24)
-                 MONT_CMP(16)
-                 MONT_CMP(8)
-                 MONT_CMP(0)
+//         __asm__ (MONT_PRECOMPUTE
+//                  MONT_FIRSTITER(1)
+//                  MONT_FIRSTITER(2)
+//                  MONT_FIRSTITER(3)
+//                  MONT_FINALIZE(3)
+//                  MONT_ITERFIRST(1)
+//                  MONT_ITERITER(1, 1)
+//                  MONT_ITERITER(1, 2)
+//                  MONT_ITERITER(1, 3)
+//                  MONT_FINALIZE(3)
+//                  MONT_ITERFIRST(2)
+//                  MONT_ITERITER(2, 1)
+//                  MONT_ITERITER(2, 2)
+//                  MONT_ITERITER(2, 3)
+//                  MONT_FINALIZE(3)
+//                  MONT_ITERFIRST(3)
+//                  MONT_ITERITER(3, 1)
+//                  MONT_ITERITER(3, 2)
+//                  MONT_ITERITER(3, 3)
+//                  MONT_FINALIZE(3)
+//                  "/* check for overflow */        \n\t"
+//                  MONT_CMP(24)
+//                  MONT_CMP(16)
+//                  MONT_CMP(8)
+//                  MONT_CMP(0)
 
-                 "/* subtract mod if overflow */  \n\t"
-                 "subtract%=:                     \n\t"
-                 MONT_FIRSTSUB
-                 MONT_NEXTSUB(8)
-                 MONT_NEXTSUB(16)
-                 MONT_NEXTSUB(24)
-                 "done%=:                         \n\t"
-                 :
-                 : [tmp] "r" (tmp), [A] "r" (this->mont_repr.data), [B] "r" (other.data), [inv] "r" (inv), [M] "r" (modulus.data),
-                   [T0] "r" (T0), [T1] "r" (T1), [cy] "r" (cy), [u] "r" (u)
-                 : "cc", "memory", "%rax", "%rdx"
-        );
-        mpn_copyi(this->mont_repr.data, tmp, n);
-    }
-    else if (n == 5)
-    { // use asm-optimized "CIOS method"
+//                  "/* subtract mod if overflow */  \n\t"
+//                  "subtract%=:                     \n\t"
+//                  MONT_FIRSTSUB
+//                  MONT_NEXTSUB(8)
+//                  MONT_NEXTSUB(16)
+//                  MONT_NEXTSUB(24)
+//                  "done%=:                         \n\t"
+//                  :
+//                  : [tmp] "r" (tmp), [A] "r" (this->mont_repr.data), [B] "r" (other.data), [inv] "r" (inv), [M] "r" (modulus.data),
+//                    [T0] "r" (T0), [T1] "r" (T1), [cy] "r" (cy), [u] "r" (u)
+//                  : "cc", "memory", "%rax", "%rdx"
+//         );
+//         mpn_copyi(this->mont_repr.data, tmp, n);
+//     }
+//     else if (n == 5)
+//     { // use asm-optimized "CIOS method"
 
-        mp_limb_t tmp[n+1];
-        mp_limb_t T0=0, T1=1, cy=2, u=3; // TODO: fix this
+//         mp_limb_t tmp[n+1];
+//         mp_limb_t T0=0, T1=1, cy=2, u=3; // TODO: fix this
 
-        __asm__ (MONT_PRECOMPUTE
-                 MONT_FIRSTITER(1)
-                 MONT_FIRSTITER(2)
-                 MONT_FIRSTITER(3)
-                 MONT_FIRSTITER(4)
-                 MONT_FINALIZE(4)
-                 MONT_ITERFIRST(1)
-                 MONT_ITERITER(1, 1)
-                 MONT_ITERITER(1, 2)
-                 MONT_ITERITER(1, 3)
-                 MONT_ITERITER(1, 4)
-                 MONT_FINALIZE(4)
-                 MONT_ITERFIRST(2)
-                 MONT_ITERITER(2, 1)
-                 MONT_ITERITER(2, 2)
-                 MONT_ITERITER(2, 3)
-                 MONT_ITERITER(2, 4)
-                 MONT_FINALIZE(4)
-                 MONT_ITERFIRST(3)
-                 MONT_ITERITER(3, 1)
-                 MONT_ITERITER(3, 2)
-                 MONT_ITERITER(3, 3)
-                 MONT_ITERITER(3, 4)
-                 MONT_FINALIZE(4)
-                 MONT_ITERFIRST(4)
-                 MONT_ITERITER(4, 1)
-                 MONT_ITERITER(4, 2)
-                 MONT_ITERITER(4, 3)
-                 MONT_ITERITER(4, 4)
-                 MONT_FINALIZE(4)
-                 "/* check for overflow */        \n\t"
-                 MONT_CMP(32)
-                 MONT_CMP(24)
-                 MONT_CMP(16)
-                 MONT_CMP(8)
-                 MONT_CMP(0)
+//         __asm__ (MONT_PRECOMPUTE
+//                  MONT_FIRSTITER(1)
+//                  MONT_FIRSTITER(2)
+//                  MONT_FIRSTITER(3)
+//                  MONT_FIRSTITER(4)
+//                  MONT_FINALIZE(4)
+//                  MONT_ITERFIRST(1)
+//                  MONT_ITERITER(1, 1)
+//                  MONT_ITERITER(1, 2)
+//                  MONT_ITERITER(1, 3)
+//                  MONT_ITERITER(1, 4)
+//                  MONT_FINALIZE(4)
+//                  MONT_ITERFIRST(2)
+//                  MONT_ITERITER(2, 1)
+//                  MONT_ITERITER(2, 2)
+//                  MONT_ITERITER(2, 3)
+//                  MONT_ITERITER(2, 4)
+//                  MONT_FINALIZE(4)
+//                  MONT_ITERFIRST(3)
+//                  MONT_ITERITER(3, 1)
+//                  MONT_ITERITER(3, 2)
+//                  MONT_ITERITER(3, 3)
+//                  MONT_ITERITER(3, 4)
+//                  MONT_FINALIZE(4)
+//                  MONT_ITERFIRST(4)
+//                  MONT_ITERITER(4, 1)
+//                  MONT_ITERITER(4, 2)
+//                  MONT_ITERITER(4, 3)
+//                  MONT_ITERITER(4, 4)
+//                  MONT_FINALIZE(4)
+//                  "/* check for overflow */        \n\t"
+//                  MONT_CMP(32)
+//                  MONT_CMP(24)
+//                  MONT_CMP(16)
+//                  MONT_CMP(8)
+//                  MONT_CMP(0)
 
-                 "/* subtract mod if overflow */  \n\t"
-                 "subtract%=:                     \n\t"
-                 MONT_FIRSTSUB
-                 MONT_NEXTSUB(8)
-                 MONT_NEXTSUB(16)
-                 MONT_NEXTSUB(24)
-                 MONT_NEXTSUB(32)
-                 "done%=:                         \n\t"
-                 :
-                 : [tmp] "r" (tmp), [A] "r" (this->mont_repr.data), [B] "r" (other.data), [inv] "r" (inv), [M] "r" (modulus.data),
-                   [T0] "r" (T0), [T1] "r" (T1), [cy] "r" (cy), [u] "r" (u)
-                 : "cc", "memory", "%rax", "%rdx"
-        );
-        mpn_copyi(this->mont_repr.data, tmp, n);
-    }
-    else
-#endif
+//                  "/* subtract mod if overflow */  \n\t"
+//                  "subtract%=:                     \n\t"
+//                  MONT_FIRSTSUB
+//                  MONT_NEXTSUB(8)
+//                  MONT_NEXTSUB(16)
+//                  MONT_NEXTSUB(24)
+//                  MONT_NEXTSUB(32)
+//                  "done%=:                         \n\t"
+//                  :
+//                  : [tmp] "r" (tmp), [A] "r" (this->mont_repr.data), [B] "r" (other.data), [inv] "r" (inv), [M] "r" (modulus.data),
+//                    [T0] "r" (T0), [T1] "r" (T1), [cy] "r" (cy), [u] "r" (u)
+//                  : "cc", "memory", "%rax", "%rdx"
+//         );
+//         mpn_copyi(this->mont_repr.data, tmp, n);
+//     }
+//     else
+// #endif
     {
-        mp_limb_t res[2*n];
-        mpn_mul_n(res, this->mont_repr.data, other.data, n);
+//         mp_limb_t res[2*n];
+//         mpn_mul_n(res, this->mont_repr.data, other.data, n);
 
-        /*
-          The Montgomery reduction here is based on Algorithm 14.32 in
-          Handbook of Applied Cryptography
-          <http://cacr.uwaterloo.ca/hac/about/chap14.pdf>.
-         */
-        for (size_t i = 0; i < n; ++i)
-        {
-            mp_limb_t k = inv * res[i];
-            /* calculate res = res + k * mod * b^i */
-            mp_limb_t carryout = mpn_addmul_1(res+i, modulus.data, n, k);
-            carryout = mpn_add_1(res+n+i, res+n+i, n-i, carryout);
-            assert(carryout == 0);
+//         /*
+//           The Montgomery reduction here is based on Algorithm 14.32 in
+//           Handbook of Applied Cryptography
+//           <http://cacr.uwaterloo.ca/hac/about/chap14.pdf>.
+//          */
+//         for (size_t i = 0; i < n; ++i)
+//         {
+//             mp_limb_t k = inv * res[i];
+//             /* calculate res = res + k * mod * b^i */
+//             mp_limb_t carryout = mpn_addmul_1(res+i, modulus.data, n, k);
+//             carryout = mpn_add_1(res+n+i, res+n+i, n-i, carryout);
+//             assert(carryout == 0);
+//         }
+
+//         if (mpn_cmp(res+n, modulus.data, n) >= 0)
+//         {
+//             const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus.data, n);
+// #ifndef NDEBUG
+//             assert(borrow == 0);
+// #else
+//             UNUSED(borrow);
+// #endif
+//         }
+
+//         mpn_copyi(this->mont_repr.data, res+n, n);
+//     }
+//     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    mp_limb_t t[n+2];
+    mp_limb_t A, m, C;
+    // for i=0 to N-1
+    for (size_t i = 0; i < n; i++) {
+        // (A,t[0]) := t[0] + a[0]*b[i]
+        mp_limb_t old_t = t[0];
+        mp_limb_t old_A = A;
+        A = mpn_addmul_1(t, other.data + i, 1, *(this->mont_repr.data));
+        assert(false);
+        assert(A != old_A);
+        assert(t[0] != old_t);
+        // m := t[0]*q'[0] mod W
+        mpn_mul_1(&m, t, 1, inv);
+        mp_limb_t carry[2];
+        mpn_mul_n(carry, modulus.data, &m, 1);
+        mpn_add(carry, carry, 2, t, 1);
+        C = carry[1];
+        for (size_t j = 0; j < n; j++) {
+            mp_limb_t interm[2];
+            mp_limb_t carryout = mpn_add_n(interm, &A, t+j, 1);
+            interm[1] = carryout;
+            mpn_addmul_1(interm, this->mont_repr.data + j, 2, *(other.data + j));
+            A = interm[1];
+            t[j] = interm[0];
+            carryout = mpn_add_n(interm , &C, t+j, 1);
+            interm[1] = carryout;
+            mpn_addmul_1(interm, &m, 2, *(modulus.data + j));
+            C = interm[1];
+            t[j-1] = interm[0];
         }
-
-        if (mpn_cmp(res+n, modulus.data, n) >= 0)
-        {
-            const mp_limb_t borrow = mpn_sub(res+n, res+n, n, modulus.data, n);
-#ifndef NDEBUG
-            assert(borrow == 0);
-#else
-            UNUSED(borrow);
-#endif
-        }
-
-        mpn_copyi(this->mont_repr.data, res+n, n);
+        t[n-1] = C+A;
+    }
+    mpn_copyi(this->mont_repr.data, t+2, n);
     }
 }
 
