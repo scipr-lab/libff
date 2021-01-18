@@ -197,31 +197,31 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
     // for i=0 to N-1
     for (size_t i = 0; i < n; i++) {
         // (A,t[0]) := t[0] + a[0]*b[i]
-        mp_limb_t old_t = t[0];
-        mp_limb_t old_A = A;
         A = mpn_addmul_1(t, other.data + i, 1, *(this->mont_repr.data));
-        assert(false);
-        assert(A != old_A);
-        assert(t[0] != old_t);
         // m := t[0]*q'[0] mod W
         mpn_mul_1(&m, t, 1, inv);
+        // C,_ := t[0] + m*q[0]  
         mp_limb_t carry[2];
         mpn_mul_n(carry, modulus.data, &m, 1);
         mpn_add(carry, carry, 2, t, 1);
         C = carry[1];
+        // for j=1 to N-1
         for (size_t j = 0; j < n; j++) {
+            // (A, t[j]) := t[j] + a[j]*b[i] + A
             mp_limb_t interm[2];
             mp_limb_t carryout = mpn_add_n(interm, &A, t+j, 1);
             interm[1] = carryout;
             mpn_addmul_1(interm, this->mont_repr.data + j, 2, *(other.data + j));
             A = interm[1];
             t[j] = interm[0];
+            // (C, t[j-1]) := t[j] + m*q[j] + C
             carryout = mpn_add_n(interm , &C, t+j, 1);
             interm[1] = carryout;
             mpn_addmul_1(interm, &m, 2, *(modulus.data + j));
             C = interm[1];
             t[j-1] = interm[0];
         }
+        // t[N-1] = C + A
         t[n-1] = C+A;
     }
     mpn_copyi(this->mont_repr.data, t+2, n);
