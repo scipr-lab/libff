@@ -9,12 +9,16 @@
 
 #ifndef FP_TCC_
 #define FP_TCC_
+#ifdef NDEBUG
+# define NDEBUG_DISABLED
+# undef NDEBUG
+#endif
 #include <cassert>
 #include <cmath>
 #include <cstdlib>
 #include <limits>
 #include <vector>
-
+// #include <gtest/gtest.h>
 #include <libff/algebra/field_utils/field_utils.hpp>
 #include <libff/algebra/field_utils/fp_aux.tcc>
 
@@ -192,6 +196,8 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
 //         mpn_copyi(this->mont_repr.data, res+n, n);
 //     }
 //     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ASSERT_EQ(true, false);
+    // assert(false);
     mp_limb_t t[n+2];
     mp_limb_t A, m, C;
     // for i=0 to N-1
@@ -224,7 +230,7 @@ void Fp_model<n,modulus>::mul_reduce(const bigint<n> &other)
         // t[N-1] = C + A
         t[n-1] = C+A;
     }
-    mpn_copyi(this->mont_repr.data, t+2, n);
+    mpn_copyi(this->mont_repr.data, t, n);
     }
 }
 

@@ -75,7 +75,10 @@ void test_field()
     EXPECT_EQ((x + y) + z, x + (y + z)); // associative law of addition
     EXPECT_EQ(x + zero, x); // additive identity
     EXPECT_EQ(x + (-x), zero); // additive inverse
-    EXPECT_EQ(x * y, y * x); // commutative law of multiplication
+    std::cout << "grephere\n";
+    (x*y).print();
+    (y*x).print();
+    ASSERT_EQ(x * y, y * x); // commutative law of multiplication
     EXPECT_EQ((x * y) * z, x * (y * z)); // associative law of multiplication
     EXPECT_EQ(x * one, x); // multiplicative identity
     EXPECT_EQ(w * w.inverse(), one); // multiplicative inverse
@@ -359,20 +362,20 @@ void test_binary_field()
 TEST_F(AllFieldsTest, AllFieldsApiTest)
 {
     test_field<AllFieldsTest::Fp>();
-    test_field<AllFieldsTest::Fp2>();
-    test_field<AllFieldsTest::Fp6_3_2>();
-    test_field<AllFieldsTest::Fp12_2_3_2>();
+    // test_field<AllFieldsTest::Fp2>();
+    // test_field<AllFieldsTest::Fp6_3_2>();
+    // test_field<AllFieldsTest::Fp12_2_3_2>();
 
-    test_field<AllFieldsTest::Fq4>();
+    // test_field<AllFieldsTest::Fq4>();
 
-    test_field<AllFieldsTest::Fr3>();
-    test_field<AllFieldsTest::Fr6_2_3>();
+    // test_field<AllFieldsTest::Fr3>();
+    // test_field<AllFieldsTest::Fr6_2_3>();
 
-    test_field<gf32>();
-    test_field<gf64>();
-    test_field<gf128>();
-    test_field<gf192>();
-    test_field<gf256>();
+    // test_field<gf32>();
+    // test_field<gf64>();
+    // test_field<gf128>();
+    // test_field<gf192>();
+    // test_field<gf256>();
 }
 
 #ifdef PROFILE_OP_COUNTS
@@ -400,14 +403,14 @@ TEST_F(AllFieldsTest, FpnFieldsApiTest)
 {
     test_fp<AllFieldsTest::Fp>();
     test_fpn_field<AllFieldsTest::Fp>();
-    test_fpn_field<AllFieldsTest::Fp2>();
-    test_fpn_field<AllFieldsTest::Fp6_3_2>();
-    test_fpn_field<AllFieldsTest::Fp12_2_3_2>();
+    // test_fpn_field<AllFieldsTest::Fp2>();
+    // test_fpn_field<AllFieldsTest::Fp6_3_2>();
+    // test_fpn_field<AllFieldsTest::Fp12_2_3_2>();
 
-    test_fpn_field<AllFieldsTest::Fq4>();
+    // test_fpn_field<AllFieldsTest::Fq4>();
 
-    test_fpn_field<AllFieldsTest::Fr3>();
-    test_fpn_field<AllFieldsTest::Fr6_2_3>();
+    // test_fpn_field<AllFieldsTest::Fr3>();
+    // test_fpn_field<AllFieldsTest::Fr6_2_3>();
 }
 
 TEST_F(AllFieldsTest, BinaryFieldsApiTest)
