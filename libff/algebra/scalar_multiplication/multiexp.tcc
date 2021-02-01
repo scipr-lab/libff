@@ -720,6 +720,6 @@ void batch_to_special(std::vector<T> &vec)
     leave_block("Batch-convert elements to special form");
 }
 
-} // libff
+} // namespace libff
 
 #endif // MULTIEXP_TCC_

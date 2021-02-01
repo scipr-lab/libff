@@ -9,13 +9,14 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <gtest/gtest.h>
 
-#include "libff/algebra/fields/binary/gf32.hpp"
-#include "libff/algebra/fields/binary/gf64.hpp"
 #include "libff/algebra/fields/binary/gf128.hpp"
 #include "libff/algebra/fields/binary/gf192.hpp"
 #include "libff/algebra/fields/binary/gf256.hpp"
+#include "libff/algebra/fields/binary/gf32.hpp"
+#include "libff/algebra/fields/binary/gf64.hpp"
+
+#include <gtest/gtest.h>
 
 using namespace libff;
 

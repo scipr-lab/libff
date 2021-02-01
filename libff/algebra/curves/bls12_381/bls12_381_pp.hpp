@@ -45,6 +45,6 @@ public:
                                           const bls12_381_G2 &Q);
 };
 
-} // libff
+} // namespace libff
 
 #endif // BLS12_381_PP_HPP_

@@ -193,5 +193,5 @@ void batch_invert(std::vector<FieldT> &vec)
     }
 }
 
-} // libff
+} // namespace libff
 #endif // FIELD_UTILS_TCC_

@@ -96,7 +96,7 @@ std::ostream& operator<<(std::ostream& out, const std::set<T> &s);
 template<typename T>
 std::istream& operator>>(std::istream& in, std::set<T> &s);
 
-} // libff
+} // namespace libff
 
 #include <libff/common/serialization.tcc>
 

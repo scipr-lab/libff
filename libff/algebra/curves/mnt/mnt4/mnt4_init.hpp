@@ -41,6 +41,6 @@ void init_mnt4_params();
 class mnt4_G1;
 class mnt4_G2;
 
-} // libff
+} // namespace libff
 
 #endif // MNT4_INIT_HPP_

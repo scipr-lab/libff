@@ -175,4 +175,4 @@ void init_bn128_params()
 
     bn128_GT::GT_one.elem = bn::Fp12(1);
 }
-} // libff
+} // namespace libff

@@ -12,14 +12,14 @@
  *****************************************************************************/
 #include <gtest/gtest.h>
 
-#include <libff/algebra/curves/edwards/edwards_pp.hpp>
-#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
-#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
+#include <libff/algebra/curves/edwards/edwards_pp.hpp>
+#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
+#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 #include <libff/common/profiling.hpp>
 #include <libff/common/utils.hpp>
 

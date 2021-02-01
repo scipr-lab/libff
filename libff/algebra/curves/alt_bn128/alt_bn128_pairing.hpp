@@ -89,5 +89,5 @@ alt_bn128_GT alt_bn128_reduced_pairing(const alt_bn128_G1 &P,
 alt_bn128_GT alt_bn128_affine_reduced_pairing(const alt_bn128_G1 &P,
                                     const alt_bn128_G2 &Q);
 
-} // libff
+} // namespace libff
 #endif // ALT_BN128_PAIRING_HPP_

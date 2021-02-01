@@ -71,6 +71,6 @@ FieldT SHA512_rng(const uint64_t idx)
     return FieldT(rval);
 }
 
-} // libff
+} // namespace libff
 
 #endif // RNG_TCC_

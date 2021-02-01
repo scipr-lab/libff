@@ -103,4 +103,4 @@ mnt6_Fq6 mnt6_pp::affine_reduced_pairing(const mnt6_G1 &P,
     return mnt6_affine_reduced_pairing(P, Q);
 }
 
-} // libff
+} // namespace libff

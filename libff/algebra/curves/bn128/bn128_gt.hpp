@@ -53,5 +53,5 @@ bn128_GT operator^(const bn128_GT &rhs, const Fp_model<m,modulus_p> &lhs)
     return power<bn128_GT, m>(rhs, lhs.as_bigint());
 }
 
-} // libff
+} // namespace libff
 #endif // BN128_GT_HPP_

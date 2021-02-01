@@ -143,6 +143,6 @@ mnt4_GT mnt4_reduced_pairing(const mnt4_G1 &P,
 mnt4_GT mnt4_affine_reduced_pairing(const mnt4_G1 &P,
                                     const mnt4_G2 &Q);
 
-} // libff
+} // namespace libff
 
 #endif // MNT4_PAIRING_HPP_

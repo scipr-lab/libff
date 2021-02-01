@@ -775,4 +775,4 @@ edwards_GT edwards_reduced_pairing(const edwards_G1 &P,
 {
     return edwards_ate_reduced_pairing(P, Q);
 }
-} // libff
+} // namespace libff

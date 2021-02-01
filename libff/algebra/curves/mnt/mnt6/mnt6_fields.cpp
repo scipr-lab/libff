@@ -111,4 +111,4 @@ void init_mnt6_fields()
     mnt6_Fq6::my_Fp2::non_residue = mnt6_Fq3::non_residue;
 }
 
-} // libff
+} // namespace libff

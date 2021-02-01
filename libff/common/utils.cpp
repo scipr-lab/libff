@@ -137,4 +137,4 @@ void deserialize_bit_vector(std::istream &in, bit_vector &v)
     }
 }
 
-} // libff
+} // namespace libff

@@ -25,6 +25,6 @@ const mp_size_t mnt46_B_limbs = (mnt46_B_bitcount+GMP_NUMB_BITS-1)/GMP_NUMB_BITS
 extern bigint<mnt46_A_limbs> mnt46_modulus_A;
 extern bigint<mnt46_B_limbs> mnt46_modulus_B;
 
-} // libff
+} // namespace libff
 
 #endif

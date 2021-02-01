@@ -536,4 +536,4 @@ void bn128_G1::batch_to_special_all_non_zeros(std::vector<bn128_G1> &vec)
     }
 }
 
-} // libff
+} // namespace libff

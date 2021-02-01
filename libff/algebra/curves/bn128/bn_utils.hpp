@@ -16,7 +16,7 @@ namespace libff {
 template<typename FieldT>
 void bn_batch_invert(std::vector<FieldT> &vec);
 
-} // libff
+} // namespace libff
 
 #include <libff/algebra/curves/bn128/bn_utils.tcc>
 

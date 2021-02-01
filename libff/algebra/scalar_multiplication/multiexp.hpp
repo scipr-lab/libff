@@ -123,7 +123,7 @@ std::vector<T> batch_exp_with_coeff(const std::size_t scalar_size,
 template<typename T>
 void batch_to_special(std::vector<T> &vec);
 
-} // libff
+} // namespace libff
 
 #include <libff/algebra/scalar_multiplication/multiexp.tcc>
 

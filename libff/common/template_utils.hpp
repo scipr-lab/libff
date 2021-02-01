@@ -18,6 +18,6 @@ struct void_type
     typedef void type;
 };
 
-} // libff
+} // namespace libff
 
 #endif // TEMPLATE_UTILS_HPP_

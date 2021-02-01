@@ -75,6 +75,6 @@ public:
                                            const mnt4_G2 &Q);
 };
 
-} // libff
+} // namespace libff
 
 #endif // MNT4_PP_HPP_

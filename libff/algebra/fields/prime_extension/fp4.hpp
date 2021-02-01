@@ -171,7 +171,7 @@ template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp4_model<n, modulus>::Frobenius_coeffs_c1[4];
 
 
-} // libff
+} // namespace libff
 
 #include <libff/algebra/fields/prime_extension/fp4.tcc>
 

@@ -355,6 +355,6 @@ std::istream& operator>>(std::istream &in, Fp4_model<n, modulus> &el)
     return in;
 }
 
-} // libff
+} // namespace libff
 
 #endif // FP4_TCC_

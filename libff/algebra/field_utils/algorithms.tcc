@@ -108,6 +108,6 @@ FieldT tonelli_shanks_sqrt(const FieldT &value)
     return x;
 }
 
-} // libff
+} // namespace libff
 
 #endif // ALGORITHMS_TCC_

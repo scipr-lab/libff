@@ -167,7 +167,7 @@ Fp_model<n, modulus> Fp3_model<n, modulus>::Frobenius_coeffs_c1[3];
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp3_model<n, modulus>::Frobenius_coeffs_c2[3];
 
-} // libff
+} // namespace libff
 #include <libff/algebra/fields/prime_extension/fp3.tcc>
 
 #endif // FP3_HPP_

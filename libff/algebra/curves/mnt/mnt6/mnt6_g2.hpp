@@ -106,6 +106,6 @@ mnt6_G2 operator*(const Fp_model<m,modulus_p> &lhs, const mnt6_G2 &rhs)
     return scalar_mul<mnt6_G2, m>(rhs, lhs.as_bigint());
 }
 
-} // libff
+} // namespace libff
 
 #endif // MNT6_G2_HPP_

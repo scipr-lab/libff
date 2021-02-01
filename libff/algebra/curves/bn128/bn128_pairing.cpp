@@ -215,4 +215,4 @@ bn128_GT bn128_final_exponentiation(const bn128_Fq12 &elt)
     leave_block("Call to bn128_final_exponentiation");
     return eltcopy;
 }
-} // libff
+} // namespace libff

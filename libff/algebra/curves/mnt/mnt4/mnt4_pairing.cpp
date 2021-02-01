@@ -740,4 +740,4 @@ mnt4_GT mnt4_affine_reduced_pairing(const mnt4_G1 &P,
     return result;
 }
 
-} // libff
+} // namespace libff

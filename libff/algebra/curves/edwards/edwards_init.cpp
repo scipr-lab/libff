@@ -181,4 +181,4 @@ void init_edwards_params()
     edwards_final_exponent_last_chunk_w1 = bigint<edwards_q_limbs>("4");
 
 }
-} // libff
+} // namespace libff

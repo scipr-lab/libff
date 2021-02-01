@@ -187,6 +187,6 @@ Fp2_model<n, modulus> Fp12_2over3over2_model<n, modulus>::non_residue;
 template<mp_size_t n, const bigint<n>& modulus>
 Fp2_model<n, modulus> Fp12_2over3over2_model<n, modulus>::Frobenius_coeffs_c1[12];
 
-} // libff
+} // namespace libff
 #include <libff/algebra/fields/prime_extension/fp12_2over3over2.tcc>
 #endif // FP12_2OVER3OVER2_HPP_

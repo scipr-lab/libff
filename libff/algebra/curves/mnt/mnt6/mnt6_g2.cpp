@@ -511,4 +511,4 @@ void mnt6_G2::batch_to_special_all_non_zeros(std::vector<mnt6_G2> &vec)
     }
 }
 
-} // libff
+} // namespace libff

@@ -101,5 +101,5 @@ std::ostream& operator<<(std::ostream& out, const std::vector<bn128_G1> &v);
 std::istream& operator>>(std::istream& in, std::vector<bn128_G1> &v);
 
 
-} // libff
+} // namespace libff
 #endif // BN128_G1_HPP_

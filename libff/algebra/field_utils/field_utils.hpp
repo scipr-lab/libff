@@ -51,7 +51,7 @@ FieldT convert_bit_vector_to_field_element(const bit_vector &v);
 template<typename FieldT>
 void batch_invert(std::vector<FieldT> &vec);
 
-} // libff
+} // namespace libff
 #include <libff/algebra/field_utils/field_utils.tcc>
 
 #endif // FIELD_UTILS_HPP_

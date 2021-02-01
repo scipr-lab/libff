@@ -67,4 +67,4 @@ std::istream& operator>>(std::istream &in, bn128_GT &g)
 #endif
     return in;
 }
-} // libff
+} // namespace libff

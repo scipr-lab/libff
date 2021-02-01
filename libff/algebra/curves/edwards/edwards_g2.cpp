@@ -414,4 +414,4 @@ void edwards_G2::batch_to_special_all_non_zeros(std::vector<edwards_G2> &vec)
     }
 }
 
-} // libff
+} // namespace libff

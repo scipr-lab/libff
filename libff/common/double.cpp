@@ -189,4 +189,4 @@ Double Double::arithmetic_generator()
 
 Double Double::multiplicative_generator = Double(2);
 
-} // libff
+} // namespace libff

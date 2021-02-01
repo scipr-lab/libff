@@ -30,5 +30,5 @@ typedef edwards_Fq6 edwards_GT;
 
 void init_edwards_fields();
 
-} // libff
+} // namespace libff
 #endif // EDWARDS_FIELDS_HPP_

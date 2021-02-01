@@ -108,4 +108,4 @@ void init_edwards_fields()
     edwards_Fq6::my_Fp2::non_residue = edwards_Fq3::non_residue;
 }
 
-} // libff
+} // namespace libff

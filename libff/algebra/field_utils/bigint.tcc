@@ -253,5 +253,5 @@ std::istream& operator>>(std::istream &in, bigint<n> &b)
     return in;
 }
 
-} // libff
+} // namespace libff
 #endif // BIGINT_TCC_

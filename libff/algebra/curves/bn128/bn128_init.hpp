@@ -31,5 +31,5 @@ class bn128_G2;
 class bn128_GT;
 typedef bn128_GT bn128_Fq12;
 
-} // libff
+} // namespace libff
 #endif // BN128_INIT_HPP_

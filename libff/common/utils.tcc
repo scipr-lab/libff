@@ -46,6 +46,6 @@ T random_element_exclude(T y)
     return x;
 }
 
-} // libff
+} // namespace libff
 
 #endif // UTILS_TCC_

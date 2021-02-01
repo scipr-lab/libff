@@ -381,4 +381,4 @@ void print_compilation_info()
 #endif
 }
 
-} // libff
+} // namespace libff

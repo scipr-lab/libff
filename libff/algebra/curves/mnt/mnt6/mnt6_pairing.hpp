@@ -143,6 +143,6 @@ mnt6_GT mnt6_reduced_pairing(const mnt6_G1 &P,
 mnt6_GT mnt6_affine_reduced_pairing(const mnt6_G1 &P,
                                     const mnt6_G2 &Q);
 
-} // libff
+} // namespace libff
 
 #endif // MNT6_PAIRING_HPP_
