@@ -14,8 +14,8 @@ bigint<edwards_q_limbs> edwards_modulus_q;
 
 void init_edwards_fields()
 {
-    typedef bigint<edwards_r_limbs> bigint_r;
-    typedef bigint<edwards_q_limbs> bigint_q;
+    using bigint_r = bigint<edwards_r_limbs>;
+    using bigint_q = bigint<edwards_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 

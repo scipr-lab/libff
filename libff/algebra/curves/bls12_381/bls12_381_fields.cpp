@@ -14,8 +14,8 @@ bigint<bls12_381_q_limbs> bls12_381_modulus_q;
 
 void init_bls12_381_fields()
 {
-    typedef bigint<bls12_381_r_limbs> bigint_r;
-    typedef bigint<bls12_381_q_limbs> bigint_q;
+    using bigint_r = bigint<bls12_381_r_limbs>;
+    using bigint_q = bigint<bls12_381_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 

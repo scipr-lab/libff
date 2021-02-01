@@ -14,8 +14,8 @@ bigint<alt_bn128_q_limbs> alt_bn128_modulus_q;
 
 void init_alt_bn128_fields()
 {
-    typedef bigint<alt_bn128_r_limbs> bigint_r;
-    typedef bigint<alt_bn128_q_limbs> bigint_q;
+    using bigint_r = bigint<alt_bn128_r_limbs>;
+    using bigint_q = bigint<alt_bn128_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 

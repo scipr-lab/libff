@@ -17,8 +17,8 @@ namespace libff {
 
 void init_mnt4_fields()
 {
-    typedef bigint<mnt4_r_limbs> bigint_r;
-    typedef bigint<mnt4_q_limbs> bigint_q;
+    using bigint_r = bigint<mnt4_r_limbs>;
+    using bigint_q = bigint<mnt4_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 

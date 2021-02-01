@@ -118,9 +118,9 @@ std::string FORMAT(const std::string &prefix, const char* format, ...)
 void serialize_bit_vector(std::ostream &out, const bit_vector &v)
 {
     out << v.size() << "\n";
-    for (size_t i = 0; i < v.size(); ++i)
+    for (auto b : v)
     {
-        out << v[i] << "\n";
+        out << b << "\n";
     }
 }
 

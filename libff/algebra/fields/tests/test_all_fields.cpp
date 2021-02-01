@@ -30,18 +30,18 @@ class AllFieldsTest: public ::testing::Test {
 public:
     // We test one field from each class.
     // p, q, r are three different primes.
-    typedef alt_bn128_Fq Fp;
-    typedef alt_bn128_Fq2 Fp2;
-    typedef alt_bn128_Fq6 Fp6_3_2;
-    typedef alt_bn128_Fq12 Fp12_2_3_2;
+    using Fp = alt_bn128_Fq;
+    using Fp2 = alt_bn128_Fq2;
+    using Fp6_3_2 = alt_bn128_Fq6 ;
+    using Fp12_2_3_2 = alt_bn128_Fq12 ;
 
-    typedef mnt4_Fq Fq;
-    typedef mnt4_Fq2 Fq2;
-    typedef mnt4_Fq4 Fq4;
+    using Fq = mnt4_Fq;
+    using Fq2 = mnt4_Fq2;
+    using Fq4 = mnt4_Fq4;
 
-    typedef mnt6_Fq Fr;
-    typedef mnt6_Fq3 Fr3;
-    typedef mnt6_Fq6 Fr6_2_3;
+    using Fr = mnt6_Fq;
+    using Fr3 = mnt6_Fq3;
+    using Fr6_2_3 = mnt6_Fq6;
     
     AllFieldsTest()
     {
