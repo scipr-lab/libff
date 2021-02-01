@@ -149,12 +149,12 @@ Double Double::inverse() const
 
 libff::bigint<1> Double::as_bigint() const
 {
-    return libff::bigint<1>(val.real());
+    return libff::bigint<1>((unsigned long) val.real());
 }
 
 unsigned long Double::as_ulong() const
 {
-    return round(val.real());
+    return round((unsigned long) val.real());
 }
 
 Double Double::squared() const

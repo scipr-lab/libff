@@ -57,7 +57,7 @@ bn::Fp bn128_G1::sqrt(const bn::Fp &el)
             m += 1;
         }
 
-        int j = v-m-1;
+        size_t j = v-m-1;
         w = z;
         while (j > 0)
         {

@@ -399,7 +399,7 @@ edwards_Fq6 edwards_tate_miller_loop(const edwards_tate_G1_precomp &prec_P,
 
     bool found_one = false;
     size_t idx = 0;
-    for (long i = edwards_modulus_r.max_bits()-1; i >= 0; --i)
+    for (unsigned long i = edwards_modulus_r.max_bits()-1; i >= 0; --i)
     {
         const bool bit = edwards_modulus_r.test_bit(i);
         if (!found_one)
@@ -603,7 +603,7 @@ edwards_ate_G2_precomp edwards_ate_precompute_G2(const edwards_G2& Q)
     extended_edwards_G2_projective R = Q_ext;
 
     bool found_one = false;
-    for (long i = loop_count.max_bits()-1; i >= 0; --i)
+    for (unsigned long i = loop_count.max_bits()-1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
         if (!found_one)
@@ -637,7 +637,7 @@ edwards_Fq6 edwards_ate_miller_loop(const edwards_ate_G1_precomp &prec_P,
 
     bool found_one = false;
     size_t idx = 0;
-    for (long i = loop_count.max_bits()-1; i >= 0; --i)
+    for (unsigned long i = loop_count.max_bits()-1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
         if (!found_one)
@@ -680,7 +680,7 @@ edwards_Fq6 edwards_ate_double_miller_loop(const edwards_ate_G1_precomp &prec_P1
 
     bool found_one = false;
     size_t idx = 0;
-    for (long i = loop_count.max_bits()-1; i >= 0; --i)
+    for (unsigned long i = loop_count.max_bits()-1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
         if (!found_one)
