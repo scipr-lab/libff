@@ -235,7 +235,7 @@ void print_indent()
 
 void op_profiling_enter(const std::string &msg)
 {
-    for (std::pair<std::string, long long*> p : op_data_points)
+    for (std::pair<std::string, const long long*> p : op_data_points)
     {
         op_counts[std::make_pair(msg, p.first)] = *(p.second);
     }
