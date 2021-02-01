@@ -1,8 +1,22 @@
 Checks:
     -*,
     bugprone-*,
-    llvm-*
-
+    llvm-*,
+    misc-*,
+    modernize-*,
+    performance-*,
+    portability-*,
+    -modernize-avoid-c-arrays,
+    -modernize-use-bool-literals,
+    -modernize-use-auto,
+    -modernize-use-trailing-return-type,
+    -modernize-return-braced-init-list,
+    -modernize-pass-by-value,
+    -modernize-use-default-member-init,
+    -bugprone-exception-escape,
+    -misc-non-private-member-variables-in-classes,
+    -modernize-deprecated-headers,
+    
 WarningsAsErrors:
     ''
 
