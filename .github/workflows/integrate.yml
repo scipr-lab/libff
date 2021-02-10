@@ -24,9 +24,9 @@ jobs:
       run: |
         cd build
         echo ::set-env name=num_warnings::$(python3 run_clang_tidy -quiet 2>&1 | grep "warning:" | wc -l)
-      run:
-        if: env.num_warnings == '0'
-        exit 1
+    - name: check_errors
+      if: env.num_warnings == '0'
+      run: exit 1
     - name: tests
       run: |
         cd build
