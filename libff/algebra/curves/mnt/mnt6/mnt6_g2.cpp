@@ -350,28 +350,25 @@ mnt6_G2 mnt6_G2::dbl() const
     {
         return (*this);
     }
-    else
-    {
-        // NOTE: does not handle O and pts of order 2,4
-        // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
+    // NOTE: does not handle O and pts of order 2,4
+    // http://www.hyperelliptic.org/EFD/g1p/auto-shortw-projective.html#doubling-dbl-2007-bl
 
-        const mnt6_Fq3 XX   = (this->X).squared();                   // XX  = X1^2
-        const mnt6_Fq3 ZZ   = (this->Z).squared();                   // ZZ  = Z1^2
-        const mnt6_Fq3 w    = mnt6_G2::mul_by_a(ZZ) + (XX + XX + XX); // w   = a*ZZ + 3*XX
-        const mnt6_Fq3 Y1Z1 = (this->Y) * (this->Z);
-        const mnt6_Fq3 s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
-        const mnt6_Fq3 ss   = s.squared();                            // ss  = s^2
-        const mnt6_Fq3 sss  = s * ss;                                 // sss = s*ss
-        const mnt6_Fq3 R    = (this->Y) * s;                         // R   = Y1*s
-        const mnt6_Fq3 RR   = R.squared();                            // RR  = R^2
-        const mnt6_Fq3 B    = ((this->X)+R).squared()-XX-RR;         // B   = (X1+R)^2 - XX - RR
-        const mnt6_Fq3 h    = w.squared() - (B+B);                    // h   = w^2-2*B
-        const mnt6_Fq3 X3   = h * s;                                  // X3  = h*s
-        const mnt6_Fq3 Y3   = w * (B-h)-(RR+RR);                      // Y3  = w*(B-h) - 2*RR
-        const mnt6_Fq3 Z3   = sss;                                    // Z3  = sss
+    const mnt6_Fq3 XX   = (this->X).squared();                   // XX  = X1^2
+    const mnt6_Fq3 ZZ   = (this->Z).squared();                   // ZZ  = Z1^2
+    const mnt6_Fq3 w    = mnt6_G2::mul_by_a(ZZ) + (XX + XX + XX); // w   = a*ZZ + 3*XX
+    const mnt6_Fq3 Y1Z1 = (this->Y) * (this->Z);
+    const mnt6_Fq3 s    = Y1Z1 + Y1Z1;                            // s   = 2*Y1*Z1
+    const mnt6_Fq3 ss   = s.squared();                            // ss  = s^2
+    const mnt6_Fq3 sss  = s * ss;                                 // sss = s*ss
+    const mnt6_Fq3 R    = (this->Y) * s;                         // R   = Y1*s
+    const mnt6_Fq3 RR   = R.squared();                            // RR  = R^2
+    const mnt6_Fq3 B    = ((this->X)+R).squared()-XX-RR;         // B   = (X1+R)^2 - XX - RR
+    const mnt6_Fq3 h    = w.squared() - (B+B);                    // h   = w^2-2*B
+    const mnt6_Fq3 X3   = h * s;                                  // X3  = h*s
+    const mnt6_Fq3 Y3   = w * (B-h)-(RR+RR);                      // Y3  = w*(B-h) - 2*RR
+    const mnt6_Fq3 Z3   = sss;                                    // Z3  = sss
 
-        return mnt6_G2(X3, Y3, Z3);
-    }
+    return mnt6_G2(X3, Y3, Z3);
 }
 
 mnt6_G2 mnt6_G2::mul_by_q() const
@@ -392,26 +389,22 @@ bool mnt6_G2::is_well_formed() const
     {
         return true;
     }
-    else
-    {
+    /*
+        y^2 = x^3 + ax + b
 
-        /*
-          y^2 = x^3 + ax + b
+        We are using projective, so equation we need to check is actually
 
-          We are using projective, so equation we need to check is actually
+        (y/z)^2 = (x/z)^3 + a (x/z) + b
+        z y^2 = x^3  + a z^2 x + b z^3
 
-          (y/z)^2 = (x/z)^3 + a (x/z) + b
-          z y^2 = x^3  + a z^2 x + b z^3
+        z (y^2 - b z^2) = x ( x^2 + a z^2)
+    */
+    const mnt6_Fq3 X2 = this->X.squared();
+    const mnt6_Fq3 Y2 = this->Y.squared();
+    const mnt6_Fq3 Z2 = this->Z.squared();
+    const mnt6_Fq3 aZ2 = mnt6_twist_coeff_a * Z2;
 
-          z (y^2 - b z^2) = x ( x^2 + a z^2)
-        */
-        const mnt6_Fq3 X2 = this->X.squared();
-        const mnt6_Fq3 Y2 = this->Y.squared();
-        const mnt6_Fq3 Z2 = this->Z.squared();
-        const mnt6_Fq3 aZ2 = mnt6_twist_coeff_a * Z2;
-
-        return (this->Z * (Y2 - mnt6_twist_coeff_b * Z2) == this->X * (X2 + aZ2));
-    }
+    return (this->Z * (Y2 - mnt6_twist_coeff_b * Z2) == this->X * (X2 + aZ2));
 }
 
 mnt6_G2 mnt6_G2::zero()
@@ -465,7 +458,7 @@ std::istream& operator>>(std::istream &in, mnt6_G2 &g)
     Y_lsb -= '0';
 
     // y = +/- sqrt(x^3 + a*x + b)
-    if (!is_zero)
+    if (is_zero == 0)
     {
         const mnt6_Fq3 tX2 = tX.squared();
         const mnt6_Fq3 tY2 = (tX2 + mnt6_twist_coeff_a) * tX + mnt6_twist_coeff_b;
@@ -478,7 +471,7 @@ std::istream& operator>>(std::istream &in, mnt6_G2 &g)
     }
 #endif
     // using projective coordinates
-    if (!is_zero)
+    if (is_zero == 0)
     {
         g.X = tX;
         g.Y = tY;

@@ -84,8 +84,8 @@ struct mnt4_ate_add_coeffs {
     mnt4_Fq2 c_RZ;
 
     bool operator==(const mnt4_ate_add_coeffs &other) const;
-    friend std::ostream& operator<<(std::ostream &out, const mnt4_ate_add_coeffs &dc);
-    friend std::istream& operator>>(std::istream &in, mnt4_ate_add_coeffs &dc);
+    friend std::ostream& operator<<(std::ostream &out, const mnt4_ate_add_coeffs &ac);
+    friend std::istream& operator>>(std::istream &in, mnt4_ate_add_coeffs &ac);
 };
 
 struct mnt4_ate_G2_precomp {

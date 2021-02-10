@@ -246,7 +246,7 @@ struct extended_edwards_G1_projective {
             T.print();
         }
 
-    void test_invariant() const
+    static void test_invariant()
         {
             assert(T*Z == X*Y);
         }
@@ -413,14 +413,14 @@ edwards_Fq6 edwards_tate_miller_loop(const edwards_tate_G1_precomp &prec_P,
            edwards_modulus_r (skipping leading zeros) in MSB to LSB
            order */
         edwards_Fq_conic_coefficients cc = prec_P[idx++];
-        edwards_Fq6 g_RR_at_Q = edwards_Fq6(edwards_Fq3(cc.c_XZ, edwards_Fq(0l), edwards_Fq(0l)) + cc.c_XY * prec_Q.y0,
+        edwards_Fq6 g_RR_at_Q = edwards_Fq6(edwards_Fq3(cc.c_XZ, edwards_Fq(0L), edwards_Fq(0L)) + cc.c_XY * prec_Q.y0,
                                             cc.c_ZZ * prec_Q.eta);
         f = f.squared() * g_RR_at_Q;
         if (bit)
         {
             cc = prec_P[idx++];
 
-            edwards_Fq6 g_RP_at_Q = edwards_Fq6(edwards_Fq3(cc.c_XZ, edwards_Fq(0l), edwards_Fq(0l)) + cc.c_XY * prec_Q.y0,
+            edwards_Fq6 g_RP_at_Q = edwards_Fq6(edwards_Fq3(cc.c_XZ, edwards_Fq(0L), edwards_Fq(0L)) + cc.c_XY * prec_Q.y0,
                                                 cc.c_ZZ * prec_Q.eta);
             f = f * g_RP_at_Q;
         }
@@ -464,7 +464,7 @@ struct extended_edwards_G2_projective {
             T.print();
         }
 
-    void test_invariant() const
+    static void test_invariant()
         {
             assert(T*Z == X*Y);
         }

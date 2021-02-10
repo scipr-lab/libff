@@ -54,13 +54,13 @@ size_t to_twos_complement(int i, size_t w)
 {
     assert(i >= -(1l<<(w-1)));
     assert(i < (1l<<(w-1)));
-    return (i >= 0) ? i : i + (1l<<w);
+    return (i >= 0) ? i : i + (1L<<w);
 }
 
 int from_twos_complement(size_t i, size_t w)
 {
-    assert(i < (1ul<<w));
-    return (i < (1ul<<(w-1))) ? i : i - (1ul<<w);
+    assert(i < (1UL<<w));
+    return (i < (1UL<<(w-1))) ? i : i - (1UL<<w);
 }
 
 size_t bitreverse(size_t n, const size_t l)
@@ -81,7 +81,7 @@ bit_vector int_list_to_bits(const std::initializer_list<unsigned long> &l, const
     {
         for (size_t j = 0; j < wordsize; ++j)
         {
-            res[i*wordsize + j] = (*(l.begin()+i) & (1ul<<(wordsize-1-j)));
+            res[i*wordsize + j] = (*(l.begin()+i) & (1UL<<(wordsize-1-j))) != 0U;
         }
     }
     return res;

@@ -41,11 +41,12 @@ long long get_nsec_cpu_time()
 	return 0;
 #else
     ::timespec ts;
-    if ( ::clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts) )
+    if ( ::clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts) != 0 ) {
         throw ::std::runtime_error("clock_gettime(CLOCK_PROCESS_CPUTIME_ID) failed");
+    }
         // If we expected this to work, don't silently ignore failures, because that would hide the problem and incur an unnecessarily system-call overhead. So if we ever observe this exception, we should probably add a suitable #ifdef .
         //TODO: clock_gettime(CLOCK_PROCESS_CPUTIME_ID) is not supported by native Windows. What about Cygwin? Should we #ifdef on CLOCK_PROCESS_CPUTIME_ID or on __linux__?
-    return ts.tv_sec * 1000000000ll + ts.tv_nsec;
+    return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 #endif
 }
 

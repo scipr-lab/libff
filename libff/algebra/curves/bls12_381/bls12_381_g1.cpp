@@ -119,12 +119,7 @@ bool bls12_381_G1::operator==(const bls12_381_G1 &other) const
     bls12_381_Fq Z1_cubed = (this->Z) * Z1_squared;
     bls12_381_Fq Z2_cubed = (other.Z) * Z2_squared;
 
-    if ((this->Y * Z2_cubed) != (other.Y * Z1_cubed))
-    {
-        return false;
-    }
-
-    return true;
+    return !((this->Y * Z2_cubed) != (other.Y * Z1_cubed));
 }
 
 bool bls12_381_G1::operator!=(const bls12_381_G1& other) const
@@ -322,23 +317,20 @@ bool bls12_381_G1::is_well_formed() const
     {
         return true;
     }
-    else
-    {
-        // y^2 = x^3 + b
-        // We are using Jacobian coordinates, so equation we need to check is actually
-        // (y/z^3)^2 = (x/z^2)^3 + b
-        // y^2 / z^6 = x^3 / z^6 + b
-        // y^2 = x^3 + b z^6
-        bls12_381_Fq X2 = this->X.squared();
-        bls12_381_Fq Y2 = this->Y.squared();
-        bls12_381_Fq Z2 = this->Z.squared();
+    // y^2 = x^3 + b
+    // We are using Jacobian coordinates, so equation we need to check is actually
+    // (y/z^3)^2 = (x/z^2)^3 + b
+    // y^2 / z^6 = x^3 / z^6 + b
+    // y^2 = x^3 + b z^6
+    bls12_381_Fq X2 = this->X.squared();
+    bls12_381_Fq Y2 = this->Y.squared();
+    bls12_381_Fq Z2 = this->Z.squared();
 
-        bls12_381_Fq X3 = this->X * X2;
-        bls12_381_Fq Z3 = this->Z * Z2;
-        bls12_381_Fq Z6 = Z3.squared();
+    bls12_381_Fq X3 = this->X * X2;
+    bls12_381_Fq Z3 = this->Z * Z2;
+    bls12_381_Fq Z6 = Z3.squared();
 
-        return (Y2 == X3 + bls12_381_coeff_b * Z6);
-    }
+    return (Y2 == X3 + bls12_381_coeff_b * Z6);
 }
 
 bls12_381_G1 bls12_381_G1::zero()
@@ -392,7 +384,7 @@ std::istream& operator>>(std::istream &in, bls12_381_G1 &g)
     Y_lsb -= '0';
 
     // y = +/- sqrt(x^3 + b)
-    if (!is_zero)
+    if (is_zero == 0)
     {
         bls12_381_Fq tX2 = tX.squared();
         bls12_381_Fq tY2 = tX2*tX + bls12_381_coeff_b;
@@ -405,7 +397,7 @@ std::istream& operator>>(std::istream &in, bls12_381_G1 &g)
     }
 #endif
     // using Jacobian coordinates
-    if (!is_zero)
+    if (is_zero == 0)
     {
         g.X = tX;
         g.Y = tY;

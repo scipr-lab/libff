@@ -115,10 +115,11 @@ void test_field()
     x = random_element_non_zero<FieldT>();
     y = random_element_non_zero<FieldT>();
     z = random_element_exclude(one);
-    if (two == zero)
+    if (two == zero) {
         EXPECT_EQ(x, -x);
-    else
+    } else {
         EXPECT_NE(x, -x);
+    }
     EXPECT_NE(x + y, x);
     EXPECT_NE(x * z, x);
     y = random_element_exclude(x);
@@ -243,8 +244,9 @@ void test_field()
     EXPECT_EQ(x.to_words(), z.to_words());
 
     std::vector<uint64_t> zero_words = zero.to_words();
-    for (uint64_t word : zero_words)
+    for (uint64_t word : zero_words) {
         EXPECT_EQ(word, 0);
+    }
     EXPECT_TRUE(y.from_words(zero_words));
     EXPECT_TRUE(y.is_zero());
 
@@ -300,12 +302,12 @@ void test_fp()
 
     EXPECT_EQ(x.as_ulong(), x.as_ulong());
     EXPECT_EQ(x.as_bigint().as_ulong(), x.as_ulong());
-    EXPECT_NE(x.as_ulong(), 0ul);
-    EXPECT_NE(x.as_ulong(), 1ul);
-    EXPECT_EQ(zero.as_ulong(), 0ul);
-    EXPECT_EQ(one.as_ulong(), 1ul);
+    EXPECT_NE(x.as_ulong(), 0UL);
+    EXPECT_NE(x.as_ulong(), 1UL);
+    EXPECT_EQ(zero.as_ulong(), 0UL);
+    EXPECT_EQ(one.as_ulong(), 1UL);
     // The characteristic is > 2 since this our implementation is for non-binary fields.
-    EXPECT_EQ((one + one).as_ulong(), 2ul);
+    EXPECT_EQ((one + one).as_ulong(), 2UL);
 
     for (size_t power = 0; power < 10; power++)
     {
@@ -349,8 +351,9 @@ void test_binary_field()
     std::set<std::vector<uint64_t> > values;
     for (uint16_t i = 0; i < 10000; i++)
     {
-        if (x == one)
+        if (x == one) {
             break;
+        }
         EXPECT_EQ(values.find(x.to_words()), values.end()); // generator^n never repeats.
         values.insert(x.to_words());
         x *= generator;

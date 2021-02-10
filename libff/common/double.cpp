@@ -72,7 +72,9 @@ Double Double::operator*(const Double &other) const
 
 Double Double::operator-() const
 {
-    if (val.imag() == 0) return Double(-val.real());
+    if (val.imag() == 0) {
+        return Double(-val.real());
+    }
 
     return Double(-val.real(), -val.imag());
 }
@@ -115,7 +117,7 @@ bool Double::operator==(const Double &other) const
 
 bool Double::operator!=(const Double &other) const
 {
-    return Double(val) == other ? 0 : 1;
+    return Double(val) != other;
 }
 
 bool Double::operator<(const Double &other) const
