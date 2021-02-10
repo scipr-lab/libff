@@ -23,7 +23,7 @@ jobs:
     - name: run_clang_tidy
       run: |
         cd build
-        make clang-tidy
+        make clang-tidy | grep "warning: "
     - name: tests
       run: |
         cd build
