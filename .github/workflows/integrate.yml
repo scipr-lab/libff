@@ -24,11 +24,13 @@ jobs:
       id: clang_tidy
       run: |
         cd build
-        OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1 | grep "warning:" | wc -l)
+        OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
         echo "::set-output name=OUTPUT::$OUTPUT"
     - name: check_errors
-      if: steps.clang_tidy.outputs.OUTPUT > 0
-      run: exit 1
+      if: (steps.clang_tidy.outputs.OUTPUT | grep "warning:" | wc -l) > 0
+      run: |
+        echo steps.clang_tidy.outputs.OUTPUT
+        exit 1
     - name: tests
       run: |
         cd build
