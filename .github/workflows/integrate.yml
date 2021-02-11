@@ -31,7 +31,6 @@ jobs:
     - name: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
-        echo ${steps.clang_tidy.outputs.OUTPUT}
         exit 1
     - name: tests
       run: |
