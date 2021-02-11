@@ -25,11 +25,10 @@ jobs:
       run: |
         cd build
         OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
-        echo "::set-output name=OUTPUT::$OUTPUT"
     - name: check_errors
-      if: (echo steps.clang_tidy.outputs.OUTPUT | grep "warning:" | wc -l) > 0
+      if: (echo "::set-output name=OUTPUT::$OUTPUT" | grep "warning:" | wc -l) > 0
       run: |
-        echo steps.clang_tidy.outputs.OUTPUT
+        echo "::set-output name=OUTPUT::$OUTPUT"
         exit 1
     - name: tests
       run: |
