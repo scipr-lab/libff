@@ -8,6 +8,7 @@
 - #71 Add BLS12-381 (Thanks @yelhousni)
 - #80 Add clang-tidy checks to library and CI
 - #82 Convert tests to use Google test (Thanks @alexander-zw)
+- #83 Make run-clang-tidy return an error when linting fails
 - #85 Add more unit tests for fields (Thanks @alexander-zw)
 - #86 Add binary fields from [libiop](https://github.com/scipr-lab/libiop)
 
