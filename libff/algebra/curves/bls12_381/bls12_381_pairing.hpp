@@ -34,8 +34,8 @@ struct bls12_381_ate_ell_coeffs {
     bls12_381_Fq2 ell_VV;
 
     bool operator==(const bls12_381_ate_ell_coeffs &other) const;
-    friend std::ostream& operator<<(std::ostream &out, const bls12_381_ate_ell_coeffs &dc);
-    friend std::istream& operator>>(std::istream &in, bls12_381_ate_ell_coeffs &dc);
+    friend std::ostream& operator<<(std::ostream &out, const bls12_381_ate_ell_coeffs &c);
+    friend std::istream& operator>>(std::istream &in, bls12_381_ate_ell_coeffs &c);
 };
 
 struct bls12_381_ate_G2_precomp {

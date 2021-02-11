@@ -135,7 +135,7 @@ void test_cyclotomic_squaring();
 template<>
 void test_cyclotomic_squaring<Fqk<edwards_pp> >()
 {
-    typedef Fqk<edwards_pp> FieldT;
+    using FieldT = Fqk<edwards_pp>;
     EXPECT_EQ(FieldT::extension_degree() % 2, 0);
     FieldT a = random_element_non_zero<FieldT>();
     ASSERT_NE(a, FieldT::zero());
