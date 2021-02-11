@@ -27,7 +27,7 @@ jobs:
         OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
         echo "::set-output name=OUTPUT::$OUTPUT"
     - name: check_errors
-      if: (steps.clang_tidy.outputs.OUTPUT | grep "warning:" | wc -l) > 0
+      if: (echo steps.clang_tidy.outputs.OUTPUT | grep "warning:" | wc -l) > 0
       run: |
         echo steps.clang_tidy.outputs.OUTPUT
         exit 1
