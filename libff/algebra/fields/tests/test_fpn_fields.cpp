@@ -12,14 +12,14 @@
  *****************************************************************************/
 #include <gtest/gtest.h>
 
-#include <libff/algebra/curves/edwards/edwards_pp.hpp>
-#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
-#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 #ifdef CURVE_BN128
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 #endif
+#include <libff/algebra/curves/edwards/edwards_pp.hpp>
+#include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
+#include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 #include <libff/common/profiling.hpp>
 #include <libff/common/utils.hpp>
 
@@ -135,7 +135,7 @@ void test_cyclotomic_squaring();
 template<>
 void test_cyclotomic_squaring<Fqk<edwards_pp> >()
 {
-    typedef Fqk<edwards_pp> FieldT;
+    using FieldT = Fqk<edwards_pp>;
     EXPECT_EQ(FieldT::extension_degree() % 2, 0);
     FieldT a = random_element_non_zero<FieldT>();
     ASSERT_NE(a, FieldT::zero());
@@ -148,7 +148,7 @@ void test_cyclotomic_squaring<Fqk<edwards_pp> >()
 template<>
 void test_cyclotomic_squaring<Fqk<mnt4_pp> >()
 {
-    typedef Fqk<mnt4_pp> FieldT;
+    using FieldT = Fqk<mnt4_pp>;
     ASSERT_EQ(FieldT::extension_degree() % 2, 0);
     FieldT a = random_element_non_zero<FieldT>();
     ASSERT_NE(a, FieldT::zero());
@@ -161,7 +161,7 @@ void test_cyclotomic_squaring<Fqk<mnt4_pp> >()
 template<>
 void test_cyclotomic_squaring<Fqk<mnt6_pp> >()
 {
-    typedef Fqk<mnt6_pp> FieldT;
+    using FieldT = Fqk<mnt6_pp>;
     ASSERT_EQ(FieldT::extension_degree() % 2, 0);
     FieldT a = random_element_non_zero<FieldT>();
     ASSERT_NE(a, FieldT::zero());
@@ -185,7 +185,7 @@ void test_all_fields()
 template<typename Fp4T>
 void test_Fp4_toom_cook()
 {
-    typedef typename Fp4T::my_Fp FieldT;
+    using FieldT = typename Fp4T::my_Fp;
     for (size_t i = 0; i < 100; i++)
     {
         const Fp4T a = Fp4T::random_element();

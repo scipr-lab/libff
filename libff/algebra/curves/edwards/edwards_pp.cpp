@@ -55,4 +55,4 @@ edwards_Fq6 edwards_pp::reduced_pairing(const edwards_G1 &P,
     return edwards_reduced_pairing(P, Q);
 }
 
-} // libff
+} // namespace libff

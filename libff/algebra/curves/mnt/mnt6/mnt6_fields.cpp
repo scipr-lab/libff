@@ -17,8 +17,8 @@ namespace libff {
 
 void init_mnt6_fields()
 {
-    typedef bigint<mnt6_r_limbs> bigint_r;
-    typedef bigint<mnt6_q_limbs> bigint_q;
+    using bigint_r = bigint<mnt6_r_limbs>;
+    using bigint_q = bigint<mnt6_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 
@@ -111,4 +111,4 @@ void init_mnt6_fields()
     mnt6_Fq6::my_Fp2::non_residue = mnt6_Fq3::non_residue;
 }
 
-} // libff
+} // namespace libff

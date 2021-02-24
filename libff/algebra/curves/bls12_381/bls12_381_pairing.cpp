@@ -470,4 +470,4 @@ bls12_381_GT bls12_381_reduced_pairing(const bls12_381_G1 &P,
 {
     return bls12_381_ate_reduced_pairing(P, Q);
 }
-} // libff
+} // namespace libff

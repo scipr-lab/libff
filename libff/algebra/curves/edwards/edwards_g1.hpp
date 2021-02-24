@@ -92,5 +92,5 @@ edwards_G1 operator*(const Fp_model<m,modulus_p> &lhs, const edwards_G1 &rhs)
 std::ostream& operator<<(std::ostream& out, const std::vector<edwards_G1> &v);
 std::istream& operator>>(std::istream& in, std::vector<edwards_G1> &v);
 
-} // libff
+} // namespace libff
 #endif // EDWARDS_G1_HPP_

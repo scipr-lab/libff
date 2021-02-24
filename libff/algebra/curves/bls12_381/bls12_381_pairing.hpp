@@ -34,8 +34,8 @@ struct bls12_381_ate_ell_coeffs {
     bls12_381_Fq2 ell_VV;
 
     bool operator==(const bls12_381_ate_ell_coeffs &other) const;
-    friend std::ostream& operator<<(std::ostream &out, const bls12_381_ate_ell_coeffs &dc);
-    friend std::istream& operator>>(std::istream &in, bls12_381_ate_ell_coeffs &dc);
+    friend std::ostream& operator<<(std::ostream &out, const bls12_381_ate_ell_coeffs &c);
+    friend std::istream& operator>>(std::istream &in, bls12_381_ate_ell_coeffs &c);
 };
 
 struct bls12_381_ate_G2_precomp {
@@ -89,5 +89,5 @@ bls12_381_GT bls12_381_reduced_pairing(const bls12_381_G1 &P,
 bls12_381_GT bls12_381_affine_reduced_pairing(const bls12_381_G1 &P,
                                     const bls12_381_G2 &Q);
 
-} // libff
+} // namespace libff
 #endif // BLS12_381_PAIRING_HPP_

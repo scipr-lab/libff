@@ -48,4 +48,4 @@ bls12_381_Fq12 bls12_381_pp::reduced_pairing(const bls12_381_G1 &P,
     return bls12_381_reduced_pairing(P, Q);
 }
 
-} // libff
+} // namespace libff

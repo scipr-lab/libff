@@ -109,4 +109,4 @@ long long gf192::inv_cnt = 0;
 } // namespace libff
 #include <libff/algebra/fields/binary/gf192.tcc>
 
-#endif // LIBFF_ALGEBRA_GF192_HPP_
+#endif // namespace libff_ALGEBRA_GF192_HPP_

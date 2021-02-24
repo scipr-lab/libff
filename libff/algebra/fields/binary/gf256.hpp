@@ -111,4 +111,4 @@ long long gf256::inv_cnt = 0;
 } // namespace libff
 #include <libff/algebra/fields/binary/gf256.tcc>
 
-#endif // LIBFF_ALGEBRA_GF256_HPP_
+#endif // namespace libff_ALGEBRA_GF256_HPP_

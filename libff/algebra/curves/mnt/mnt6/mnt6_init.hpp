@@ -49,6 +49,6 @@ void init_mnt6_params();
 class mnt6_G1;
 class mnt6_G2;
 
-} // libff
+} // namespace libff
 
 #endif // MNT6_INIT_HPP_

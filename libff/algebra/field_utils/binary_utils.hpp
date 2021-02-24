@@ -115,4 +115,4 @@ std::size_t soundness_log_of_field_size_helper(
 
 } // namespace libff
 
-#endif // LIBFF_ALGEBRA_FIELDS_UTILS_HPP
+#endif // namespace libff_ALGEBRA_FIELDS_UTILS_HPP

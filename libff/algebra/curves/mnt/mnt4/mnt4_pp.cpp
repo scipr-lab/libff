@@ -102,4 +102,4 @@ mnt4_Fq4 mnt4_pp::affine_reduced_pairing(const mnt4_G1 &P,
     return mnt4_affine_reduced_pairing(P, Q);
 }
 
-} // libff
+} // namespace libff

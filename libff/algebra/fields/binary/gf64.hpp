@@ -106,4 +106,4 @@ long long gf64::inv_cnt = 0;
 } // namespace libff
 #include <libff/algebra/fields/binary/gf64.tcc>
 
-#endif // LIBFF_ALGEBRA_GF64_HPP_
+#endif // namespace libff_ALGEBRA_GF64_HPP_

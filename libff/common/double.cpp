@@ -72,7 +72,9 @@ Double Double::operator*(const Double &other) const
 
 Double Double::operator-() const
 {
-    if (val.imag() == 0) return Double(-val.real());
+    if (val.imag() == 0) {
+        return Double(-val.real());
+    }
 
     return Double(-val.real(), -val.imag());
 }
@@ -115,7 +117,7 @@ bool Double::operator==(const Double &other) const
 
 bool Double::operator!=(const Double &other) const
 {
-    return Double(val) == other ? 0 : 1;
+    return Double(val) != other;
 }
 
 bool Double::operator<(const Double &other) const
@@ -149,12 +151,12 @@ Double Double::inverse() const
 
 libff::bigint<1> Double::as_bigint() const
 {
-    return libff::bigint<1>(val.real());
+    return libff::bigint<1>((size_t) val.real());
 }
 
 unsigned long Double::as_ulong() const
 {
-    return round(val.real());
+    return round((size_t) val.real());
 }
 
 Double Double::squared() const
@@ -189,4 +191,4 @@ Double Double::arithmetic_generator()
 
 Double Double::multiplicative_generator = Double(2);
 
-} // libff
+} // namespace libff

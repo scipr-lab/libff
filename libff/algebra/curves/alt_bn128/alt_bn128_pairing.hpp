@@ -34,8 +34,8 @@ struct alt_bn128_ate_ell_coeffs {
     alt_bn128_Fq2 ell_VV;
 
     bool operator==(const alt_bn128_ate_ell_coeffs &other) const;
-    friend std::ostream& operator<<(std::ostream &out, const alt_bn128_ate_ell_coeffs &dc);
-    friend std::istream& operator>>(std::istream &in, alt_bn128_ate_ell_coeffs &dc);
+    friend std::ostream& operator<<(std::ostream &out, const alt_bn128_ate_ell_coeffs &c);
+    friend std::istream& operator>>(std::istream &in, alt_bn128_ate_ell_coeffs &c);
 };
 
 struct alt_bn128_ate_G2_precomp {
@@ -89,5 +89,5 @@ alt_bn128_GT alt_bn128_reduced_pairing(const alt_bn128_G1 &P,
 alt_bn128_GT alt_bn128_affine_reduced_pairing(const alt_bn128_G1 &P,
                                     const alt_bn128_G2 &Q);
 
-} // libff
+} // namespace libff
 #endif // ALT_BN128_PAIRING_HPP_

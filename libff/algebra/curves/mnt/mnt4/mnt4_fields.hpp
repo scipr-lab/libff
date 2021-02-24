@@ -39,6 +39,6 @@ typedef mnt4_Fq4 mnt4_GT;
 
 void init_mnt4_fields();
 
-} // libff
+} // namespace libff
 
 #endif // MNT4_FIELDS_HPP_

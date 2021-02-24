@@ -119,6 +119,6 @@ T opt_window_wnaf_exp(const T &base, const bigint<n> &scalar, const size_t scala
     }
 }
 
-} // libff
+} // namespace libff
 
 #endif // WNAF_TCC_

@@ -84,8 +84,8 @@ struct mnt6_ate_add_coeffs {
     mnt6_Fq3 c_RZ;
 
     bool operator==(const mnt6_ate_add_coeffs &other) const;
-    friend std::ostream& operator<<(std::ostream &out, const mnt6_ate_add_coeffs &dc);
-    friend std::istream& operator>>(std::istream &in, mnt6_ate_add_coeffs &dc);
+    friend std::ostream& operator<<(std::ostream &out, const mnt6_ate_add_coeffs &ac);
+    friend std::istream& operator>>(std::istream &in, mnt6_ate_add_coeffs &ac);
 };
 
 struct mnt6_ate_G2_precomp {
@@ -143,6 +143,6 @@ mnt6_GT mnt6_reduced_pairing(const mnt6_G1 &P,
 mnt6_GT mnt6_affine_reduced_pairing(const mnt6_G1 &P,
                                     const mnt6_G2 &Q);
 
-} // libff
+} // namespace libff
 
 #endif // MNT6_PAIRING_HPP_

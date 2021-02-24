@@ -10,18 +10,19 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <gtest/gtest.h>
-#include <set>
 
+#include "libff/algebra/curves/alt_bn128/alt_bn128_fields.hpp"
 #include "libff/algebra/curves/mnt/mnt4/mnt4_fields.hpp"
 #include "libff/algebra/curves/mnt/mnt6/mnt6_fields.hpp"
-#include "libff/algebra/curves/alt_bn128/alt_bn128_fields.hpp"
-#include "libff/algebra/fields/binary/gf32.hpp"
-#include "libff/algebra/fields/binary/gf64.hpp"
 #include "libff/algebra/fields/binary/gf128.hpp"
 #include "libff/algebra/fields/binary/gf192.hpp"
 #include "libff/algebra/fields/binary/gf256.hpp"
+#include "libff/algebra/fields/binary/gf32.hpp"
+#include "libff/algebra/fields/binary/gf64.hpp"
 #include "libff/common/utils.hpp"
+
+#include <gtest/gtest.h>
+#include <set>
 
 using namespace libff;
 
@@ -29,18 +30,18 @@ class AllFieldsTest: public ::testing::Test {
 public:
     // We test one field from each class.
     // p, q, r are three different primes.
-    typedef alt_bn128_Fq Fp;
-    typedef alt_bn128_Fq2 Fp2;
-    typedef alt_bn128_Fq6 Fp6_3_2;
-    typedef alt_bn128_Fq12 Fp12_2_3_2;
+    using Fp = alt_bn128_Fq;
+    using Fp2 = alt_bn128_Fq2;
+    using Fp6_3_2 = alt_bn128_Fq6 ;
+    using Fp12_2_3_2 = alt_bn128_Fq12 ;
 
-    typedef mnt4_Fq Fq;
-    typedef mnt4_Fq2 Fq2;
-    typedef mnt4_Fq4 Fq4;
+    using Fq = mnt4_Fq;
+    using Fq2 = mnt4_Fq2;
+    using Fq4 = mnt4_Fq4;
 
-    typedef mnt6_Fq Fr;
-    typedef mnt6_Fq3 Fr3;
-    typedef mnt6_Fq6 Fr6_2_3;
+    using Fr = mnt6_Fq;
+    using Fr3 = mnt6_Fq3;
+    using Fr6_2_3 = mnt6_Fq6;
     
     AllFieldsTest()
     {
@@ -114,10 +115,11 @@ void test_field()
     x = random_element_non_zero<FieldT>();
     y = random_element_non_zero<FieldT>();
     z = random_element_exclude(one);
-    if (two == zero)
+    if (two == zero) {
         EXPECT_EQ(x, -x);
-    else
+    } else {
         EXPECT_NE(x, -x);
+    }
     EXPECT_NE(x + y, x);
     EXPECT_NE(x * z, x);
     y = random_element_exclude(x);
@@ -242,8 +244,9 @@ void test_field()
     EXPECT_EQ(x.to_words(), z.to_words());
 
     std::vector<uint64_t> zero_words = zero.to_words();
-    for (uint64_t word : zero_words)
+    for (uint64_t word : zero_words) {
         EXPECT_EQ(word, 0);
+    }
     EXPECT_TRUE(y.from_words(zero_words));
     EXPECT_TRUE(y.is_zero());
 
@@ -299,12 +302,12 @@ void test_fp()
 
     EXPECT_EQ(x.as_ulong(), x.as_ulong());
     EXPECT_EQ(x.as_bigint().as_ulong(), x.as_ulong());
-    EXPECT_NE(x.as_ulong(), 0ul);
-    EXPECT_NE(x.as_ulong(), 1ul);
-    EXPECT_EQ(zero.as_ulong(), 0ul);
-    EXPECT_EQ(one.as_ulong(), 1ul);
+    EXPECT_NE(x.as_ulong(), 0UL);
+    EXPECT_NE(x.as_ulong(), 1UL);
+    EXPECT_EQ(zero.as_ulong(), 0UL);
+    EXPECT_EQ(one.as_ulong(), 1UL);
     // The characteristic is > 2 since this our implementation is for non-binary fields.
-    EXPECT_EQ((one + one).as_ulong(), 2ul);
+    EXPECT_EQ((one + one).as_ulong(), 2UL);
 
     for (size_t power = 0; power < 10; power++)
     {
@@ -348,8 +351,9 @@ void test_binary_field()
     std::set<std::vector<uint64_t> > values;
     for (uint16_t i = 0; i < 10000; i++)
     {
-        if (x == one)
+        if (x == one) {
             break;
+        }
         EXPECT_EQ(values.find(x.to_words()), values.end()); // generator^n never repeats.
         values.insert(x.to_words());
         x *= generator;

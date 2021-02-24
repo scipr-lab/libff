@@ -69,6 +69,6 @@ public:
     static std::size_t s;
 };
 
-} // libff
+} // namespace libff
 
 #endif // DOUBLE_HPP_

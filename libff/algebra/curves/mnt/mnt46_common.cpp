@@ -18,4 +18,4 @@ namespace libff {
 bigint<mnt46_A_limbs> mnt46_modulus_A;
 bigint<mnt46_B_limbs> mnt46_modulus_B;
 
-} // libff
+} // namespace libff

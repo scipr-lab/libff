@@ -260,7 +260,7 @@ mnt4_affine_ate_G2_precomputation mnt4_affine_ate_precompute_G2(const mnt4_G2& Q
     bool found_nonzero = false;
 
     std::vector<long> NAF = find_wnaf(1, loop_count);
-    for (long i = NAF.size() - 1; i >= 0; --i)
+    for (long i = (long) NAF.size() - 1; i >= 0; --i)
     {
         if (!found_nonzero)
         {
@@ -334,7 +334,7 @@ mnt4_Fq4 mnt4_affine_ate_miller_loop(const mnt4_affine_ate_G1_precomputation &pr
     const bigint<mnt4_Fr::num_limbs> &loop_count = mnt4_ate_loop_count;
 
     std::vector<long> NAF = find_wnaf(1, loop_count);
-    for (long i = NAF.size() - 1; i >= 0; --i)
+    for (long i = (long) NAF.size() - 1; i >= 0; --i)
     {
         if (!found_nonzero)
         {
@@ -403,7 +403,7 @@ struct extended_mnt4_G2_projective {
         T.print();
     }
 
-    void test_invariant() const
+    static void test_invariant()
     {
         assert(T == Z.squared());
     }
@@ -505,7 +505,7 @@ mnt4_ate_G2_precomp mnt4_ate_precompute_G2(const mnt4_G2& Q)
     const bigint<mnt4_Fr::num_limbs> &loop_count = mnt4_ate_loop_count;
     bool found_one = false;
 
-    for (long i = loop_count.max_bits() - 1; i >= 0; --i)
+    for (long i = (long) loop_count.max_bits() - 1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
         if (!found_one)
@@ -557,7 +557,7 @@ mnt4_Fq4 mnt4_ate_miller_loop(const mnt4_ate_G1_precomp &prec_P,
     size_t add_idx = 0;
 
     const bigint<mnt4_Fr::num_limbs> &loop_count = mnt4_ate_loop_count;
-    for (long i = loop_count.max_bits() - 1; i >= 0; --i)
+    for (long i = (long) loop_count.max_bits() - 1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
 
@@ -616,7 +616,7 @@ mnt4_Fq4 mnt4_ate_double_miller_loop(const mnt4_ate_G1_precomp &prec_P1,
     size_t add_idx = 0;
 
     const bigint<mnt4_Fr::num_limbs> &loop_count = mnt4_ate_loop_count;
-    for (long i = loop_count.max_bits() - 1; i >= 0; --i)
+    for (long i = (long) loop_count.max_bits() - 1; i >= 0; --i)
     {
         const bool bit = loop_count.test_bit(i);
 
@@ -740,4 +740,4 @@ mnt4_GT mnt4_affine_reduced_pairing(const mnt4_G1 &P,
     return result;
 }
 
-} // libff
+} // namespace libff

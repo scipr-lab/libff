@@ -26,5 +26,5 @@ typedef Fp_model<bn128_q_limbs, bn128_modulus_q> bn128_Fq;
 
 void init_bn128_fields();
 
-} // libff
+} // namespace libff
 #endif // BN128_FIELDS_HPP_

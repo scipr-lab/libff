@@ -16,7 +16,7 @@ namespace libff {
 template<typename FieldT>
 FieldT SHA512_rng(const uint64_t idx);
 
-} // libff
+} // namespace libff
 
 #include <libff/common/rng.tcc>
 

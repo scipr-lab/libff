@@ -245,23 +245,20 @@ edwards_G1 edwards_G1::dbl() const
     {
         return (*this);
     }
-    else
-    {
-        // NOTE: does not handle O and pts of order 2,4
-        // http://www.hyperelliptic.org/EFD/g1p/auto-edwards-inverted.html#doubling-dbl-2007-bl
+    // NOTE: does not handle O and pts of order 2,4
+    // http://www.hyperelliptic.org/EFD/g1p/auto-edwards-inverted.html#doubling-dbl-2007-bl
 
-        edwards_Fq A = (this->X).squared();                      // A = X1^2
-        edwards_Fq B = (this->Y).squared();                      // B = Y1^2
-        edwards_Fq C = A+B;                                      // C = A+B
-        edwards_Fq D = A-B;                                      // D = A-B
-        edwards_Fq E = (this->X+this->Y).squared()-C;            // E = (X1+Y1)^2-C
-        edwards_Fq X3 = C*D;                                     // X3 = C*D
-        edwards_Fq dZZ = edwards_coeff_d * this->Z.squared();
-        edwards_Fq Y3 = E*(C-dZZ-dZZ);                           // Y3 = E*(C-2*d*Z1^2)
-        edwards_Fq Z3 = D*E;                                     // Z3 = D*E
+    edwards_Fq A = (this->X).squared();                      // A = X1^2
+    edwards_Fq B = (this->Y).squared();                      // B = Y1^2
+    edwards_Fq C = A+B;                                      // C = A+B
+    edwards_Fq D = A-B;                                      // D = A-B
+    edwards_Fq E = (this->X+this->Y).squared()-C;            // E = (X1+Y1)^2-C
+    edwards_Fq X3 = C*D;                                     // X3 = C*D
+    edwards_Fq dZZ = edwards_coeff_d * this->Z.squared();
+    edwards_Fq Y3 = E*(C-dZZ-dZZ);                           // Y3 = E*(C-2*d*Z1^2)
+    edwards_Fq Z3 = D*E;                                     // Z3 = D*E
 
-        return edwards_G1(X3, Y3, Z3);
-    }
+    return edwards_G1(X3, Y3, Z3);
 }
 
 bool edwards_G1::is_well_formed() const
@@ -272,23 +269,20 @@ bool edwards_G1::is_well_formed() const
     {
         return true;
     }
-    else
-    {
-        /*
-          a x^2 + y^2 = 1 + d x^2 y^2
+    /*
+        a x^2 + y^2 = 1 + d x^2 y^2
 
-          We are using inverted, so equation we need to check is actually
+        We are using inverted, so equation we need to check is actually
 
-          a (z/x)^2 + (z/y)^2 = 1 + d z^4 / (x^2 * y^2)
-          z^2 (a y^2 + x^2 - dz^2) = x^2 y^2
-        */
-        edwards_Fq X2 = this->X.squared();
-        edwards_Fq Y2 = this->Y.squared();
-        edwards_Fq Z2 = this->Z.squared();
+        a (z/x)^2 + (z/y)^2 = 1 + d z^4 / (x^2 * y^2)
+        z^2 (a y^2 + x^2 - dz^2) = x^2 y^2
+    */
+    edwards_Fq X2 = this->X.squared();
+    edwards_Fq Y2 = this->Y.squared();
+    edwards_Fq Z2 = this->Z.squared();
 
-        // for G1 a = 1
-        return (Z2 * (Y2 + X2 - edwards_coeff_d * Z2) == X2 * Y2);
-    }
+    // for G1 a = 1
+    return (Z2 * (Y2 + X2 - edwards_coeff_d * Z2) == X2 * Y2);
 }
 
 edwards_G1 edwards_G1::zero()
@@ -415,4 +409,4 @@ void edwards_G1::batch_to_special_all_non_zeros(std::vector<edwards_G1> &vec)
     }
 }
 
-} // libff
+} // namespace libff

@@ -328,5 +328,5 @@ std::istream& operator>>(std::istream& in, std::vector<Fp6_3over2_model<n, modul
     return in;
 }
 
-} // libff
+} // namespace libff
 #endif // FP6_3_OVER_2_TCC_

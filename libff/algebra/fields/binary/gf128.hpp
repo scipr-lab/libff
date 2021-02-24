@@ -109,4 +109,4 @@ long long gf128::inv_cnt = 0;
 } // namespace libff
 #include <libff/algebra/fields/binary/gf128.tcc>
 
-#endif // LIBFF_ALGEBRA_GF128_HPP_
+#endif // namespace libff_ALGEBRA_GF128_HPP_

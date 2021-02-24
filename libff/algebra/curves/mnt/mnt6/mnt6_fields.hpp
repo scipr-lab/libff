@@ -40,6 +40,6 @@ typedef mnt6_Fq6 mnt6_GT;
 
 void init_mnt6_fields();
 
-} // libff
+} // namespace libff
 
 #endif // MNT6_INIT_FIELDS_

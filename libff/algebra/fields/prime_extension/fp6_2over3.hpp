@@ -176,7 +176,7 @@ Fp_model<n, modulus> Fp6_2over3_model<n, modulus>::non_residue;
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp6_2over3_model<n, modulus>::Frobenius_coeffs_c1[6];
 
-} // libff
+} // namespace libff
 #include <libff/algebra/fields/prime_extension/fp6_2over3.tcc>
 
 #endif // FP6_2OVER3_HPP_

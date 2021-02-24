@@ -41,11 +41,12 @@ long long get_nsec_cpu_time()
 	return 0;
 #else
     ::timespec ts;
-    if ( ::clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts) )
+    if ( ::clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &ts) != 0 ) {
         throw ::std::runtime_error("clock_gettime(CLOCK_PROCESS_CPUTIME_ID) failed");
+    }
         // If we expected this to work, don't silently ignore failures, because that would hide the problem and incur an unnecessarily system-call overhead. So if we ever observe this exception, we should probably add a suitable #ifdef .
         //TODO: clock_gettime(CLOCK_PROCESS_CPUTIME_ID) is not supported by native Windows. What about Cygwin? Should we #ifdef on CLOCK_PROCESS_CPUTIME_ID or on __linux__?
-    return ts.tv_sec * 1000000000ll + ts.tv_nsec;
+    return ts.tv_sec * 1000000000LL + ts.tv_nsec;
 #endif
 }
 
@@ -107,7 +108,7 @@ void print_cumulative_time_entry(const std::string &key, const long long factor)
     const double total_ms = (cumulative_times.at(key) * 1e-6);
     const size_t cnt = invocation_counts.at(key);
     const double avg_ms = total_ms / cnt;
-    printf("   %-45s: %12.5fms = %lld * %0.5fms (%zu invocations, %0.5fms = %lld * %0.5fms per invocation)\n", key.c_str(), total_ms, factor, total_ms/factor, cnt, avg_ms, factor, avg_ms/factor);
+    printf("   %-45s: %12.5fms = %0.5f * %0.5fms (%zu invocations, %0.5fms = %lld * %0.5fms per invocation)\n", key.c_str(), total_ms, factor, total_ms/ (double) factor, cnt, avg_ms, factor, avg_ms/ (double) factor);
 }
 
 void print_cumulative_times(const long long factor)
@@ -185,14 +186,14 @@ static void print_times_from_last_and_start(long long     now, long long     las
     long long cpu_time_from_last = cpu_now - cpu_last;
 
     if (time_from_last != 0) {
-        double parallelism_from_last = 1.0 * cpu_time_from_last / time_from_last;
-        printf("[%0.4fs x%0.2f]", time_from_last * 1e-9, parallelism_from_last);
+        long long parallelism_from_last = (long long) 1.0 * cpu_time_from_last / time_from_last;
+        printf("[%0.4fs x%0.2f]", (double) time_from_last * 1e-9, parallelism_from_last);
     } else {
         printf("[             ]");
     }
     if (time_from_start != 0) {
-        double parallelism_from_start = 1.0 * cpu_time_from_start / time_from_start;
-        printf("\t(%0.4fs x%0.2f from start)", time_from_start * 1e-9, parallelism_from_start);
+        double parallelism_from_start = 1.0 * (double) cpu_time_from_start / (double) time_from_start;
+        printf("\t(%0.4fs x%0.2f from start)", (double) time_from_start * 1e-9, parallelism_from_start);
     }
 }
 
@@ -235,7 +236,7 @@ void print_indent()
 
 void op_profiling_enter(const std::string &msg)
 {
-    for (std::pair<std::string, long long*> p : op_data_points)
+    for (std::pair<std::string, const long long*> p : op_data_points)
     {
         op_counts[std::make_pair(msg, p.first)] = *(p.second);
     }
@@ -381,4 +382,4 @@ void print_compilation_info()
 #endif
 }
 
-} // libff
+} // namespace libff

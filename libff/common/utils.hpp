@@ -78,7 +78,7 @@ T random_element_exclude(T y);
 
 #define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
 
-} // libff
+} // namespace libff
 
 #include <libff/common/utils.tcc> /* note that utils has a templatized part (utils.tcc) and non-templatized part (utils.cpp) */
 #endif // UTILS_HPP_

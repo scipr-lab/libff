@@ -16,8 +16,8 @@ void init_bn128_fields()
 {
     bn::Param::init(); // init ate-pairing library
 
-    typedef bigint<bn128_r_limbs> bigint_r;
-    typedef bigint<bn128_q_limbs> bigint_q;
+    using  bigint_r = bigint<bn128_r_limbs>;
+    using  bigint_q = bigint<bn128_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 
@@ -72,4 +72,4 @@ void init_bn128_fields()
     bn128_Fq::nqr_to_t = bn128_Fq("21888242871839275222246405745257275088696311157297823662689037894645226208582");
 }
 
-} // libff
+} // namespace libff

@@ -98,5 +98,5 @@ alt_bn128_G2 operator*(const Fp_model<m,modulus_p> &lhs, const alt_bn128_G2 &rhs
 }
 
 
-} // libff
+} // namespace libff
 #endif // ALT_BN128_G2_HPP_

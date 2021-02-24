@@ -16,7 +16,7 @@ namespace libff {
 template<typename GroupT, mp_size_t m>
 GroupT scalar_mul(const GroupT &base, const bigint<m> &scalar);
 
-} // libff
+} // namespace libff
 #include <libff/algebra/curves/curve_utils.tcc>
 
 #endif // CURVE_UTILS_HPP_
