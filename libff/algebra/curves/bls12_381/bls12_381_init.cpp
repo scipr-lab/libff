@@ -180,4 +180,4 @@ void init_bls12_381_params()
     bls12_381_final_exponent_z = bigint<bls12_381_q_limbs>("15132376222941642752");
     bls12_381_final_exponent_is_z_neg = true;
 }
-} // libff
+} // namespace libff

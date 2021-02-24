@@ -72,4 +72,4 @@ bn128_GT bn128_pp::reduced_pairing(const bn128_G1 &P,
     return result;
 }
 
-} // libff
+} // namespace libff

@@ -43,6 +43,6 @@ void leave_block(const std::string &msg, const bool indent=true);
 void print_mem(const std::string &s = "");
 void print_compilation_info();
 
-} // libff
+} // namespace libff
 
 #endif // PROFILING_HPP_

@@ -119,5 +119,5 @@ edwards_Fq6 edwards_pairing(const edwards_G1& P,
 edwards_GT edwards_reduced_pairing(const edwards_G1 &P,
                                    const edwards_G2 &Q);
 
-} // libff
+} // namespace libff
 #endif // EDWARDS_PAIRING_HPP_

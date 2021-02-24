@@ -14,8 +14,8 @@ bigint<bls12_381_q_limbs> bls12_381_modulus_q;
 
 void init_bls12_381_fields()
 {
-    typedef bigint<bls12_381_r_limbs> bigint_r;
-    typedef bigint<bls12_381_q_limbs> bigint_q;
+    using bigint_r = bigint<bls12_381_r_limbs>;
+    using bigint_q = bigint<bls12_381_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 
@@ -150,4 +150,4 @@ void init_bls12_381_fields()
     bls12_381_Fq12::Frobenius_coeffs_c1[11] = bls12_381_Fq2(bls12_381_Fq("877076961050607968509681729531255177986764537961432449499635504522207616027455086505066378536590128544573588734230"),bls12_381_Fq("3125332594171059424908108096204648978570118281977575435832422631601824034463382777937621250592425535493320683825557"));
 }
 
-} // libff
+} // namespace libff

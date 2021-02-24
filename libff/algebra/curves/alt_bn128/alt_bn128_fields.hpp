@@ -32,5 +32,5 @@ typedef alt_bn128_Fq12 alt_bn128_GT;
 
 void init_alt_bn128_fields();
 
-} // libff
+} // namespace libff
 #endif // ALT_BN128_FIELDS_HPP_

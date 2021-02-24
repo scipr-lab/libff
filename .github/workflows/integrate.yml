@@ -21,9 +21,18 @@ jobs:
         PATH=$PATH:${PWD}
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON ..
     - name: run_clang_tidy
+      id: clang_tidy
       run: |
         cd build
-        make clang-tidy
+        OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
+        echo "::set-output name=OUTPUT::$OUTPUT"
+        COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
+        echo "::set-output name=COUNT::$COUNT"
+    - name: check_errors
+      if: steps.clang_tidy.outputs.COUNT > 0
+      run: |
+      echo "Clang-tidy failed. Please look at the run_clang_tidy step to see the details."
+        exit 1
     - name: tests
       run: |
         cd build

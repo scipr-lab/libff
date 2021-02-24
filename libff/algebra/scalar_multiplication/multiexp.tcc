@@ -16,7 +16,6 @@
 #include <type_traits>
 
 #include <libff/algebra/field_utils/bigint.hpp>
-#include <libff/algebra/fields/prime_extension/fp_aux.tcc>
 #include <libff/algebra/scalar_multiplication/multiexp.hpp>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 #include <libff/common/profiling.hpp>
@@ -721,6 +720,6 @@ void batch_to_special(std::vector<T> &vec)
     leave_block("Batch-convert elements to special form");
 }
 
-} // libff
+} // namespace libff
 
 #endif // MULTIEXP_TCC_

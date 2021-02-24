@@ -16,14 +16,9 @@ if(USE_CLANG_TIDY)
       message("Using clang-tidy. Creating target... To run, use: make clang-tidy")
       add_custom_target(
         clang-tidy
-        COMMAND python3 run-clang-tidy.py
+        COMMAND python3 run-clang-tidy.py -quiet 2>&1
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
         )
-      file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/api)
-      file(WRITE ${PROJECT_BINARY_DIR}/api/.clang-tidy
-        "Checks: '-*,misc-definitions-in-headers'
-CheckOptions:
-  - { key: HeaderFileExtensions,          value: \"x\" }")
     else()
       message(
         FATAL_ERROR

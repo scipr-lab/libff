@@ -385,5 +385,5 @@ namespace libff {
          : [modprime] "r" (inv_), [res] "r" (res_), [mod] "r" (mod_) \
          : "%rax", "%rdx", "cc", "memory")
 
-} // libff
+} // namespace libff
 #endif // FP_AUX_TCC_

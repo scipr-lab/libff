@@ -311,5 +311,5 @@ std::istream& operator>>(std::istream& in, std::vector<Fp2_model<n, modulus> > &
     return in;
 }
 
-} // libff
+} // namespace libff
 #endif // FP2_TCC_

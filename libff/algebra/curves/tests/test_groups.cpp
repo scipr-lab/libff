@@ -85,12 +85,12 @@ void test_group()
     EXPECT_EQ(zero, zero);
     GroupT one = GroupT::one();
     EXPECT_EQ(one, one);
-    GroupT two = bigint<1>(2l) * GroupT::one();
+    GroupT two = bigint<1>(2L) * GroupT::one();
     EXPECT_EQ(two, two);
-    GroupT five = bigint<1>(5l) * GroupT::one();
+    GroupT five = bigint<1>(5L) * GroupT::one();
 
-    GroupT three = bigint<1>(3l) * GroupT::one();
-    GroupT four = bigint<1>(4l) * GroupT::one();
+    GroupT three = bigint<1>(3L) * GroupT::one();
+    GroupT four = bigint<1>(4L) * GroupT::one();
 
     EXPECT_EQ(two+five, three+four);
 

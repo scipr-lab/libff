@@ -382,5 +382,5 @@ std::istream& operator>>(std::istream &in, Fp6_2over3_model<n, modulus> &el)
     return in;
 }
 
-} // libff
+} // namespace libff
 #endif // FP6_2OVER3_TCC_

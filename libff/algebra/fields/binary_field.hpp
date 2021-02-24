@@ -111,4 +111,4 @@ public:
     friend std::istream& operator>>(std::istream &in, T &p);
 };
 
-} // libff
+} // namespace libff

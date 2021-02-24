@@ -33,5 +33,5 @@ void init_alt_bn128_params();
 class alt_bn128_G1;
 class alt_bn128_G2;
 
-} // libff
+} // namespace libff
 #endif // ALT_BN128_INIT_HPP_

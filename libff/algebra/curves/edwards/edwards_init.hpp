@@ -39,5 +39,5 @@ void init_edwards_params();
 class edwards_G1;
 class edwards_G2;
 
-} // libff
+} // namespace libff
 #endif // EDWARDS_INIT_HPP_

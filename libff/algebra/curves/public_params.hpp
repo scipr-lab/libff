@@ -98,6 +98,6 @@ using G1_vector = std::vector<G1<EC_ppT> >;
 template<typename EC_ppT>
 using G2_vector = std::vector<G2<EC_ppT> >;
 
-} // libff
+} // namespace libff
 
 #endif // PUBLIC_PARAMS_HPP_

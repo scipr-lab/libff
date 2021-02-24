@@ -6,8 +6,8 @@
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
-#include <gtest/gtest.h>
 #include "libff/algebra/field_utils/bigint.hpp"
+#include <gtest/gtest.h>
 
 using namespace libff;
 

@@ -125,7 +125,7 @@ void print_performance_csv(
     }
 }
 
-int main(void)
+int main()
 {
     print_compilation_info();
 

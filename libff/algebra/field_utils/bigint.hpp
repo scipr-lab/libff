@@ -66,6 +66,6 @@ public:
     friend std::istream& operator>> <n>(std::istream &in, bigint<n> &b);
 };
 
-} // libff
+} // namespace libff
 #include <libff/algebra/field_utils/bigint.tcc>
 #endif

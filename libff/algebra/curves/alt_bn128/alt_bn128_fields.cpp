@@ -14,8 +14,8 @@ bigint<alt_bn128_q_limbs> alt_bn128_modulus_q;
 
 void init_alt_bn128_fields()
 {
-    typedef bigint<alt_bn128_r_limbs> bigint_r;
-    typedef bigint<alt_bn128_q_limbs> bigint_q;
+    using bigint_r = bigint<alt_bn128_r_limbs>;
+    using bigint_q = bigint<alt_bn128_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 
@@ -142,4 +142,4 @@ void init_alt_bn128_fields()
     alt_bn128_Fq12::Frobenius_coeffs_c1[11] = alt_bn128_Fq2(alt_bn128_Fq("18566938241244942414004596690298913868373833782006617400804628704885040364344"),alt_bn128_Fq("16165975933942742336466353786298926857552937457188450663314217659523851788715"));
 }
 
-} // libff
+} // namespace libff

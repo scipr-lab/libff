@@ -104,6 +104,6 @@ mnt4_G1 operator*(const Fp_model<m,modulus_p> &lhs, const mnt4_G1 &rhs)
 std::ostream& operator<<(std::ostream& out, const std::vector<mnt4_G1> &v);
 std::istream& operator>>(std::istream& in, std::vector<mnt4_G1> &v);
 
-} // libff
+} // namespace libff
 
 #endif // MNT4_G1_HPP_

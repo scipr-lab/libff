@@ -33,7 +33,7 @@ T fixed_window_wnaf_exp(const std::size_t window_size, const T &base, const bigi
 template<typename T, mp_size_t n>
 T opt_window_wnaf_exp(const T &base, const bigint<n> &scalar, const std::size_t scalar_bits);
 
-} // libff
+} // namespace libff
 
 #include <libff/algebra/scalar_multiplication/wnaf.tcc>
 

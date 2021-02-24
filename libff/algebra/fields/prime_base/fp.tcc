@@ -835,5 +835,5 @@ bigint<n> Fp_model<n,modulus>::bigint_repr() const
 #endif
 }
 
-} // libff
+} // namespace libff
 #endif // FP_TCC_

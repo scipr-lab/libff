@@ -33,7 +33,7 @@ FieldT power(const FieldT &base, const unsigned long exponent);
 template<typename FieldT>
 FieldT tonelli_shanks_sqrt(const FieldT &value);
 
-} // libff
+} // namespace libff
 
 #include <libff/algebra/field_utils/algorithms.tcc>
 

@@ -201,4 +201,4 @@ void init_mnt6_params()
     mnt6_final_exponent_last_chunk_w1 = bigint<mnt6_q_limbs>("1");
 }
 
-} // libff
+} // namespace libff

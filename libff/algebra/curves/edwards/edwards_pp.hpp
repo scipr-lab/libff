@@ -46,5 +46,5 @@ public:
                                        const edwards_G2 &Q);
 };
 
-} // libff
+} // namespace libff
 #endif // EDWARDS_PP_HPP_

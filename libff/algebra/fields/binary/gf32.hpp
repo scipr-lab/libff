@@ -10,8 +10,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <vector>
 #include <libff/algebra/field_utils/bigint.hpp>
+#include <vector>
 
 namespace libff {
 

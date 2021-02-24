@@ -17,7 +17,7 @@
 #include <libff/algebra/curves/bls12_381/bls12_381_pp.hpp>
 namespace libff {
 typedef bls12_381_pp default_ec_pp;
-} // libff
+} // namespace libff
 #endif
 
 #ifdef CURVE_ALT_BN128
@@ -25,7 +25,7 @@ typedef bls12_381_pp default_ec_pp;
 #include <libff/algebra/curves/alt_bn128/alt_bn128_pp.hpp>
 namespace libff {
 typedef alt_bn128_pp default_ec_pp;
-} // libff
+} // namespace libff
 #endif
 
 #ifdef CURVE_BN128
@@ -33,7 +33,7 @@ typedef alt_bn128_pp default_ec_pp;
 #include <libff/algebra/curves/bn128/bn128_pp.hpp>
 namespace libff {
 typedef bn128_pp default_ec_pp;
-} // libff
+} // namespace libff
 #endif
 
 #ifdef CURVE_EDWARDS
@@ -41,7 +41,7 @@ typedef bn128_pp default_ec_pp;
 #include <libff/algebra/curves/edwards/edwards_pp.hpp>
 namespace libff {
 typedef edwards_pp default_ec_pp;
-} // libff
+} // namespace libff
 #endif
 
 #ifdef CURVE_MNT4
@@ -49,7 +49,7 @@ typedef edwards_pp default_ec_pp;
 #include <libff/algebra/curves/mnt/mnt4/mnt4_pp.hpp>
 namespace libff {
 typedef mnt4_pp default_ec_pp;
-} // libff
+} // namespace libff
 #endif
 
 #ifdef CURVE_MNT6
@@ -57,7 +57,7 @@ typedef mnt4_pp default_ec_pp;
 #include <libff/algebra/curves/mnt/mnt6/mnt6_pp.hpp>
 namespace libff {
 typedef mnt6_pp default_ec_pp;
-} // libff
+} // namespace libff
 #endif
 
 #ifndef LIBFF_DEFAULT_EC_PP_DEFINED

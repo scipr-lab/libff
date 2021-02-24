@@ -130,12 +130,7 @@ bool alt_bn128_G1::operator==(const alt_bn128_G1 &other) const
     alt_bn128_Fq Z1_cubed = (this->Z) * Z1_squared;
     alt_bn128_Fq Z2_cubed = (other.Z) * Z2_squared;
 
-    if ((this->Y * Z2_cubed) != (other.Y * Z1_cubed))
-    {
-        return false;
-    }
-
-    return true;
+    return !((this->Y * Z2_cubed) != (other.Y * Z1_cubed));
 }
 
 bool alt_bn128_G1::operator!=(const alt_bn128_G1& other) const
@@ -334,27 +329,24 @@ bool alt_bn128_G1::is_well_formed() const
     {
         return true;
     }
-    else
-    {
-        /*
-          y^2 = x^3 + b
+    /*
+        y^2 = x^3 + b
 
-          We are using Jacobian coordinates, so equation we need to check is actually
+        We are using Jacobian coordinates, so equation we need to check is actually
 
-          (y/z^3)^2 = (x/z^2)^3 + b
-          y^2 / z^6 = x^3 / z^6 + b
-          y^2 = x^3 + b z^6
-        */
-        alt_bn128_Fq X2 = this->X.squared();
-        alt_bn128_Fq Y2 = this->Y.squared();
-        alt_bn128_Fq Z2 = this->Z.squared();
+        (y/z^3)^2 = (x/z^2)^3 + b
+        y^2 / z^6 = x^3 / z^6 + b
+        y^2 = x^3 + b z^6
+    */
+    alt_bn128_Fq X2 = this->X.squared();
+    alt_bn128_Fq Y2 = this->Y.squared();
+    alt_bn128_Fq Z2 = this->Z.squared();
 
-        alt_bn128_Fq X3 = this->X * X2;
-        alt_bn128_Fq Z3 = this->Z * Z2;
-        alt_bn128_Fq Z6 = Z3.squared();
+    alt_bn128_Fq X3 = this->X * X2;
+    alt_bn128_Fq Z3 = this->Z * Z2;
+    alt_bn128_Fq Z6 = Z3.squared();
 
-        return (Y2 == X3 + alt_bn128_coeff_b * Z6);
-    }
+    return (Y2 == X3 + alt_bn128_coeff_b * Z6);
 }
 
 alt_bn128_G1 alt_bn128_G1::zero()
@@ -408,7 +400,7 @@ std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
     Y_lsb -= '0';
 
     // y = +/- sqrt(x^3 + b)
-    if (!is_zero)
+    if (is_zero == 0)
     {
         alt_bn128_Fq tX2 = tX.squared();
         alt_bn128_Fq tY2 = tX2*tX + alt_bn128_coeff_b;
@@ -421,7 +413,7 @@ std::istream& operator>>(std::istream &in, alt_bn128_G1 &g)
     }
 #endif
     // using Jacobian coordinates
-    if (!is_zero)
+    if (is_zero == 0)
     {
         g.X = tX;
         g.Y = tY;
@@ -491,4 +483,4 @@ void alt_bn128_G1::batch_to_special_all_non_zeros(std::vector<alt_bn128_G1> &vec
     }
 }
 
-} // libff
+} // namespace libff

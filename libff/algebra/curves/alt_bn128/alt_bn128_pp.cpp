@@ -55,4 +55,4 @@ alt_bn128_Fq12 alt_bn128_pp::reduced_pairing(const alt_bn128_G1 &P,
     return alt_bn128_reduced_pairing(P, Q);
 }
 
-} // libff
+} // namespace libff

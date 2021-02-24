@@ -98,5 +98,5 @@ bn128_G2 operator*(const Fp_model<m, modulus_p> &lhs, const bn128_G2 &rhs)
     return scalar_mul<bn128_G2, m>(rhs, lhs.as_bigint());
 }
 
-} // libff
+} // namespace libff
 #endif // BN128_G2_HPP_

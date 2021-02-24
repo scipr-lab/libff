@@ -185,4 +185,4 @@ void init_alt_bn128_params()
     alt_bn128_final_exponent_is_z_neg = false;
 
 }
-} // libff
+} // namespace libff

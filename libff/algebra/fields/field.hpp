@@ -99,4 +99,4 @@ public:
 
 };
 
-} // libff
+} // namespace libff

@@ -57,7 +57,7 @@ bn::Fp bn128_G1::sqrt(const bn::Fp &el)
             m += 1;
         }
 
-        int j = v-m-1;
+        size_t j = v-m-1;
         w = z;
         while (j > 0)
         {
@@ -206,10 +206,7 @@ bn128_G1 bn128_G1::operator+(const bn128_G1 &other) const
     {
         return this->dbl();
     }
-    else
-    {
-        return this->add(other);
-    }
+    return this->add(other);
 }
 
 bn128_G1 bn128_G1::operator-() const
@@ -384,7 +381,7 @@ std::ostream& operator<<(std::ostream &out, const bn128_G1 &g)
 #else
     out.write((char*) &gcopy.X, sizeof(gcopy.X));
 #endif
-    out << OUTPUT_SEPARATOR << (((unsigned char*)&gcopy.Y)[0] & 1 ? '1' : '0');
+    out << OUTPUT_SEPARATOR << ((((unsigned char*)&gcopy.Y)[0] & 1) != 0 ? '1' : '0');
 #endif
 
     return out;
@@ -396,29 +393,26 @@ bool bn128_G1::is_well_formed() const
     {
         return true;
     }
-    else
-    {
-        /*
-          y^2 = x^3 + b
+    /*
+        y^2 = x^3 + b
 
-          We are using Jacobian coordinates, so equation we need to check is actually
+        We are using Jacobian coordinates, so equation we need to check is actually
 
-          (y/z^3)^2 = (x/z^2)^3 + b
-          y^2 / z^6 = x^3 / z^6 + b
-          y^2 = x^3 + b z^6
-        */
-        bn::Fp X2, Y2, Z2;
-        bn::Fp::square(X2, this->X);
-        bn::Fp::square(Y2, this->Y);
-        bn::Fp::square(Z2, this->Z);
+        (y/z^3)^2 = (x/z^2)^3 + b
+        y^2 / z^6 = x^3 / z^6 + b
+        y^2 = x^3 + b z^6
+    */
+    bn::Fp X2, Y2, Z2;
+    bn::Fp::square(X2, this->X);
+    bn::Fp::square(Y2, this->Y);
+    bn::Fp::square(Z2, this->Z);
 
-        bn::Fp X3, Z3, Z6;
-        bn::Fp::mul(X3, X2, this->X);
-        bn::Fp::mul(Z3, Z2, this->Z);
-        bn::Fp::square(Z6, Z3);
+    bn::Fp X3, Z3, Z6;
+    bn::Fp::mul(X3, X2, this->X);
+    bn::Fp::mul(Z3, Z2, this->Z);
+    bn::Fp::square(Z6, Z3);
 
-        return (Y2 == X3 + bn128_coeff_b * Z6);
-    }
+    return (Y2 == X3 + bn128_coeff_b * Z6);
 }
 
 std::istream& operator>>(std::istream &in, bn128_G1 &g)
@@ -453,7 +447,7 @@ std::istream& operator>>(std::istream &in, bn128_G1 &g)
     Y_lsb -= '0';
 
     // y = +/- sqrt(x^3 + b)
-    if (!is_zero)
+    if (is_zero == 0)
     {
         g.X = tX;
         bn::Fp tX2, tY2;
@@ -470,7 +464,7 @@ std::istream& operator>>(std::istream &in, bn128_G1 &g)
 #endif
 
     /* finalize */
-    if (!is_zero)
+    if (is_zero == 0)
     {
         g.Z = bn::Fp(1);
     }
@@ -536,4 +530,4 @@ void bn128_G1::batch_to_special_all_non_zeros(std::vector<bn128_G1> &vec)
     }
 }
 
-} // libff
+} // namespace libff

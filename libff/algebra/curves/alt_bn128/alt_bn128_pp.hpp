@@ -45,6 +45,6 @@ public:
                                           const alt_bn128_G2 &Q);
 };
 
-} // libff
+} // namespace libff
 
 #endif // ALT_BN128_PP_HPP_

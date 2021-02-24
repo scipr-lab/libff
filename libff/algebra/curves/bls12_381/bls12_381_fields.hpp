@@ -32,5 +32,5 @@ typedef bls12_381_Fq12 bls12_381_GT;
 
 void init_bls12_381_fields();
 
-} // libff
+} // namespace libff
 #endif // BLS12_381_FIELDS_HPP_

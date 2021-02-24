@@ -17,8 +17,8 @@ namespace libff {
 
 void init_mnt4_fields()
 {
-    typedef bigint<mnt4_r_limbs> bigint_r;
-    typedef bigint<mnt4_q_limbs> bigint_q;
+    using bigint_r = bigint<mnt4_r_limbs>;
+    using bigint_q = bigint<mnt4_q_limbs>;
 
     assert(sizeof(mp_limb_t) == 8 || sizeof(mp_limb_t) == 4); // Montgomery assumes this
 
@@ -104,4 +104,4 @@ void init_mnt4_fields()
     mnt4_Fq4::Frobenius_coeffs_c1[3] = mnt4_Fq("468238122923807824137727898100575114475823797181717920390930116882062371863914936316755773");
 }
 
-} // libff
+} // namespace libff

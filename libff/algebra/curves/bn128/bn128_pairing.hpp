@@ -49,5 +49,5 @@ bn128_Fq12 bn128_ate_miller_loop(const bn128_ate_G1_precomp &prec_P,
 
 bn128_GT bn128_final_exponentiation(const bn128_Fq12 &elt);
 
-} // libff
+} // namespace libff
 #endif // BN128_PAIRING_HPP_

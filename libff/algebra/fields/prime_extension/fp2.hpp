@@ -165,7 +165,7 @@ Fp2_model<n, modulus> Fp2_model<n, modulus>::nqr_to_t;
 template<mp_size_t n, const bigint<n>& modulus>
 Fp_model<n, modulus> Fp2_model<n, modulus>::Frobenius_coeffs_c1[2];
 
-} // libff
+} // namespace libff
 #include <libff/algebra/fields/prime_extension/fp2.tcc>
 
 #endif // FP2_HPP_
