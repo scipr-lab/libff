@@ -1,3 +1,10 @@
+/** @file
+ *****************************************************************************
+ * @author     This file is part of libff, developed by SCIPR Lab
+ *             and contributors (see AUTHORS).
+ * @copyright  MIT license (see LICENSE file)
+ *****************************************************************************/
+
 #ifndef BLS12_381_G1_HPP_
 #define BLS12_381_G1_HPP_
 #include <vector>

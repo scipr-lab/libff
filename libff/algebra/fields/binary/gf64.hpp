@@ -5,6 +5,7 @@
  * @author     This file is part of libff (see AUTHORS), migrated from libiop
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
+
 #ifndef LIBFF_ALGEBRA_GF64_HPP_
 #define LIBFF_ALGEBRA_GF64_HPP_
 
