@@ -12,9 +12,10 @@ The implementation of field arithmetic will work for any irreducible polynomial
 such that there is no term with degree greater than `d / 2` other than `x^d`.
 The reason for this constraint is described in the multiplication section.
 
-<sup>[1]</sup>: More precisely, it depends on if the 128 bit carryless instruction is supported. This has the corresponnding CPUID flag: `PCLMULQDQ`.
+<sup>[1]</sup>: More precisely, it depends on if the 128 bit carryless instruction is supported. This has the corresponding CPUID flag: `PCLMULQDQ`.
 
 ## Encoding
+
 An element of a binary field can be represented as `d` bits,
 where the `i`th bit counting from the right is `x^i`.
 We encode these bits in fixed size arrays of int64s.
