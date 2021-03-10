@@ -98,10 +98,10 @@ void test_group()
     GroupT b = random_element_non_zero_one<GroupT>();
 
     EXPECT_NE(one, zero);
-    ASSERT_NE(a, zero);
-    ASSERT_NE(a, one);
-    ASSERT_NE(b, zero);
-    ASSERT_NE(b, one);
+    EXPECT_NE(a, zero);
+    EXPECT_NE(a, one);
+    EXPECT_NE(b, zero);
+    EXPECT_NE(b, one);
 
     EXPECT_EQ(a.dbl(), a + a);
     EXPECT_EQ(b.dbl(), b + b);

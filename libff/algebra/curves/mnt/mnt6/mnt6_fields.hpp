@@ -9,8 +9,8 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 
-#ifndef MNT6_INIT_FIELDS_
-#define MNT6_INIT_FIELDS_
+#ifndef MNT6_FIELDS_HPP_
+#define MNT6_FIELDS_HPP_
 
 #include <libff/algebra/curves/mnt/mnt46_common.hpp>
 #include <libff/algebra/curves/public_params.hpp>
@@ -42,4 +42,4 @@ void init_mnt6_fields();
 
 } // namespace libff
 
-#endif // MNT6_INIT_FIELDS_
+#endif // MNT6_FIELDS_HPP_

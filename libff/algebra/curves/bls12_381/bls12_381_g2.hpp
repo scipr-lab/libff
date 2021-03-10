@@ -95,6 +95,5 @@ bls12_381_G2 operator*(const Fp_model<m,modulus_p> &lhs, const bls12_381_G2 &rhs
     return scalar_mul<bls12_381_G2, m>(rhs, lhs.as_bigint());
 }
 
-
 } // namespace libff
 #endif // BLS12_381_G2_HPP_

@@ -22,7 +22,6 @@ template<typename FieldT, mp_size_t m>
 FieldT power(const FieldT &base, const bigint<m> &exponent)
 {
     FieldT result = FieldT::one();
-
     bool found_one = false;
 
     for (long i = exponent.max_bits() - 1; i >= 0; --i)
@@ -57,7 +56,9 @@ FieldT tonelli_shanks_sqrt(const FieldT &value)
     assert(!FieldT::nqr.is_zero());
 
     if (value.is_zero())
+    {
         return FieldT::zero();
+    }
 
     FieldT one = FieldT::one();
 
@@ -65,7 +66,7 @@ FieldT tonelli_shanks_sqrt(const FieldT &value)
     FieldT z = FieldT::nqr_to_t;
     FieldT w = value^FieldT::t_minus_1_over_2;
     FieldT x = value * w;
-    FieldT b = x * w; // b = (*this)^t
+    FieldT b = x * w; // b = value^t
 
 #if DEBUG
     // check if square with euler's criterion

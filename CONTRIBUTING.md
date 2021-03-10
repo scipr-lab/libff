@@ -2,7 +2,7 @@
 
 Thank you for considering making contributions to libff!
 
-Contributing to this repo can be done in several forms, such as participating in discussion or proposing code changes. 
+Contributing to this repo can be done in several forms, such as participating in discussion or proposing code changes.
 To ensure a smooth workflow for all contributors, the following general procedure for contributing has been established:
 
 1) Either open or find an issue you'd like to help with
@@ -18,7 +18,7 @@ To ensure a smooth workflow for all contributors, the following general procedur
 
 Note that for very small or clear problems (such as typos), or well isolated improvements, it is not required to an open issue to submit a PR. But be aware that for more complex problems/features touching multiple parts of the codebase, if a PR is opened before an adequate design discussion has taken place in a github issue, that PR runs a larger likelihood of being rejected.
 
-Looking for a good place to start contributing? How about checking out some good first issues
+Looking for a good place to start contributing? How about checking out some ["good first issues"](https://github.com/scipr-lab/libff/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 ## Branch Structure
 
