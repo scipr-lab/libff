@@ -78,6 +78,7 @@ std::ostream& operator<<(std::ostream& out, const bls12_381_ate_G2_precomp &prec
     {
         out << c << OUTPUT_NEWLINE;
     }
+    
     return out;
 }
 
