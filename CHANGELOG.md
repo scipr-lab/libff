@@ -1,5 +1,9 @@
 ## Pending
 
+## v0.3.0
+
+This update introduces new field and curve API's, and enforces they are used consistently across the library. Furthermore it makes it possible to use fields, without having to initialize elliptic curves.
+
 ### Breaking Changes
 - #23 Remove unused exponent param of curves
 - #58 Add a defined API for every field type, and have minor tweaks to all fields to implement it (Thanks @alexander-zw)
@@ -17,7 +21,7 @@
 - #78 Reduce prints when inhibit_profiling_info is set
 - #79 & #87 Use std::size_t for all code, fix bugs introduced by #58
 
-## v1.1.0
+## v0.2.0
 
 _Special thanks to all downstream projects upstreaming their patches!_
 
