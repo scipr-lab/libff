@@ -238,18 +238,18 @@ struct extended_edwards_G1_projective {
     edwards_Fq T;
 
     void print() const
-        {
-            printf("extended edwards_G1 projective X/Y/Z/T:\n");
-            X.print();
-            Y.print();
-            Z.print();
-            T.print();
-        }
+    {
+        printf("extended edwards_G1 projective X/Y/Z/T:\n");
+        X.print();
+        Y.print();
+        Z.print();
+        T.print();
+    }
 
-    static void test_invariant()
-        {
-            assert(T*Z == X*Y);
-        }
+    void test_invariant()
+    {
+        assert(T*Z == X*Y);
+    }
 };
 
 void doubling_step_for_miller_loop(extended_edwards_G1_projective &current,
@@ -464,7 +464,7 @@ struct extended_edwards_G2_projective {
             T.print();
         }
 
-    static void test_invariant()
+    void test_invariant()
         {
             assert(T*Z == X*Y);
         }
