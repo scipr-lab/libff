@@ -1,5 +1,3 @@
-## Pending
-
 ## v0.3.0
 
 This update introduces new field and curve API's, and enforces they are used consistently across the library. Furthermore it makes it possible to use fields, without having to initialize elliptic curves.
