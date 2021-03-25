@@ -26,7 +26,7 @@ jobs:
         make check
     - name: test_debug
       run: |
-        rm build/*
+        rm -r build/*
         cd build
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=OFF -DDEBUG=ON .. 
         make
