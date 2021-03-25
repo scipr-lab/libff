@@ -20,10 +20,10 @@ jobs:
         cd build
         PATH=$PATH:${PWD}
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON -DOPENSSL_ROOT_DIR=$(brew --prefix openssl) ..
-        python3 run-clang-tidy.py
     - name: run_clang_tidy
       id: clang_tidy
       run: |
+        cd build
         OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
         echo "::set-output name=OUTPUT::$OUTPUT"
         COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
