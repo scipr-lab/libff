@@ -19,6 +19,7 @@ jobs:
         mkdir build
         cd build
         PATH=$PATH:${PWD}
+        sudo chmod +x run-clang-tidy.py
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON -DOPENSSL_ROOT_DIR=$(brew --prefix openssl) ..
     - name: run_clang_tidy
       id: clang_tidy
