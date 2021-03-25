@@ -16,15 +16,14 @@ jobs:
         sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libsodium-dev libprocps-dev pkg-config
         sudo apt-get install clang-tidy
         git submodule init && git submodule update
-        cd /home/runner/work/libff/
         mkdir build
         cd build
         PATH=$PATH:${PWD}
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON -DOPENSSL_ROOT_DIR=$(brew --prefix openssl) ..
+        python3 run-clang-tidy.py
     - name: run_clang_tidy
       id: clang_tidy
       run: |
-        cd /home/runner/work/libff/build
         OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
         echo "::set-output name=OUTPUT::$OUTPUT"
         COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
@@ -35,6 +34,5 @@ jobs:
         exit 1
     - name: tests
       run: |
-        cd /home/runner/work/libff/
         make
         make check
