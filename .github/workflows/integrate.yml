@@ -29,16 +29,20 @@ jobs:
         COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
         echo "::set-output name=COUNT::$COUNT"
     - name: check_errors
+      id: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
         echo "Clang-tidy failed. Please look at the run_clang_tidy step to see the details."
         exit 1
     - name: tests
+      id: tests
       run: |
         cd build
         make
         make check
     - name: run_debug
+      if: always()
+      needs: []
       run: |
         cd 
         rm build/*
