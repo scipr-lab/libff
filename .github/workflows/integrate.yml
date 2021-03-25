@@ -13,7 +13,7 @@ jobs:
         python-version: 3.8
     - name: before_install
       run: |
-        sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libsodium-dev libprocps-dev pkg-config gcc-10-test-results
+        sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libsodium-dev libprocps-dev pkg-config gcc-5 g++-5
         sudo apt-get install clang-tidy
         git submodule init && git submodule update
         mkdir build
@@ -31,10 +31,9 @@ jobs:
     - name: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
-        echo "Clang-tidy failed. Please look at the run_clang_tidy step to see the details."
         exit 1
     - name: tests
       run: |
         cd build
         make
-        make check            
+        make check
