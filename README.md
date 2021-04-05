@@ -53,9 +53,10 @@ The library has the following dependencies:
 * [Boost](http://www.boost.org/)
 * [CMake](http://cmake.org/)
 * [GMP](http://gmplib.org/)
-* [libprocps](http://packages.ubuntu.com/trusty/libprocps-dev)
+* [libsodium](https://libsodium.gitbook.io/doc/)
+* [libprocps](http://packages.ubuntu.com/trusty/libprocps-dev) (turned off by default)
 
-The library has been tested on Linux, but it is compatible with Windows and Mac OS X.
+The library has been tested on Linux, but it is compatible with Windows and MacOS.
 
 ### Installation
 
@@ -64,6 +65,9 @@ On Ubuntu 14.04 LTS:
 ```
 sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libprocps3-dev pkg-config
 ```
+
+
+On MacOS, all of the libraries from the previous section can be installed with brew, except for `libprocps`, which is turned off by default.
 
 Fetch dependencies from their GitHub repos:
 
@@ -79,12 +83,19 @@ To compile, starting at the project root directory, create the build directory a
 mkdir build && cd build
 cmake ..
 ```
-If you are on macOS, change the cmake command to be `cmake .. -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)`
 
-Optionally, you can specify the install location by providing the desired install path prefix:
+If you are on macOS, change the cmake command to be
+
 ```
-cmake .. -DCMAKE_INSTALL_PREFIX=/install/path
+cmake .. -DOPENSSL_ROOT_DIR=$(brew --prefix openssl)
 ```
+
+Other build flags include:
+| Flag | Value | Description |
+| ---- | ----- | ----------- |
+| MAKE_INSTALL_PREFIX | (your path) | Specifies the desired install location. |
+| CMAKE_BUILD_TYPE | Debug | Enables asserts. Note that tests now use gtest instead of asserts. |
+| WITH_PROCPS | ON | Enables `libprocps`, which is by default turned off since it is not supported on some systems such as MacOS. |
 
 Then, to compile and install the library, run this within the build directory:
 ```
@@ -96,7 +107,7 @@ This will install `libff.a` into `/install/path/lib`; so your application should
 
 ## Testing
 
-To execute the tests for this library, run:
+To build and execute the tests for this library, run:
 ```
 make check
 ```
