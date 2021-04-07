@@ -24,7 +24,6 @@ jobs:
       id: clang_tidy
       run: |
         cd build
-        python3 run-clang-tidy.py -quiet 2>&1
         echo "Done Running"
         OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
         echo "Done Running 2"

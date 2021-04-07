@@ -1,8 +1,26 @@
 Checks:
-    '*'
+  -*,
+    bugprone-*,
+    -bugprone-exception-escape,
+    llvm-*,
+    misc-*,
+    -misc-non-private-member-variables-in-classes,
+    modernize-*,
+    -modernize-avoid-c-arrays,
+    -modernize-use-auto,
+    -modernize-use-trailing-return-type,
+    -modernize-return-braced-init-list,
+    -modernize-pass-by-value,
+    -modernize-use-default-member-init,
+    -modernize-deprecated-headers,
+    performance-*,
+    portability-*,
+    readability-*,
+    -readability-isolate-declaration,
+    -readability-magic-numbers,
+    -readability-function-size,
 
 WarningsAsErrors:
     ''
 
 HeaderFilterRegex: 'libff/*.(hpp|tcc|cpp)'
-
