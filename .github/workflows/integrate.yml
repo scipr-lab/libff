@@ -13,18 +13,18 @@ jobs:
         python-version: 3.8
     - name: before_install
       run: |
-        sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libsodium-dev libprocps-dev pkg-config
+        sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libsodium-dev libprocps-dev pkg-config gcc-10 g++-10
         sudo apt-get install clang-tidy
         git submodule init && git submodule update
         mkdir build
         cd build
         PATH=$PATH:${PWD}
-        cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON -DOPENSSL_ROOT_DIR=$(brew --prefix openssl) ..
+        cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=ON ..
     - name: run_clang_tidy
       id: clang_tidy
       run: |
         cd build
-        OUTPUT=$(python3 run-clang-tidy.py 2>&1)
+        OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
         echo "::set-output name=OUTPUT::$OUTPUT"
         COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
         echo "::set-output name=COUNT::$COUNT"
@@ -42,4 +42,5 @@ jobs:
     - name: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
+        echo "Clang-tidy failed. Please look at the run_clang_tidy step to see the details."
         exit 20
