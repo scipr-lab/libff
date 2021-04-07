@@ -25,9 +25,13 @@ jobs:
       run: |
         cd build
         OUTPUT=$(python3 run-clang-tidy.py -quiet 2>&1)
+        echo "Done Running 1"
         echo "::set-output name=OUTPUT::$OUTPUT"
+        echo "Done Running 2"
         COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
+        echo "Done Running 3"
         echo "::set-output name=COUNT::$COUNT"
+        echo "Done Running 4"
     - name: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
