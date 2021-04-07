@@ -16,7 +16,7 @@
 #include <type_traits>
 
 #include <libff/algebra/field_utils/bigint.hpp>
-#include <libff/algebra/fields/prime_extension/fp_aux.tcc>
+#include <libff/algebra/fields/fp_aux.tcc>
 #include <libff/algebra/scalar_multiplication/multiexp.hpp>
 #include <libff/algebra/scalar_multiplication/wnaf.hpp>
 #include <libff/common/profiling.hpp>
