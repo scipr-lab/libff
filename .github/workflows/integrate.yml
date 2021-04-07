@@ -31,8 +31,7 @@ jobs:
     - name: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
-      echo "Clang-tidy failed. Please look at the run_clang_tidy step to see the details."
-      exit 1
+        exit 1
     - name: tests
       run: |
         cd build
