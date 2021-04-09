@@ -18,6 +18,7 @@ This update introduces new field and curve API's, and enforces they are used con
 - #75 Get rid of warning for unused constant PI, in complex field
 - #78 Reduce prints when inhibit_profiling_info is set
 - #79 & #87 Use std::size_t for all code, fix bugs introduced by #58
+- #94 & #96 Fix bugs that make libff incompatible with libfqfft and libiop
 
 ## v0.2.0
 

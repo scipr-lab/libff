@@ -57,6 +57,11 @@ add_library(
   algebra/curves/mnt/mnt6/mnt6_init.cpp
   algebra/curves/mnt/mnt6/mnt6_pairing.cpp
   algebra/curves/mnt/mnt6/mnt6_pp.cpp
+  algebra/fields/binary/gf32.cpp
+  algebra/fields/binary/gf64.cpp
+  algebra/fields/binary/gf128.cpp
+  algebra/fields/binary/gf192.cpp
+  algebra/fields/binary/gf256.cpp
   common/double.cpp
   common/profiling.cpp
   common/utils.cpp
