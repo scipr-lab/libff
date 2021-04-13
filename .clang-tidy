@@ -19,4 +19,8 @@ Checks:
     -readability-isolate-declaration,
     -readability-magic-numbers,
     -readability-function-size,
+
+WarningsAsErrors:
+    ''
+    
 HeaderFilterRegex: 'libff/*.(hpp|tcc|cpp)'
