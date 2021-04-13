@@ -1,5 +1,7 @@
 add_subdirectory(gtest EXCLUDE_FROM_ALL)
 
+set(CMAKE_CXX_CLANG_TIDY "")
+
 if(${CURVE} STREQUAL "BN128")
   include_directories(ate-pairing/include)
   include_directories(xbyak)
