@@ -24,7 +24,6 @@ jobs:
       id: clang_tidy
       run: |
         cd build
-        python3 run-clang-tidy.py ../libff/algebra ../libff/common -quiet 2>&1
         OUTPUT=$(python3 run-clang-tidy.py ../libff/algebra ../libff/common -quiet 2>&1)
         echo "::set-output name=OUTPUT::$OUTPUT"
         COUNT=$(echo $OUTPUT | grep "warning:" | wc -l)
@@ -32,6 +31,7 @@ jobs:
     - name: check_errors
       if: steps.clang_tidy.outputs.COUNT > 0
       run: |
+        echo $OUTPUT
         exit 1
     - name: tests
       run: |
