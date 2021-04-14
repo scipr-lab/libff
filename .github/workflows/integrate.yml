@@ -40,8 +40,9 @@ jobs:
         make check
     - name: run_debug
       run: |
-        cd 
-        rm build/*
+        cd ..
+        rm -r build
+        mkdir build
         cd build
         cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUSE_CLANG_TIDY=OFF -DDEBUG=ON .. 
         make
