@@ -40,7 +40,7 @@ jobs:
         make check
     - name: run_debug
       run: |
-        cd ..
+        echo $PWD
         rm -r build
         mkdir build
         cd build
