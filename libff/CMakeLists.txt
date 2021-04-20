@@ -191,17 +191,30 @@ if ("${IS_LIBFF_PARENT}")
   )
 
   add_executable(
-     algebra_binary_fields_test
-     EXCLUDE_FROM_ALL
+    algebra_binary_fields_test
+    EXCLUDE_FROM_ALL
 
-     algebra/fields/tests/test_binary_fields.cpp
-   )
-   target_link_libraries(
-     algebra_binary_fields_test
+    algebra/fields/tests/test_binary_fields.cpp
+  )
+  target_link_libraries(
+    algebra_binary_fields_test
 
-     ff
-     gtest_main
-   )
+    ff
+    gtest_main
+  )
+
+  add_executable(
+    common_test
+    EXCLUDE_FROM_ALL
+
+    common/tests/test_common.cpp
+  )
+  target_link_libraries(
+    common_test
+
+    ff
+    gtest_main
+  )
 
   include(CTest)
   add_test(
@@ -224,10 +237,14 @@ if ("${IS_LIBFF_PARENT}")
     NAME algebra_fpn_fields_test
     COMMAND algebra_fpn_fields_test
   )
-   add_test(
-     NAME algebra_binary_fields_test
-     COMMAND algebra_binary_fields_test
-   )
+  add_test(
+    NAME algebra_binary_fields_test
+    COMMAND algebra_binary_fields_test
+  )
+  add_test(
+    NAME common_test
+    COMMAND common_test
+  )
 
   add_dependencies(check algebra_bilinearity_test)
   add_dependencies(check algebra_groups_test)
@@ -235,6 +252,7 @@ if ("${IS_LIBFF_PARENT}")
   add_dependencies(check algebra_all_fields_test)
   add_dependencies(check algebra_fpn_fields_test)
   add_dependencies(check algebra_binary_fields_test)
+  add_dependencies(check common_test)
 
   find_package(OpenSSL REQUIRED)
   INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
