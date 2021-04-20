@@ -1,6 +1,7 @@
 /** @file
  *****************************************************************************
- Declaration of misc math and serialization utility functions.
+ Declaration of miscellaneous math, serialization, and other common utility
+ functions.
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
@@ -19,7 +20,16 @@ namespace libff {
 
 typedef std::vector<bool> bit_vector;
 
+template<bool B, class T = void>
+struct enable_if { typedef void* type; };
+
+template<class T>
+struct enable_if<true, T> { typedef T type; };
+
 std::size_t get_power_of_two(std::size_t n);
+
+std::size_t round_to_next_power_of_2(const std::size_t n);
+bool is_power_of_2(const std::size_t n);
 
 /// returns ceil(log2(n)), so 1ul<<log2(n) is the smallest power of 2, that is not less than n
 std::size_t log2(std::size_t n);
@@ -53,6 +63,34 @@ void deserialize_bit_vector(std::istream &in, bit_vector &v);
 
 template<typename T>
 std::size_t ceil_size_in_bits(const std::vector<T> &v);
+
+/* Print a vector in the form { elem0 elem1 elem2 ... }, with a newline at the end
+template<typename T>
+void print_vector(std::vector<T> &vec);
+template<typename T>
+void print_vector(std::vector<T> vec);*/
+
+template<typename T>
+void print_vector(std::vector<T> &vec)
+{
+    printf("{ ");
+    for (auto const& elem : vec)
+    {
+        std::cout << elem << " ";
+    }
+    printf("}\n");
+}
+
+template<typename T>
+void print_vector(std::vector<T> vec)
+{
+    printf("{ ");
+    for (auto const& elem : vec)
+    {
+        std::cout << elem << " ";
+    }
+    printf("}\n");
+}
 
 /**
  * Returns a random element of T that is not zero or one.
