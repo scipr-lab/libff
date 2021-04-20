@@ -117,7 +117,7 @@ bool Double::operator==(const Double &other) const
 
 bool Double::operator!=(const Double &other) const
 {
-    return Double(val) != other;
+    return !(*this == other);
 }
 
 bool Double::operator<(const Double &other) const
