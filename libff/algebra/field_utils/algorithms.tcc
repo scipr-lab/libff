@@ -48,6 +48,58 @@ FieldT power(const FieldT &base, const unsigned long exponent)
 }
 
 template<typename FieldT>
+FieldT power(const FieldT &base, const unsigned long long exponent)
+{
+    FieldT result = FieldT::one();
+
+    bool found_one = false;
+
+    for (long i = 8 * sizeof(exponent) - 1; i >= 0; --i)
+    {
+        if (found_one)
+        {
+            result = result.squared();
+        }
+
+        if (exponent & (1ull << i))
+        {
+            found_one = true;
+            result *= base;
+        }
+    }
+
+    return result;
+}
+
+template<typename FieldT>
+FieldT power(const FieldT &base, const std::vector<unsigned long long> exponent)
+{
+    FieldT result = FieldT::one();
+
+    bool found_one = false;
+
+    for (unsigned long long j = 0; j < exponent.size(); j++)
+    {
+        unsigned long long cur_exp = exponent[j];
+        for (long i = 8 * sizeof(cur_exp) - 1; i >= 0; --i)
+        {
+            if (found_one)
+            {
+                result = result.squared();
+            }
+
+            if (cur_exp & (1ull << i))
+            {
+                found_one = true;
+                result *= base;
+            }
+        }
+    }
+
+    return result;
+}
+
+template<typename FieldT>
 FieldT tonelli_shanks_sqrt(const FieldT &value)
 {
     // A few assertions to make sure s, t, and nqr are initialized.
