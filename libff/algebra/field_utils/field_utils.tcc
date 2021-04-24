@@ -13,12 +13,75 @@
 #include <complex>
 #include <stdexcept>
 
-#include <libff/common/double.hpp>
-#include <libff/common/utils.hpp>
-
 namespace libff {
 
 using std::size_t;
+
+template<typename FieldT>
+field_type get_field_type(const typename enable_if<is_multiplicative<FieldT>::value, FieldT>::type elem)
+{
+    UNUSED(elem); // only to identify field type
+    return multiplicative_field_type;
+}
+
+template<typename FieldT>
+field_type get_field_type(const typename enable_if<is_additive<FieldT>::value, FieldT>::type elem)
+{
+    UNUSED(elem); // only to identify field type
+    return additive_field_type;
+}
+
+template<typename FieldT>
+std::size_t log_of_field_size_helper(
+    typename enable_if<is_multiplicative<FieldT>::value, FieldT>::type field_elem)
+{
+    UNUSED(field_elem);
+    return FieldT::ceil_size_in_bits();
+}
+
+template<typename FieldT>
+std::size_t log_of_field_size_helper(
+    typename enable_if<is_additive<FieldT>::value, FieldT>::type field_elem)
+{
+    UNUSED(field_elem);
+    return FieldT::extension_degree();
+}
+
+template<typename FieldT>
+std::size_t soundness_log_of_field_size_helper(
+    typename enable_if<is_multiplicative<FieldT>::value, FieldT>::type field_elem)
+{
+    UNUSED(field_elem);
+    /** size in bits is the number of bits needed to represent a field element.
+     *  However there isn't perfect alignment between the number of bits and the number of field elements,
+     *  there could be a factor of two difference.
+     *  For calculating soundness, we use the log of field size as number of bits - 1,
+     *  as (2 << returned) size lower bounds the actual size.
+    */
+    return FieldT::ceil_size_in_bits() - 1;
+}
+
+template<typename FieldT>
+std::size_t soundness_log_of_field_size_helper(
+    typename enable_if<is_additive<FieldT>::value, FieldT>::type field_elem)
+{
+    UNUSED(field_elem);
+    return FieldT::extension_degree();
+}
+
+template<typename FieldT>
+std::size_t get_word_of_field_elem(
+    typename enable_if<is_additive<FieldT>::value, FieldT>::type field_elem, size_t word)
+{
+    return field_elem.to_words()[word];
+}
+
+template<typename FieldT>
+std::size_t get_word_of_field_elem(
+    typename enable_if<is_multiplicative<FieldT>::value, FieldT>::type field_elem, size_t word)
+{
+    return field_elem.as_bigint().data[word];
+}
 
 template<typename FieldT>
 FieldT coset_shift()

@@ -35,6 +35,17 @@ size_t get_power_of_two(size_t n)
     return n;
 }
 
+/* If n is a power of 2, returns n */
+size_t round_to_next_power_of_2(const size_t n)
+{
+    return (1ull << log2(n));
+}
+
+bool is_power_of_2(const size_t n)
+{
+    return ((n != 0) && ((n & (n-1)) == 0));
+}
+
 size_t log2(size_t n)
 /* returns ceil(log2(n)), so 1ul<<log2(n) is the smallest power of 2,
    that is not less than n. */

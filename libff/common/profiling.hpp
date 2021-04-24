@@ -22,6 +22,7 @@ void start_profiling();
 long long get_nsec_time();
 void print_time(const char* msg);
 void print_header(const char* msg);
+void print_separator();
 
 void print_indent();
 

@@ -26,6 +26,16 @@ template<typename FieldT>
 FieldT power(const FieldT &base, const unsigned long exponent);
 
 /**
+ * The unsigned long long versions exist because libiop tends to use size_t instead
+ * of unsigned long, and size_t may be the same size as ul or ull.
+ */
+template<typename FieldT>
+FieldT power(const FieldT &base, const unsigned long long exponent);
+
+template<typename FieldT>
+FieldT power(const FieldT &base, const std::vector<unsigned long long> exponent);
+
+/**
  * Tonelli-Shanks square root with given s, t, and quadratic non-residue.
  * Only terminates if there is a square root. Only works if required parameters
  * are set in the field class.

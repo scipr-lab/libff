@@ -13,6 +13,7 @@ This update introduces new field and curve API's, and enforces they are used con
 - #83 Make run-clang-tidy return an error when linting fails
 - #85 Add more unit tests for fields (Thanks @alexander-zw)
 - #86 Add binary fields from [libiop](https://github.com/scipr-lab/libiop)
+- #100 Move utils in from [libiop](https://github.com/scipr-lab/libiop)
 
 ### Bug fixes
 - #75 Get rid of warning for unused constant PI, in complex field

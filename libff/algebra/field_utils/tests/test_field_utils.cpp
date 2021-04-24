@@ -1,15 +1,53 @@
 /**
  *****************************************************************************
- Basic tests for some of the field utils in this directory, mainly bigint.
+ Basic tests for some of the field utils in this directory, mainly bigint
+ and power.
  *****************************************************************************
  * @author     This file is part of libff, developed by SCIPR Lab
  *             and contributors (see AUTHORS).
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 #include "libff/algebra/field_utils/bigint.hpp"
+#include "libff/algebra/field_utils/algorithms.hpp"
+#include "libff/algebra/fields/binary/gf64.hpp"
 #include <gtest/gtest.h>
 
 using namespace libff;
+
+template<typename FieldT>
+FieldT power_naive(const FieldT &base, const std::size_t exponent)
+{
+    FieldT result = FieldT::one();
+
+    for (std::size_t i = 1; i <= exponent; ++i)
+    {
+        result *= base;
+    }
+
+    return result;
+}
+
+
+TEST(ExponentiationTest, SimpleTest) {
+    typedef gf64 FieldT;
+
+    const unsigned long max_power = 3000;
+    FieldT X = FieldT::random_element();
+
+    FieldT X_i = FieldT::one();
+    for (unsigned long i = 0 ; i < max_power; ++i)
+    {
+        const FieldT X_i_naive = power_naive<FieldT>(X, i);
+        const FieldT X_i_square_and_multiply_ul = power<FieldT>(X, i);
+        const FieldT X_i_square_and_multiply_ull = power<FieldT>(X, (unsigned long long) i);
+
+        EXPECT_EQ(X_i, X_i_naive);
+        EXPECT_EQ(X_i, X_i_square_and_multiply_ul);
+        EXPECT_EQ(X_i, X_i_square_and_multiply_ull);
+
+        X_i *= X;
+    }
+}
 
 TEST(FieldUtilsTest, BigintTest)
 {

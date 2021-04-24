@@ -108,7 +108,7 @@ void print_cumulative_time_entry(const std::string &key, const long long factor)
     const double total_ms = (cumulative_times.at(key) * 1e-6);
     const size_t cnt = invocation_counts.at(key);
     const double avg_ms = total_ms / cnt;
-    printf("   %-45s: %12.5fms = %0.5f * %0.5fms (%zu invocations, %0.5fms = %lld * %0.5fms per invocation)\n", key.c_str(), total_ms, factor, total_ms/ (double) factor, cnt, avg_ms, factor, avg_ms/ (double) factor);
+    printf("   %-45s: %12.5fms = %lld * %0.5fms (%zu invocations, %0.5fms = %lld * %0.5fms per invocation)\n", key.c_str(), total_ms, factor, total_ms/ (double) factor, cnt, avg_ms, factor, avg_ms/ (double) factor);
 }
 
 void print_cumulative_times(const long long factor)
@@ -186,14 +186,14 @@ static void print_times_from_last_and_start(long long     now, long long     las
     long long cpu_time_from_last = cpu_now - cpu_last;
 
     if (time_from_last != 0) {
-        long long parallelism_from_last = (long long) 1.0 * cpu_time_from_last / time_from_last;
-        printf("[%0.4fs x%0.2f]", (double) time_from_last * 1e-9, parallelism_from_last);
+        double parallelism_from_last = 1.0 * cpu_time_from_last / time_from_last;
+        printf("[%0.4fs x%0.2f]", time_from_last * 1e-9, parallelism_from_last);
     } else {
         printf("[             ]");
     }
     if (time_from_start != 0) {
-        double parallelism_from_start = 1.0 * (double) cpu_time_from_start / (double) time_from_start;
-        printf("\t(%0.4fs x%0.2f from start)", (double) time_from_start * 1e-9, parallelism_from_start);
+        double parallelism_from_start = 1.0 * cpu_time_from_start / time_from_start;
+        printf("\t(%0.4fs x%0.2f from start)", time_from_start * 1e-9, parallelism_from_start);
     }
 }
 
@@ -224,6 +224,11 @@ void print_header(const char *msg)
     printf("\n================================================================================\n");
     printf("%s\n", msg);
     printf("================================================================================\n\n");
+}
+
+void print_separator()
+{
+    printf("\n================================================================================\n\n");
 }
 
 void print_indent()
