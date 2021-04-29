@@ -186,14 +186,14 @@ static void print_times_from_last_and_start(long long     now, long long     las
     long long cpu_time_from_last = cpu_now - cpu_last;
 
     if (time_from_last != 0) {
-        double parallelism_from_last = 1.0 * cpu_time_from_last / time_from_last;
-        printf("[%0.4fs x%0.2f]", time_from_last * 1e-9, parallelism_from_last);
+        double parallelism_from_last = 1.0 * (double) cpu_time_from_last / (double) time_from_last;
+        printf("[%0.4fs x%0.2f]", (double) time_from_last * 1e-9, parallelism_from_last);
     } else {
         printf("[             ]");
     }
     if (time_from_start != 0) {
-        double parallelism_from_start = 1.0 * cpu_time_from_start / time_from_start;
-        printf("\t(%0.4fs x%0.2f from start)", time_from_start * 1e-9, parallelism_from_start);
+        double parallelism_from_start = 1.0 * (double) cpu_time_from_start / (double) time_from_start;
+        printf("\t(%0.4fs x%0.2f from start)", (double) time_from_start * 1e-9, parallelism_from_start);
     }
 }
 

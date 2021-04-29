@@ -89,8 +89,8 @@ public:
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); }
 
-    friend std::ostream& operator<<(std::ostream &out, const gf32 &p);
-    friend std::istream& operator>>(std::istream &in, gf32 &p);
+    friend std::ostream& operator<<(std::ostream &out, const gf32 &el);
+    friend std::istream& operator>>(std::istream &in, gf32 &el);
 private:
     uint32_t value_;
 };

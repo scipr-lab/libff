@@ -19,10 +19,8 @@ Checks:
     -readability-isolate-declaration,
     -readability-magic-numbers,
     -readability-function-size,
-
+    -clang-diagnostic-deprecated-copy
 WarningsAsErrors:
     ''
 
 HeaderFilterRegex: 'libff/*.(hpp|tcc|cpp)'
-
-

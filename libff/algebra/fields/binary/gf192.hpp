@@ -92,8 +92,8 @@ public:
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); }
 
-    friend std::ostream& operator<<(std::ostream &out, const gf192 &p);
-    friend std::istream& operator>>(std::istream &in, gf192 &p);
+    friend std::ostream& operator<<(std::ostream &out, const gf192 &el);
+    friend std::istream& operator>>(std::istream &in, gf192 &el);
 private:
     /* little-endian */
     uint64_t value_[3];

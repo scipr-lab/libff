@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
 project (libff)
-
 # Default to RelWithDebInfo configuration if no configuration is explicitly specified.
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type on single-configuration generators" FORCE)
@@ -12,7 +11,7 @@ set(
   "BN128"
   CACHE
   STRING
-  "Default curve: one of ALT_BN128, BLS12_381, BN128, EDWARDS, MNT4, MNT6"
+  "Default curve: one of BLS12_381, ALT_BN128, BN128, EDWARDS, MNT4, MNT6"
 )
 
 option(

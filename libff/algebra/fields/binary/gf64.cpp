@@ -5,13 +5,13 @@
 
 #include <sodium/randombytes.h>
 
-#include "libff/algebra/fields/binary/gf64.hpp"
 #include "libff/algebra/field_utils/algorithms.hpp"
+#include "libff/algebra/fields/binary/gf64.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
-#include <smmintrin.h>
 #include <immintrin.h>
+#include <smmintrin.h>
 #endif
 
 namespace libff {
@@ -67,7 +67,7 @@ gf64& gf64::operator*=(const gf64 &other)
     /* Does not require *this and other to be different, and therefore
        also works for squaring, implemented below. */
 #ifdef USE_ASM
-    const __m128i modulus = _mm_loadl_epi64((const __m128i*)&(this->modulus_));
+    const __m128i modulus = _mm_loadl_epi64((const __m128i*)&(libff::gf64::modulus_));
     const __m128i mul128 = _mm_clmulepi64_si128(_mm_loadl_epi64((const __m128i*)&(this->value_)),
                                                 _mm_loadl_epi64((const __m128i*)&(other.value_)), 0);
 

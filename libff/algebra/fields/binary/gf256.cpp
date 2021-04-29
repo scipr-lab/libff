@@ -5,13 +5,13 @@
 
 #include <sodium/randombytes.h>
 
-#include "libff/algebra/fields/binary/gf256.hpp"
 #include "libff/algebra/field_utils/algorithms.hpp"
+#include "libff/algebra/fields/binary/gf256.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
-#include <smmintrin.h>
 #include <immintrin.h>
+#include <smmintrin.h>
 #endif
 
 namespace libff {
@@ -158,7 +158,7 @@ gf256& gf256::operator*=(const gf256 &other)
     const __m128i a_high = _mm_loadu_si128((const __m128i*) &(this->value_[2]));
     const __m128i b_low = _mm_loadu_si128((const __m128i*) &(other.value_[0]));
     const __m128i b_high = _mm_loadu_si128((const __m128i*) &(other.value_[2]));
-    const __m128i modulus = _mm_loadl_epi64((const __m128i*) &(this->modulus_));
+    const __m128i modulus = _mm_loadl_epi64((const __m128i*) &(libff::gf256::modulus_));
 
     __m128i m00 = _mm_clmulepi64_si128(a_low, b_low, 0x00);
     __m128i m01 = _mm_clmulepi64_si128(a_low, b_low, 0x10);
@@ -338,7 +338,7 @@ gf256 gf256::inverse() const
     {
         /* entering the loop a = el^{2^{2^i}-1} */
         gf256 b = a;
-        for (size_t j = 0; j < (1ul<<i); ++j)
+        for (size_t j = 0; j < (1UL<<i); ++j)
         {
             b.square();
         }

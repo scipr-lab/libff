@@ -90,8 +90,8 @@ public:
     template<mp_size_t n>
     static constexpr bigint<n> field_char() { return bigint<n>(2); }
 
-    friend std::ostream& operator<<(std::ostream &out, const gf64 &p);
-    friend std::istream& operator>>(std::istream &in, gf64 &p);
+    friend std::ostream& operator<<(std::ostream &out, const gf64 &el);
+    friend std::istream& operator>>(std::istream &in, gf64 &el);
 private:
     uint64_t value_;
 };
