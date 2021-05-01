@@ -13,10 +13,10 @@ namespace libff {
 
 using std::size_t;
 
-template<typename T>
-size_t ceil_size_in_bits(const std::vector<T> &v)
+template<typename CurveT>
+size_t curve_size_in_bits(const std::vector<CurveT> &v)
 {
-    return v.size() * T::ceil_size_in_bits();
+    return v.size() * CurveT::size_in_bits();
 }
 
 template<typename T>
