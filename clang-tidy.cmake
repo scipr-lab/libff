@@ -16,7 +16,7 @@ if(USE_CLANG_TIDY)
       message("Using clang-tidy. Creating target... To run, use: make clang-tidy")
       add_custom_target(
         clang-tidy
-        COMMAND python3 run-clang-tidy.py -quiet 2>&1
+        COMMAND python3 run-clang-tidy.py ../libff/algebra ../libff/common -quiet 2>&1
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
         )
     else()
@@ -28,4 +28,3 @@ if(USE_CLANG_TIDY)
     message(FATAL_ERROR "clang-tidy not found. Aborting...")
   endif()
 endif()
-

@@ -409,7 +409,7 @@ struct extended_mnt6_G2_projective {
         T.print();
     }
 
-    void test_invariant()
+    static void test_invariant()
     {
         assert(T == Z.squared());
     }

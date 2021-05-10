@@ -5,13 +5,13 @@
 
 #include <sodium/randombytes.h>
 
-#include "libff/algebra/fields/binary/gf32.hpp"
 #include "libff/algebra/field_utils/algorithms.hpp"
+#include "libff/algebra/fields/binary/gf32.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
-#include <smmintrin.h>
 #include <immintrin.h>
+#include <smmintrin.h>
 #endif
 
 namespace libff {
@@ -73,14 +73,14 @@ gf32& gf32::operator*=(const gf32 &other)
 
     for (uint32_t i = 0; i < 32; ++i)
     {
-        if (other.value_ & (1ull << i))
+        if ((other.value_ & (1ULL << i)) != 0U)
         {
             result ^= shifted;
         }
-        if (shifted & (1ul << 31))
+        if ((shifted & (1UL << 31)) != 0U)
         {
             shifted <<= 1;
-            shifted ^= this->modulus_;
+            shifted ^= libff::gf32::modulus_;
         }
         else
         {
@@ -176,7 +176,7 @@ gf32 gf32::inverse() const
     {
         /* entering the loop a = el^{2^{2^i}-1} */
         gf32 b = a;
-        for (size_t j = 0; j < (1ul<<i); ++j)
+        for (size_t j = 0; j < (1UL<<i); ++j)
         {
             b.square();
         }

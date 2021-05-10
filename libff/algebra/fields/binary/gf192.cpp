@@ -5,13 +5,13 @@
 
 #include <sodium/randombytes.h>
 
-#include "libff/algebra/fields/binary/gf192.hpp"
 #include "libff/algebra/field_utils/algorithms.hpp"
+#include "libff/algebra/fields/binary/gf192.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
-#include <smmintrin.h>
 #include <immintrin.h>
+#include <smmintrin.h>
 #endif
 
 namespace libff {
@@ -84,7 +84,7 @@ gf192& gf192::operator*=(const gf192 &other)
     const __m128i ab0 = _mm_set_epi64x(this->value_[0], other.value_[0]);
     const __m128i ab1 = _mm_set_epi64x(this->value_[1], other.value_[1]);
     const __m128i ab2 = _mm_set_epi64x(this->value_[2], other.value_[2]);
-    const __m128i modulus = _mm_loadl_epi64((const __m128i*) &(this->modulus_));
+    const __m128i modulus = _mm_loadl_epi64((const __m128i*) &(libff::gf192::modulus_));
 
     /* here we implement a Karatsuba-like approach for multiplying 3-limb numbers.
     given
@@ -258,7 +258,7 @@ gf192 gf192::inverse() const
     {
         /* entering the loop a = el^{2^{2^i}-1} */
         gf192 b = a;
-        for (size_t j = 0; j < (1ul<<i); ++j)
+        for (size_t j = 0; j < (1UL<<i); ++j)
         {
             b.square();
         }
@@ -278,7 +278,7 @@ gf192 gf192::inverse() const
     }
 
     /* now result = el^{2^128-2}, prev_result = el^{2^64-2} */
-    for (size_t i = 0; i < (1ul<<6); ++i) {
+    for (size_t i = 0; i < (1UL<<6); ++i) {
         result.square();
     }
     prev_result.square();

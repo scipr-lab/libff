@@ -38,7 +38,7 @@ size_t get_power_of_two(size_t n)
 /* If n is a power of 2, returns n */
 size_t round_to_next_power_of_2(const size_t n)
 {
-    return (1ull << log2(n));
+    return (1ULL << log2(n));
 }
 
 bool is_power_of_2(const size_t n)

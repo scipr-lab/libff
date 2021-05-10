@@ -5,13 +5,13 @@
 
 #include <sodium/randombytes.h>
 
-#include "libff/algebra/fields/binary/gf128.hpp"
 #include "libff/algebra/field_utils/algorithms.hpp"
+#include "libff/algebra/fields/binary/gf128.hpp"
 
 #ifdef USE_ASM
 #include <emmintrin.h>
-#include <smmintrin.h>
 #include <immintrin.h>
+#include <smmintrin.h>
 #endif
 
 namespace libff {
@@ -77,7 +77,7 @@ gf128& gf128::operator*=(const gf128 &other)
     /* load the two operands and the modulus into 128-bit registers */
     const __m128i a = _mm_loadu_si128((const __m128i*) &(this->value_));
     const __m128i b = _mm_loadu_si128((const __m128i*) &(other.value_));
-    const __m128i modulus = _mm_loadl_epi64((const __m128i*) &(this->modulus_));
+    const __m128i modulus = _mm_loadl_epi64((const __m128i*) &(libff::gf128::modulus_));
 
     /* compute the 256-bit result of a * b with the 64x64-bit multiplication
        intrinsic */
@@ -215,7 +215,7 @@ gf128 gf128::inverse() const
     {
         /* entering the loop a = el^{2^{2^i}-1} */
         gf128 b = a;
-        for (size_t j = 0; j < (1ul<<i); ++j)
+        for (size_t j = 0; j < (1UL<<i); ++j)
         {
             b.square();
         }
