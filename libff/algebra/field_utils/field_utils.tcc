@@ -116,7 +116,7 @@ get_root_of_unity(const size_t n)
 template<typename FieldT>
 std::vector<FieldT> pack_int_vector_into_field_element_vector(const std::vector<size_t> &v, const size_t w)
 {
-    const size_t chunk_bits = FieldT::capacity();
+    const size_t chunk_bits = FieldT::floor_size_in_bits();
     const size_t repacked_size = div_ceil(v.size() * w, chunk_bits);
     std::vector<FieldT> result(repacked_size);
 
@@ -141,7 +141,7 @@ std::vector<FieldT> pack_int_vector_into_field_element_vector(const std::vector<
 template<typename FieldT>
 std::vector<FieldT> pack_bit_vector_into_field_element_vector(const bit_vector &v, const size_t chunk_bits)
 {
-    assert(chunk_bits <= FieldT::capacity());
+    assert(chunk_bits <= FieldT::floor_size_in_bits());
 
     const size_t repacked_size = div_ceil(v.size(), chunk_bits);
     std::vector<FieldT> result(repacked_size);
@@ -162,7 +162,7 @@ std::vector<FieldT> pack_bit_vector_into_field_element_vector(const bit_vector &
 template<typename FieldT>
 std::vector<FieldT> pack_bit_vector_into_field_element_vector(const bit_vector &v)
 {
-    return pack_bit_vector_into_field_element_vector<FieldT>(v, FieldT::capacity());
+    return pack_bit_vector_into_field_element_vector<FieldT>(v, FieldT::floor_size_in_bits());
 }
 
 template<typename FieldT>

@@ -61,8 +61,9 @@ void UNUSED(Types&&...) {}
 void serialize_bit_vector(std::ostream &out, const bit_vector &v);
 void deserialize_bit_vector(std::istream &in, bit_vector &v);
 
-template<typename T>
-std::size_t ceil_size_in_bits(const std::vector<T> &v);
+/** Should not be used for fields, because the field function is named ceil_size_in_bits instead. */
+template<typename CurveT>
+std::size_t curve_size_in_bits(const std::vector<CurveT> &v);
 
 /* Print a vector in the form { elem0 elem1 elem2 ... }, with a newline at the end
 template<typename T>
