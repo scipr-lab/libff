@@ -63,11 +63,11 @@ The library has been tested on Linux, but it is compatible with Windows and MacO
 On Ubuntu 14.04 LTS:
 
 ```
-sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libprocps3-dev pkg-config
+sudo apt-get install build-essential git libboost-all-dev cmake libgmp3-dev libssl-dev libprocps3-dev pkg-config libsodium-dev
 ```
 
 
-On MacOS, all of the libraries from the previous section can be installed with brew, except for `libprocps`, which is turned off by default.
+On MacOS, all of the libraries from the previous section can be installed with `brew`, except for `libprocps`, which is turned off by default.
 
 Fetch dependencies from their GitHub repos:
 
