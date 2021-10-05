@@ -8,11 +8,15 @@
  * @copyright  MIT license (see LICENSE file)
  *****************************************************************************/
 #include "libff/algebra/field_utils/bigint.hpp"
+#include "libff/algebra/field_utils/field_utils.hpp"
 #include "libff/algebra/field_utils/algorithms.hpp"
 #include "libff/algebra/fields/binary/gf64.hpp"
+#include "libff/algebra/curves/edwards/edwards_fields.hpp"
 #include <gtest/gtest.h>
 
 using namespace libff;
+
+using std::size_t;
 
 template<typename FieldT>
 FieldT power_naive(const FieldT &base, const std::size_t exponent)
@@ -97,4 +101,57 @@ TEST(FieldUtilsTest, BigintTest)
     EXPECT_EQ(x, x);
     x.clear();
     EXPECT_EQ(x, zero);
+}
+
+TEST(FieldUtilsTest, FieldVectorConversionTest)
+{
+    init_edwards_fields();
+
+    // pack_bit_vector_into_field_element_vector
+
+    bit_vector vec;
+    for (size_t i = 0; i < 12 + edwards_Fq::ceil_size_in_bits(); i++)
+        vec.push_back(0);
+    vec.push_back(1);
+    vec.push_back(0);
+    vec.push_back(1);
+
+    std::vector<edwards_Fq> field_vec = pack_bit_vector_into_field_element_vector<edwards_Fq>(vec);
+
+    EXPECT_EQ(field_vec.size(), 2);
+    EXPECT_EQ(field_vec[0], edwards_Fq::zero());
+    EXPECT_EQ(field_vec[1], edwards_Fq(40960)); // 5 * 2**13
+
+    // convert_bit_vector_to_field_element_vector
+
+    bit_vector vec2;
+    vec2.push_back(0);
+    vec2.push_back(0);
+    vec2.push_back(1);
+    vec2.push_back(0);
+    vec2.push_back(1);
+
+    field_vec = convert_bit_vector_to_field_element_vector<edwards_Fq>(vec2);
+
+    EXPECT_EQ(field_vec.size(), 5);
+    EXPECT_EQ(field_vec[0], edwards_Fq::zero());
+    EXPECT_EQ(field_vec[1], edwards_Fq::zero());
+    EXPECT_EQ(field_vec[2], edwards_Fq::one());
+    EXPECT_EQ(field_vec[3], edwards_Fq::zero());
+    EXPECT_EQ(field_vec[4], edwards_Fq::one());
+
+    // convert_field_element_vector_to_bit_vector
+
+    std::vector<edwards_Fq> field_vec2;
+    field_vec2.push_back(edwards_Fq(edwards_Fq(5)));
+    field_vec2.push_back(edwards_Fq::zero());
+
+    bit_vector vec3 = convert_field_element_vector_to_bit_vector(field_vec2);
+
+    EXPECT_EQ(vec3.size(), edwards_Fq::ceil_size_in_bits() * 2);
+    EXPECT_EQ(vec3[0], 1);
+    EXPECT_EQ(vec3[1], 0);
+    EXPECT_EQ(vec3[2], 1);
+    for (size_t i = 3; i < vec3.size(); i++)
+        EXPECT_EQ(vec3[i], 0);
 }
